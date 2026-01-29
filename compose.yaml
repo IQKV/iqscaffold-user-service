@@ -120,7 +120,7 @@ services:
         -XX:MaxRAMPercentage=75.0
         -Djava.security.egd=file:/dev/./urandom
     ports:
-      - "8081:8080" # User service (internal)
+      - "8080:8080" # User service (internal)
     depends_on:
       postgres-user:
         condition: service_healthy
