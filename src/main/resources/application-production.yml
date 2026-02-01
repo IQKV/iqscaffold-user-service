@@ -161,6 +161,23 @@ iqscaffold:
       format: json  # JSON format for production
       include-user-id: false  # Disabled for privacy in production
   
+  # S3/MinIO Configuration - Production Environment
+  s3:
+    endpoint: ${IQSCAFFOLD_S3_ENDPOINT:https://s3.amazonaws.com}
+    access-key: ${IQSCAFFOLD_S3_ACCESS_KEY}
+    secret-key: ${IQSCAFFOLD_S3_SECRET_KEY}
+    bucket-name: ${IQSCAFFOLD_S3_BUCKET_NAME:user-avatars-production}
+    region: ${IQSCAFFOLD_S3_REGION:us-west-2}
+    ssl: ${IQSCAFFOLD_S3_SSL:true}
+    upload:
+      max-file-size-bytes: ${IQSCAFFOLD_S3_MAX_FILE_SIZE:5242880} # 5MB
+      allowed-mime-types:
+        - image/jpeg
+        - image/png
+        - image/webp
+        - image/gif
+      presigned-url-expiration-minutes: ${IQSCAFFOLD_S3_URL_EXPIRATION:60} # 1 hour
+  
   tenant-id-header: X-Tenant-ID
   
   tenancy:

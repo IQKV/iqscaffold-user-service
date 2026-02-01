@@ -127,14 +127,6 @@ iqscaffold:
         - image/webp
         - image/gif
       presigned-url-expiration-minutes: ${IQSCAFFOLD_S3_URL_EXPIRATION:60} # 1 hour
-        prefetch: 10
-        default-requeue-rejected: false
-        retry:
-          enabled: true
-          initial-interval: 1000ms
-          max-attempts: 3
-          max-interval: 10000ms
-          multiplier: 2.0
 
   # Liquibase Configuration
   # Disabled globally - migrations are run programmatically per schema via TenantLiquibaseRunner
@@ -173,7 +165,7 @@ springdoc:
   show-actuator: true
   use-management-port: false
 
-# OpenTelemetry Configuration
+# Management Configuration
 management:
   endpoints:
     web:
@@ -212,6 +204,16 @@ iqscaffold:
       connection-timeout: PT20S
       idle-timeout: PT5M
       max-lifetime: PT20M
+    url: ${IQSCAFFOLD_DATABASE_URL:jdbc:postgresql://localhost:5432/iqscaffold_user}
+    username: ${IQSCAFFOLD_DATABASE_USERNAME:iqscaffold_user}
+    password: ${IQSCAFFOLD_DATABASE_PASSWORD:iqscaffold_password}
+    pool:
+      maximum-size: 10
+      minimum-idle: 2
+      connection-timeout: PT20S
+      idle-timeout: PT5M
+      max-lifetime: PT20M
+  # Cache Configuration
   cache:
     redis:
       host: ${IQSCAFFOLD_CACHE_REDIS_HOST:localhost}
@@ -227,6 +229,8 @@ iqscaffold:
       key-prefix: "iqscaffold:auth"
       default-ttl: PT1H
       enable-statistics: false
+
+  # Messaging Configuration
   messaging:
     rabbitmq:
       host: ${IQSCAFFOLD_MESSAGING_RABBITMQ_HOST:localhost}
@@ -271,6 +275,8 @@ iqscaffold:
         user-verified: "user.verified"
         password-reset: "user.password.reset"
         notification-email: "notification.email"
+
+  # Authentication Configuration
   auth:
     jwt:
       secret-key: ${IQSCAFFOLD_AUTH_JWT_SECRET:change-me-in-production}
