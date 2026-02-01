@@ -1,0 +1,84 @@
+databaseChangeLog:
+  # Master Liquibase Changelog for IQ Scaffold User Service
+  # 
+  # This file serves as the unified entry point for all database migrations.
+  # However, note that this application uses a custom multi-tenant Liquibase setup
+  # with programmatic execution via TenantLiquibaseRunner and SystemLiquibaseInitializer.
+  #
+  # The actual migrations are executed through:
+  # - System migrations: classpath:db/changelog/system/master.xml (public schema)
+  # - Tenant migrations: classpath:db/changelog/tenant/master.xml (per-tenant schemas)
+  #
+  # This master file can be used for:
+  # - Manual Liquibase operations
+  # - Development and testing scenarios
+  # - Documentation and migration overview
+  #
+  # Author: IQ Scaffold Team
+  # Created: 2026-02-01
+
+  # =============================================================================
+  # SYSTEM-LEVEL MIGRATIONS (Public Schema)
+  # =============================================================================
+  # These migrations create shared infrastructure used across all tenants:
+  # - Tenants table for multi-tenancy management
+  # - Authorities table for role-based access control
+  # - Organization management in public schema
+  # - System-wide configuration and metadata
+  
+  - include:
+      file: db/changelog/system/master.xml
+      context: system
+      
+  # =============================================================================
+  # TENANT-LEVEL MIGRATIONS (Per-Tenant Schemas)
+  # =============================================================================
+  # These migrations are applied to each tenant schema individually:
+  # - User management tables and relationships
+  # - User preferences and profile data
+  # - Payment gateway abstractions
+  # - Avatar and file storage metadata
+  # - Demo data for development environments
+  
+  - include:
+      file: db/changelog/tenant/master.xml
+      context: tenant
+
+  # =============================================================================
+  # MIGRATION EXECUTION NOTES
+  # =============================================================================
+  #
+  # AUTOMATIC EXECUTION (Production):
+  # The application automatically handles migration execution through:
+  # 1. SystemLiquibaseInitializer - Runs system migrations on startup
+  # 2. TenantLiquibaseRunner - Runs tenant migrations during tenant provisioning
+  #
+  # MANUAL EXECUTION (Development/Testing):
+  # To run migrations manually using this master file:
+  #
+  # All migrations:
+  #   mvn liquibase:update
+  #
+  # System migrations only:
+  #   mvn liquibase:update -Dliquibase.contexts=system
+  #
+  # Tenant migrations only:
+  #   mvn liquibase:update -Dliquibase.contexts=tenant
+  #
+  # Generate SQL for review:
+  #   mvn liquibase:updateSQL
+  #
+  # Rollback last changeset:
+  #   mvn liquibase:rollback -Dliquibase.rollbackCount=1
+  #
+  # CONFIGURATION:
+  # Liquibase configuration is managed through:
+  # - application.yml: iqscaffold.liquibase.systemChangeLog
+  # - application.yml: iqscaffold.liquibase.tenantChangeLog
+  # - Spring Boot: spring.liquibase.enabled=false (disabled for custom handling)
+  #
+  # MULTI-TENANCY:
+  # Each tenant gets its own database schema with the pattern: tenant_{tenantId}
+  # System tables remain in the public schema and are shared across tenants.
+  #
+  # =============================================================================
