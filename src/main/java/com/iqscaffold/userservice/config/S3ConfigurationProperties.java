@@ -65,7 +65,7 @@ public record S3ConfigurationProperties(
       Long maxFileSizeBytes,
 
       @NotNull(message = "Allowed MIME types list is required")
-      java.util.List<String> allowedMimeTypes,
+      String allowedMimeTypes,
 
       @Positive(message = "Presigned URL expiration must be positive")
       Integer presignedUrlExpirationMinutes
@@ -77,14 +77,17 @@ public record S3ConfigurationProperties(
     public UploadConfig() {
       this(
           5 * 1024 * 1024L, // 5MB max file size
-          java.util.List.of(
-              "image/jpeg",
-              "image/png",
-              "image/webp",
-              "image/gif"
-          ),
+          "image/jpeg,image/png,image/webp,image/gif",
           60 // 1 hour expiration for presigned URLs
       );
+    }
+
+    /**
+     * Get allowed MIME types as a list.
+     * @return list of allowed MIME types
+     */
+    public java.util.List<String> getAllowedMimeTypesList() {
+      return java.util.Arrays.asList(allowedMimeTypes.split(","));
     }
   }
 

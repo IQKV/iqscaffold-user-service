@@ -184,13 +184,9 @@ iqscaffold:
     region: ${IQSCAFFOLD_S3_REGION:us-east-1}
     ssl: ${IQSCAFFOLD_S3_SSL:false}
     upload:
-      max-file-size-bytes: ${IQSCAFFOLD_S3_MAX_FILE_SIZE:5242880} # 5MB
-      allowed-mime-types:
-        - image/jpeg
-        - image/png
-        - image/webp
-        - image/gif
-      presigned-url-expiration-minutes: ${IQSCAFFOLD_S3_URL_EXPIRATION:60} # 1 hour
+      max-file-size-bytes: ${IQSCAFFOLD_S3_UPLOAD_MAX_FILE_SIZE_BYTES:5242880} # 5MB
+      allowed-mime-types: ${IQSCAFFOLD_S3_UPLOAD_ALLOWED_MIME_TYPES:image/jpeg,image/png,image/webp,image/gif}
+      presigned-url-expiration-minutes: ${IQSCAFFOLD_S3_UPLOAD_PRESIGNED_URL_EXPIRATION_MINUTES:60} # 1 hour
 
   # Database Configuration
   database:

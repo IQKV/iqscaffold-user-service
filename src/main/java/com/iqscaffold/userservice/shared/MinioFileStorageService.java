@@ -205,9 +205,9 @@ public class MinioFileStorageService implements FileStorageService {
 
     // Check MIME type
     var contentType = detectContentType(file);
-    if (!s3Properties.upload().allowedMimeTypes().contains(contentType)) {
+    if (!s3Properties.upload().getAllowedMimeTypesList().contains(contentType)) {
       log.warn("File type {} is not allowed. Allowed types: {}",
-          contentType, s3Properties.upload().allowedMimeTypes());
+          contentType, s3Properties.upload().getAllowedMimeTypesList());
       return false;
     }
 
