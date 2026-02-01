@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.29.xsd">
+
+    <changeSet id="002-initialize-crm-authorities" author="iqscaffold" context="public">
+        <comment>Initialize CRM-specific authorities for lead, contact, and pipeline management</comment>
+
+        <!-- CRM General Access Authority -->
+        <insert tableName="authorities" schemaName="public">
+            <column name="name" value="CRM_ACCESS"/>
+            <column name="description" value="General CRM access - allows basic read/write operations across CRM modules"/>
+        </insert>
+
+        <!-- CRM Administrative Authority -->
+        <insert tableName="authorities" schemaName="public">
+            <column name="name" value="CRM_ADMIN"/>
+            <column name="description" value="CRM administrator with full control over CRM configuration and data management"/>
+        </insert>
+
+        <!-- Lead Management Authority -->
+        <insert tableName="authorities" schemaName="public">
+            <column name="name" value="CRM_LEAD_MANAGER"/>
+            <column name="description" value="Lead management authority - create, update, delete leads and manage lead lifecycle"/>
+        </insert>
+
+        <!-- Contact Management Authority -->
+        <insert tableName="authorities" schemaName="public">
+            <column name="name" value="CRM_CONTACT_MANAGER"/>
+            <column name="description" value="Contact management authority - create, update, delete contacts and companies"/>
+        </insert>
+
+        <!-- Pipeline Management Authority -->
+        <insert tableName="authorities" schemaName="public">
+            <column name="name" value="CRM_PIPELINE_MANAGER"/>
+            <column name="description" value="Pipeline management authority - create, update, delete pipeline stages and manage sales processes"/>
+        </insert>
+
+        <rollback>
+            <delete tableName="authorities" schemaName="public">
+                <where>name IN ('CRM_ACCESS', 'CRM_ADMIN', 'CRM_LEAD_MANAGER', 'CRM_CONTACT_MANAGER', 'CRM_PIPELINE_MANAGER')</where>
+            </delete>
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>

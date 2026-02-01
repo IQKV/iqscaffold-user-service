@@ -91,6 +91,7 @@
                 baseColumnNames="organization_id"
                 constraintName="fk_organization_preferences_organization"
                 referencedTableName="organizations"
+                referencedTableSchemaName="public"
                 referencedColumnNames="id"
                 onDelete="CASCADE"
                 onUpdate="CASCADE"/>
