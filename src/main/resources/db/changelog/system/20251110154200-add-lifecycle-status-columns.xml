@@ -5,7 +5,7 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.29.xsd">
 
-    <changeSet id="00000000000007" author="iqscaffold">
+    <changeSet id="20251110154200-add-lifecycle-status-columns" author="iqscaffold">
         <comment>Add lifecycle status columns to tenants table</comment>
 
         <addColumn tableName="tenants">
@@ -27,7 +27,7 @@
         </addColumn>
     </changeSet>
 
-    <changeSet id="00000000000008" author="iqscaffold">
+    <changeSet id="20251110154201-create-status-indexes" author="iqscaffold">
         <comment>Create index on tenant status for performance</comment>
 
         <createIndex indexName="idx_tenants_status" tableName="tenants">
@@ -43,7 +43,7 @@
         </createIndex>
     </changeSet>
 
-    <changeSet id="00000000000009" author="iqscaffold">
+    <changeSet id="20251110154202-drop-enabled-column" author="iqscaffold">
         <comment>Drop enabled column from tenants table - replaced by status enum</comment>
 
         <dropColumn tableName="tenants" columnName="enabled"/>

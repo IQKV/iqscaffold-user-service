@@ -6,8 +6,8 @@
                         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.29.xsd">
 
     <include file="db/changelog/tenant/20251110154500-initial-user-schema.xml"/>
-    <include file="db/changelog/tenant/20251122000000-organization-preferences-schema.xml"/>
     <include file="db/changelog/tenant/20251122000100-user-preferences-schema.xml"/>
+    <include file="db/changelog/tenant/20251210000000-payment-gateway-abstraction.xml"/>
     
     <!-- Demo data for development and testing (context: demo) -->
     <include file="db/changelog/tenant/demo/master.xml"/>

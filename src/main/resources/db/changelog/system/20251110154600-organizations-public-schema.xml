@@ -121,51 +121,74 @@
             <column name="organization_id" type="BIGINT">
                 <constraints nullable="false" unique="true"/>
             </column>
-            <column name="default_locale" type="VARCHAR(10)">
+            <!-- Localization and formatting preferences -->
+            <column name="default_locale" type="VARCHAR(10)" defaultValue="en">
                 <constraints nullable="true"/>
             </column>
-            <column name="default_timezone" type="VARCHAR(50)">
+            <column name="default_timezone" type="VARCHAR(50)" defaultValue="UTC">
                 <constraints nullable="true"/>
             </column>
-            <column name="default_currency" type="VARCHAR(3)">
+            <column name="default_currency" type="VARCHAR(3)" defaultValue="USD">
                 <constraints nullable="true"/>
             </column>
-            <column name="password_min_length" type="INTEGER">
+            <column name="default_date_format" type="VARCHAR(50)" defaultValue="yyyy-MM-dd">
+                <constraints nullable="true"/>
+            </column>
+            <column name="default_time_format" type="VARCHAR(50)" defaultValue="HH:mm:ss">
+                <constraints nullable="true"/>
+            </column>
+            <!-- User registration and verification settings -->
+            <column name="allow_user_registration" type="BOOLEAN" defaultValueBoolean="true">
+                <constraints nullable="false"/>
+            </column>
+            <column name="require_email_verification" type="BOOLEAN" defaultValueBoolean="true">
+                <constraints nullable="false"/>
+            </column>
+            <!-- Password policy settings -->
+            <column name="password_min_length" type="INTEGER" defaultValueNumeric="8">
                 <constraints nullable="true"/>
             </column>
             <column name="password_require_uppercase" type="BOOLEAN" defaultValueBoolean="true">
-                <constraints nullable="true"/>
+                <constraints nullable="false"/>
             </column>
             <column name="password_require_lowercase" type="BOOLEAN" defaultValueBoolean="true">
-                <constraints nullable="true"/>
+                <constraints nullable="false"/>
             </column>
             <column name="password_require_numbers" type="BOOLEAN" defaultValueBoolean="true">
-                <constraints nullable="true"/>
+                <constraints nullable="false"/>
             </column>
             <column name="password_require_special_chars" type="BOOLEAN" defaultValueBoolean="true">
+                <constraints nullable="false"/>
+            </column>
+            <!-- Session and security settings -->
+            <column name="session_timeout_minutes" type="INTEGER" defaultValueNumeric="30">
                 <constraints nullable="true"/>
             </column>
-            <column name="session_timeout_minutes" type="INTEGER">
+            <column name="max_login_attempts" type="INTEGER" defaultValueNumeric="5">
                 <constraints nullable="true"/>
             </column>
-            <column name="max_login_attempts" type="INTEGER">
+            <column name="lockout_duration_minutes" type="INTEGER" defaultValueNumeric="15">
                 <constraints nullable="true"/>
             </column>
-            <column name="lockout_duration_minutes" type="INTEGER">
-                <constraints nullable="true"/>
+            <!-- Two-factor authentication settings -->
+            <column name="enable_two_factor_auth" type="BOOLEAN" defaultValueBoolean="false">
+                <constraints nullable="false"/>
             </column>
-            <column name="two_factor_auth_required" type="BOOLEAN" defaultValueBoolean="false">
-                <constraints nullable="true"/>
+            <column name="require_two_factor_auth" type="BOOLEAN" defaultValueBoolean="false">
+                <constraints nullable="false"/>
             </column>
-            <column name="allow_user_registration" type="BOOLEAN" defaultValueBoolean="true">
-                <constraints nullable="true"/>
-            </column>
-            <column name="require_email_verification" type="BOOLEAN" defaultValueBoolean="true">
-                <constraints nullable="true"/>
-            </column>
+            <!-- Contact and notification settings -->
             <column name="notification_email" type="VARCHAR(255)">
                 <constraints nullable="true"/>
             </column>
+            <column name="support_email" type="VARCHAR(255)">
+                <constraints nullable="true"/>
+            </column>
+            <!-- Custom settings as JSON -->
+            <column name="custom_settings" type="TEXT">
+                <constraints nullable="true"/>
+            </column>
+            <!-- Audit fields -->
             <column name="created_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
                 <constraints nullable="false"/>
             </column>
@@ -189,6 +212,9 @@
         <!-- Create indexes for organization_preferences table -->
         <createIndex indexName="idx_org_preferences_organization_id" tableName="organization_preferences" schemaName="public">
             <column name="organization_id"/>
+        </createIndex>
+        <createIndex indexName="idx_org_preferences_created_at" tableName="organization_preferences" schemaName="public">
+            <column name="created_at"/>
         </createIndex>
 
         <rollback>
