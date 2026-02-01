@@ -109,29 +109,10 @@ spring:
       simple:
         acknowledge-mode: auto
 
-# IQ Scaffold Configuration
-iqscaffold:
-  # S3/MinIO Configuration
-  s3:
-    endpoint: ${IQSCAFFOLD_S3_ENDPOINT:http://localhost:9000}
-    access-key: ${IQSCAFFOLD_S3_ACCESS_KEY:minioadmin}
-    secret-key: ${IQSCAFFOLD_S3_SECRET_KEY:minioadmin}
-    bucket-name: ${IQSCAFFOLD_S3_BUCKET_NAME:user-avatars}
-    region: ${IQSCAFFOLD_S3_REGION:us-east-1}
-    ssl: ${IQSCAFFOLD_S3_SSL:false}
-    upload:
-      max-file-size-bytes: ${IQSCAFFOLD_S3_MAX_FILE_SIZE:5242880} # 5MB
-      allowed-mime-types:
-        - image/jpeg
-        - image/png
-        - image/webp
-        - image/gif
-      presigned-url-expiration-minutes: ${IQSCAFFOLD_S3_URL_EXPIRATION:60} # 1 hour
-
-  # Liquibase Configuration
-  # Disabled globally - migrations are run programmatically per schema via TenantLiquibaseRunner
-  liquibase:
-    enabled: false
+# Liquibase Configuration
+# Disabled globally - migrations are run programmatically per schema via TenantLiquibaseRunner
+liquibase:
+  enabled: false
 
 # SpringDoc OpenAPI Configuration
 springdoc:
@@ -192,8 +173,26 @@ management:
       export:
         enabled: true
 
-# IQ Scaffold-specific configuration properties
+# IQ Scaffold Configuration
 iqscaffold:
+  # S3/MinIO Configuration
+  s3:
+    endpoint: ${IQSCAFFOLD_S3_ENDPOINT:http://localhost:9000}
+    access-key: ${IQSCAFFOLD_S3_ACCESS_KEY:minioadmin}
+    secret-key: ${IQSCAFFOLD_S3_SECRET_KEY:minioadmin}
+    bucket-name: ${IQSCAFFOLD_S3_BUCKET_NAME:user-avatars}
+    region: ${IQSCAFFOLD_S3_REGION:us-east-1}
+    ssl: ${IQSCAFFOLD_S3_SSL:false}
+    upload:
+      max-file-size-bytes: ${IQSCAFFOLD_S3_MAX_FILE_SIZE:5242880} # 5MB
+      allowed-mime-types:
+        - image/jpeg
+        - image/png
+        - image/webp
+        - image/gif
+      presigned-url-expiration-minutes: ${IQSCAFFOLD_S3_URL_EXPIRATION:60} # 1 hour
+
+  # Database Configuration
   database:
     url: ${IQSCAFFOLD_DATABASE_URL:jdbc:postgresql://localhost:5432/iqscaffold_user}
     username: ${IQSCAFFOLD_DATABASE_USERNAME:iqscaffold_user}
@@ -204,15 +203,7 @@ iqscaffold:
       connection-timeout: PT20S
       idle-timeout: PT5M
       max-lifetime: PT20M
-    url: ${IQSCAFFOLD_DATABASE_URL:jdbc:postgresql://localhost:5432/iqscaffold_user}
-    username: ${IQSCAFFOLD_DATABASE_USERNAME:iqscaffold_user}
-    password: ${IQSCAFFOLD_DATABASE_PASSWORD:iqscaffold_password}
-    pool:
-      maximum-size: 10
-      minimum-idle: 2
-      connection-timeout: PT20S
-      idle-timeout: PT5M
-      max-lifetime: PT20M
+
   # Cache Configuration
   cache:
     redis:
@@ -502,6 +493,8 @@ iqscaffold:
         enableMicroserviceValidation: true
         enableRouteValidation: true
         bypassAuthorities: ["SUPER_ADMIN"]
+
+  # Email Configuration
   email:
     smtp:
       host: ${SMTP_HOST:localhost}
@@ -527,6 +520,8 @@ iqscaffold:
       password-reset-confirmed-template: "email/password-reset/confirmed.html"
       registration-confirmed-subject: "Welcome to IQ Scaffold - Email Verified!"
       registration-confirmed-template: "email/user-registration/email-confirmed.html"
+
+  # Observability Configuration
   observability:
     tracing:
       enabled: true
@@ -559,9 +554,11 @@ iqscaffold:
       enable-sql-logging: false
       enable-security-events: true
       enable-performance-logging: false
+
+  # Tenant Configuration
   tenant-id-header: X-Tenant-ID
   
-  # Internationalization configuration
+  # Internationalization Configuration
   i18n:
     supported-locales:
       - en
@@ -573,10 +570,13 @@ iqscaffold:
     fallback-to-system-locale: false
     use-code-as-default-message: true
   
+  # Tenancy Configuration
   tenancy:
     schema:
       prefix: tenant_
       default: public
+
+  # Liquibase Configuration
   liquibase:
     systemChangeLog: classpath:db/changelog/system/master.xml
     tenantChangeLog: classpath:db/changelog/tenant/master.xml
