@@ -24,6 +24,7 @@ An identity and access management service that handles:
 - **Account Security** - Password reset flows, account lockout protection, and multi-device session management
 - **User Management** - Admin-controlled user CRUD operations with role-based permissions
 - **User Preferences** - Self-service preference management for personalization (locale, theme, notifications, profile)
+- **Avatar Management** - Secure profile picture uploads with S3/MinIO integration and tenant isolation
 - **Organization Management** - Organization CRUD with owner assignment and tenant isolation
 - **Organization Preferences** - Organization-wide settings for security policies, defaults, and configurations
 - **Multi-Tenancy** - Tenant isolation ensuring data segregation across organizations with schema-per-tenant strategy

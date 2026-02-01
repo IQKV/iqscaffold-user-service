@@ -211,6 +211,18 @@
             <classifier>jakarta</classifier>
         </dependency>
 
+        <!-- MinIO/S3 Client -->
+        <dependency>
+            <groupId>io.minio</groupId>
+            <artifactId>minio</artifactId>
+        </dependency>
+
+        <!-- Apache Tika for file type detection -->
+        <dependency>
+            <groupId>org.apache.tika</groupId>
+            <artifactId>tika-core</artifactId>
+        </dependency>
+
     </dependencies>
 
     <build>

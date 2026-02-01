@@ -10,7 +10,8 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @EnableConfigurationProperties({
     IqScaffoldProperties.class,
-    PlatformConfigurationProperties.class
+    PlatformConfigurationProperties.class,
+    S3ConfigurationProperties.class
 })
 public class UserServiceConfig {
   // Configuration beans will be added in subsequent tasks

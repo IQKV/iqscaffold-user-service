@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+
+    <changeSet id="20250201120000-add-avatar-fields" author="iqscaffold">
+        <comment>Add avatar-related fields to user_preferences table for S3/MinIO integration</comment>
+        
+        <!-- Add avatar storage key field -->
+        <addColumn tableName="user_preferences">
+            <column name="avatar_storage_key" type="varchar(500)">
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
+        
+        <!-- Add avatar file size field -->
+        <addColumn tableName="user_preferences">
+            <column name="avatar_file_size" type="bigint">
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
+        
+        <!-- Add avatar content type field -->
+        <addColumn tableName="user_preferences">
+            <column name="avatar_content_type" type="varchar(100)">
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
+        
+        <!-- Add avatar uploaded timestamp field -->
+        <addColumn tableName="user_preferences">
+            <column name="avatar_uploaded_at" type="timestamp">
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
+        
+        <!-- Add index on avatar_storage_key for efficient lookups -->
+        <createIndex indexName="idx_user_preferences_avatar_storage_key" tableName="user_preferences">
+            <column name="avatar_storage_key"/>
+        </createIndex>
+        
+        <!-- Add comment to document the purpose -->
+        <sql>
+            COMMENT ON COLUMN user_preferences.avatar_storage_key IS 'S3/MinIO storage key for user avatar file';
+            COMMENT ON COLUMN user_preferences.avatar_file_size IS 'Size of avatar file in bytes';
+            COMMENT ON COLUMN user_preferences.avatar_content_type IS 'MIME type of avatar file';
+            COMMENT ON COLUMN user_preferences.avatar_uploaded_at IS 'Timestamp when avatar was uploaded';
+        </sql>
+        
+        <rollback>
+            <dropIndex indexName="idx_user_preferences_avatar_storage_key" tableName="user_preferences"/>
+            <dropColumn tableName="user_preferences" columnName="avatar_uploaded_at"/>
+            <dropColumn tableName="user_preferences" columnName="avatar_content_type"/>
+            <dropColumn tableName="user_preferences" columnName="avatar_file_size"/>
+            <dropColumn tableName="user_preferences" columnName="avatar_storage_key"/>
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>

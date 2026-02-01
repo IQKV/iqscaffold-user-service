@@ -9,6 +9,16 @@ spring:
   output:
     ansi:
       enabled: always
+  
+  # Multipart file upload configuration
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 10MB
+      max-request-size: 10MB
+      file-size-threshold: 2KB
+      resolve-lazily: false
+  
   # Internationalization Configuration
   messages:
     basename: i18n/messages
@@ -98,6 +108,25 @@ spring:
     listener:
       simple:
         acknowledge-mode: auto
+
+# IQ Scaffold Configuration
+iqscaffold:
+  # S3/MinIO Configuration
+  s3:
+    endpoint: ${IQSCAFFOLD_S3_ENDPOINT:http://localhost:9000}
+    access-key: ${IQSCAFFOLD_S3_ACCESS_KEY:minioadmin}
+    secret-key: ${IQSCAFFOLD_S3_SECRET_KEY:minioadmin}
+    bucket-name: ${IQSCAFFOLD_S3_BUCKET_NAME:user-avatars}
+    region: ${IQSCAFFOLD_S3_REGION:us-east-1}
+    ssl: ${IQSCAFFOLD_S3_SSL:false}
+    upload:
+      max-file-size-bytes: ${IQSCAFFOLD_S3_MAX_FILE_SIZE:5242880} # 5MB
+      allowed-mime-types:
+        - image/jpeg
+        - image/png
+        - image/webp
+        - image/gif
+      presigned-url-expiration-minutes: ${IQSCAFFOLD_S3_URL_EXPIRATION:60} # 1 hour
         prefetch: 10
         default-requeue-rejected: false
         retry:

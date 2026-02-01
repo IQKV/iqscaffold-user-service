@@ -58,6 +58,18 @@ public class UserPreference extends TenantAware {
   @Column(name = "profile_photo_url", length = 500)
   private String profilePhotoUrl;
 
+  @Column(name = "avatar_storage_key", length = 500)
+  private String avatarStorageKey;
+
+  @Column(name = "avatar_file_size")
+  private Long avatarFileSize;
+
+  @Column(name = "avatar_content_type", length = 100)
+  private String avatarContentType;
+
+  @Column(name = "avatar_uploaded_at")
+  private LocalDateTime avatarUploadedAt;
+
   @Column(name = "phone_number", length = 50)
   private String phoneNumber;
 
@@ -164,6 +176,38 @@ public class UserPreference extends TenantAware {
 
   public void setProfilePhotoUrl(String profilePhotoUrl) {
     this.profilePhotoUrl = profilePhotoUrl;
+  }
+
+  public String getAvatarStorageKey() {
+    return avatarStorageKey;
+  }
+
+  public void setAvatarStorageKey(String avatarStorageKey) {
+    this.avatarStorageKey = avatarStorageKey;
+  }
+
+  public Long getAvatarFileSize() {
+    return avatarFileSize;
+  }
+
+  public void setAvatarFileSize(Long avatarFileSize) {
+    this.avatarFileSize = avatarFileSize;
+  }
+
+  public String getAvatarContentType() {
+    return avatarContentType;
+  }
+
+  public void setAvatarContentType(String avatarContentType) {
+    this.avatarContentType = avatarContentType;
+  }
+
+  public LocalDateTime getAvatarUploadedAt() {
+    return avatarUploadedAt;
+  }
+
+  public void setAvatarUploadedAt(LocalDateTime avatarUploadedAt) {
+    this.avatarUploadedAt = avatarUploadedAt;
   }
 
   public String getPhoneNumber() {

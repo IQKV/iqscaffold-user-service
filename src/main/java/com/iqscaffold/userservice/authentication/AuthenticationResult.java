@@ -19,7 +19,9 @@ public sealed interface AuthenticationResult
       String refreshToken,
       String correlationId,
       Instant timestamp
-  ) implements AuthenticationResult {
+  ) implements
+
+      AuthenticationResult {
 
   }
 
@@ -31,7 +33,9 @@ public sealed interface AuthenticationResult
       String errorCode,
       String correlationId,
       Instant timestamp
-  ) implements AuthenticationResult {
+  ) implements
+
+      AuthenticationResult {
 
   }
 }
