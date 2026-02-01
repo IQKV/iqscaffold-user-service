@@ -72,17 +72,17 @@ db/changelog/
 ├── master.xml                                    # Root orchestrator
 ├── system/
 │   ├── master.xml                               # System migrations orchestrator
-│   ├── 20251110154000-create-tenants-table.xml
-│   ├── 20251110154100-create-authorities-table.xml
-│   ├── 20251110154200-add-lifecycle-status-columns.xml
-│   ├── 20251110154300-initialize-crm-authorities.xml
-│   ├── 20251110154600-organizations-public-schema.xml
-│   └── 20251110154700-add-organization-capabilities.xml
+│   ├── 20251110162000-create-tenants-table.xml
+│   ├── 20251110162100-create-authorities-table.xml
+│   ├── 20251110162200-add-lifecycle-status-columns.xml
+│   ├── 20251110162300-initialize-crm-authorities.xml
+│   ├── 20251110162600-organizations-public-schema.xml
+│   └── 20251110162700-add-organization-capabilities.xml
 ├── tenant/
 │   ├── master.xml                               # Tenant migrations orchestrator
-│   ├── 20251110154500-initial-user-schema.xml
-│   ├── 20251122000100-user-preferences-schema.xml
-│   ├── 20251210000000-payment-gateway-abstraction.xml
+│   ├── 20251110163000-initial-user-schema.xml
+│   ├── 20251110163100-user-preferences-schema.xml
+│   ├── 20251110163200-payment-gateway-abstraction.xml
 │   └── demo/
 │       ├── master.xml                           # Demo data orchestrator
 │       ├── 20250121000000-demo-users-with-authorities.xml

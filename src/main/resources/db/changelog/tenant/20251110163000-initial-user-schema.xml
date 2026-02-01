@@ -5,7 +5,7 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.29.xsd">
 
-    <changeSet id="20251110154500-000000-initial-schema" author="iqscaffold">
+    <changeSet id="20251110163000-000000-initial-schema" author="iqscaffold">
         <comment>Initial database schema with all tables, indexes, and constraints</comment>
 
         <!-- Create users table -->
@@ -235,7 +235,7 @@
     </changeSet>
 
     <!-- PostgreSQL-specific partial index for failed login attempts -->
-    <changeSet id="20251110154500-000001-postgresql-partial-index" author="iqscaffold" dbms="postgresql">
+    <changeSet id="20251110163000-000001-postgresql-partial-index" author="iqscaffold" dbms="postgresql">
         <comment>Add partial index for failed login attempts (PostgreSQL only)</comment>
         <sql>
             CREATE INDEX idx_user_audit_log_login_failures
@@ -248,7 +248,7 @@
     </changeSet>
 
     <!-- Non-PostgreSQL index for failed login attempts -->
-    <changeSet id="20251110154500-000002-non-postgresql-index" author="iqscaffold" dbms="!postgresql">
+    <changeSet id="20251110163000-000002-non-postgresql-index" author="iqscaffold" dbms="!postgresql">
         <comment>Add regular index for failed login attempts (non-PostgreSQL databases)</comment>
         <createIndex indexName="idx_user_audit_log_login_failures" tableName="user_audit_log">
             <column name="user_id"/>

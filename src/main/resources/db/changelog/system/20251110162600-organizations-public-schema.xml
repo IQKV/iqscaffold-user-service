@@ -5,7 +5,7 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.29.xsd">
 
-    <changeSet id="20251110154600-000000-organizations-public-schema" author="iqscaffold" context="public">
+    <changeSet id="20251110162600-000000-organizations-public-schema" author="iqscaffold" context="public">
         <comment>Create organizations table in public schema - system-wide billing entities with 1:1 tenant relationship</comment>
 
         <!-- Create organizations table in public schema -->
@@ -110,7 +110,7 @@
         </rollback>
     </changeSet>
 
-    <changeSet id="20251110154600-000001-organization-preferences-public-schema" author="iqscaffold" context="public">
+    <changeSet id="20251110162600-000001-organization-preferences-public-schema" author="iqscaffold" context="public">
         <comment>Create organization_preferences table in public schema for organization-wide settings</comment>
 
         <!-- Create organization_preferences table in public schema -->

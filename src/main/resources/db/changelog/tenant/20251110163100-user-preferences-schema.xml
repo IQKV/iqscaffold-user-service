@@ -5,7 +5,7 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.29.xsd">
 
-    <changeSet id="20251122000100-000000-user-preferences-table" author="iqscaffold">
+    <changeSet id="20251110163100-000000-user-preferences-table" author="iqscaffold">
         <comment>Create user_preferences table with one-to-one relationship to users</comment>
 
         <createTable tableName="user_preferences">
