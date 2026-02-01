@@ -83,7 +83,8 @@ public record S3ConfigurationProperties(
     }
 
     /**
-     * Get allowed MIME types as a list.
+     * Get allowed MIME types as a list
+     *
      * @return list of allowed MIME types
      */
     public java.util.List<String> getAllowedMimeTypesList() {
