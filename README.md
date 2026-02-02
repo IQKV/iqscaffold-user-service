@@ -459,7 +459,7 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          jwk-set-uri: http://user-service:8080/api/v1/auth/.well-known/jwks.json
+          jwk-set-uri: http://iqscaffold-user-service:8080/api/v1/auth/.well-known/jwks.json
 ```
 
 Extract user context from JWT claims:
