@@ -53,6 +53,11 @@ databaseChangeLog:
   # 1. SystemLiquibaseInitializer - Runs system migrations on startup
   # 2. TenantLiquibaseRunner - Runs tenant migrations during tenant provisioning
   #
+  # Context filtering is now supported programmatically:
+  # - iqscaffold.liquibase.systemContexts: Controls system migration contexts
+  # - iqscaffold.liquibase.tenantContexts: Controls tenant migration contexts  
+  # - iqscaffold.liquibase.enableDemoData: Includes demo context when true
+  #
   # MANUAL EXECUTION (Development/Testing):
   # To run migrations manually using this master file:
   #
@@ -65,6 +70,15 @@ databaseChangeLog:
   # Tenant migrations only:
   #   mvn liquibase:update -Dliquibase.contexts=tenant
   #
+  # Demo data only:
+  #   mvn liquibase:update -Dliquibase.contexts=demo
+  #
+  # Multiple contexts:
+  #   mvn liquibase:update -Dliquibase.contexts=system,tenant,demo
+  #
+  # Production contexts (exclude demo):
+  #   mvn liquibase:update -Dliquibase.contexts=system,tenant,production
+  #
   # Generate SQL for review:
   #   mvn liquibase:updateSQL
   #
@@ -75,7 +89,20 @@ databaseChangeLog:
   # Liquibase configuration is managed through:
   # - application.yml: iqscaffold.liquibase.systemChangeLog
   # - application.yml: iqscaffold.liquibase.tenantChangeLog
+  # - application.yml: iqscaffold.liquibase.systemContexts (context filtering)
+  # - application.yml: iqscaffold.liquibase.tenantContexts (context filtering)
+  # - application.yml: iqscaffold.liquibase.enableDemoData (demo data control)
   # - Spring Boot: spring.liquibase.enabled=false (disabled for custom handling)
+  #
+  # ENVIRONMENT-SPECIFIC CONTEXTS:
+  # - Development: enableDemoData=true, includes demo context
+  # - Production: enableDemoData=false, excludes demo context
+  # - Testing: enableDemoData=true, includes test and demo contexts
+  #
+  # CONTEXT EXAMPLES:
+  # - systemContexts: "system,production" - runs system and production changesets
+  # - tenantContexts: "tenant,production" - runs tenant and production changesets
+  # - enableDemoData: true - automatically adds "demo" to all contexts
   #
   # MULTI-TENANCY:
   # Each tenant gets its own database schema with the pattern: tenant_{tenantId}

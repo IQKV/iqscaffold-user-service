@@ -188,6 +188,8 @@ iqscaffold:
   liquibase:
     systemChangeLog: classpath:db/changelog/system/master.xml
     tenantChangeLog: classpath:db/changelog/tenant/master.xml
+    # Exclude demo context to prevent demo data in production
+    contexts: "!demo"
     # System changelog runs once on startup for public schema (tenants table, etc.)
     # Tenant changelog runs per-tenant schema during tenant provisioning
 

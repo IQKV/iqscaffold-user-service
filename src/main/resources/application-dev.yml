@@ -1,0 +1,16 @@
+# Development Profile Configuration
+# This profile enables demo data for development
+
+spring:
+  profiles:
+    active: dev
+
+iqscaffold:
+  liquibase:
+    # Include demo context to load demo data
+    contexts: "demo"
+
+logging:
+  level:
+    com.iqscaffold.userservice.tenancy.TenantLiquibaseRunner: DEBUG
+    liquibase: INFO
