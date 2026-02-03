@@ -1,16 +1,16 @@
-# Deployment Guide
+## 📜 Deployment Guide
 
-## Overview
+### Overview
 
 The IQ Scaffold User Service is deployed using Helm charts and automated CI/CD pipelines. The service provides JWT-based authentication, multi-tenancy, and user management capabilities.
 
-## Prerequisites
+### Prerequisites
 
 - Kubernetes 1.19+
 - Helm 3.2.0+
 - External infrastructure services (PostgreSQL, Redis, RabbitMQ, S3/MinIO)
 
-## Environments
+### Environments
 
 | Environment | Namespace                   | Purpose                      |
 | ----------- | --------------------------- | ---------------------------- |
@@ -19,9 +19,9 @@ The IQ Scaffold User Service is deployed using Helm charts and automated CI/CD p
 | Staging     | `iqscaffold-staging-env`    | Pre-production validation    |
 | Production  | `iqscaffold-production-env` | Live production environment  |
 
-## Automated Deployment (CI/CD)
+### Automated Deployment (CI/CD)
 
-### Drone Pipeline Overview
+#### Drone Pipeline Overview
 
 The service uses a comprehensive Drone CI/CD pipeline with 10 stages:
 
@@ -36,7 +36,7 @@ The service uses a comprehensive Drone CI/CD pipeline with 10 stages:
 9. **RollbackDeployment** - Release rollback
 10. **ReleasePackage** - Automated version management
 
-### Branch Deployment Strategy
+#### Branch Deployment Strategy
 
 | Branch Type | Auto Deploy | Manual Promote | Target Environment |
 | ----------- | ----------- | -------------- | ------------------ |
@@ -45,7 +45,7 @@ The service uses a comprehensive Drone CI/CD pipeline with 10 stages:
 | `dev`       | -           | ✅ Staging     | Staging            |
 | Tags        | -           | ✅ Production  | Production         |
 
-### Deployment Commands
+#### Deployment Commands
 
 The pipeline uses these Helm commands for deployment:
 
@@ -71,9 +71,9 @@ helm upgrade --install --atomic --wait --timeout 5m iqscaffold-user-service ./ \
   --namespace iqscaffold-production-env
 ```
 
-## Manual Deployment
+### Manual Deployment
 
-### Quick Start
+#### Quick Start
 
 ```bash
 # Clone Helm charts
@@ -89,7 +89,7 @@ helm upgrade --install user-service ./ \
   --create-namespace
 ```
 
-### Environment-Specific Deployments
+#### Environment-Specific Deployments
 
 #### Development
 
@@ -117,9 +117,9 @@ helm upgrade --install user-service ./ \
   --create-namespace
 ```
 
-## Configuration
+### Configuration
 
-### Required Secrets
+#### Required Secrets
 
 | Secret            | Environment Variable       | Required | Description                 |
 | ----------------- | -------------------------- | -------- | --------------------------- |
@@ -132,7 +132,7 @@ helm upgrade --install user-service ./ \
 | SMTP Username     | `SMTP_USERNAME`            | ⚠️       | Email service username      |
 | SMTP Password     | `SMTP_PASSWORD`            | ⚠️       | Email service password      |
 
-### External Services
+#### External Services
 
 The service connects to these external infrastructure components:
 
@@ -142,7 +142,7 @@ The service connects to these external infrastructure components:
 - **S3/MinIO**: Avatar and file storage
 - **SMTP**: Email notifications
 
-### Service Configuration
+#### Service Configuration
 
 | Setting        | Dev      | Production       |
 | -------------- | -------- | ---------------- |
@@ -153,15 +153,15 @@ The service connects to these external infrastructure components:
 | Ingress        | Disabled | Enabled with TLS |
 | Monitoring     | Disabled | Enabled          |
 
-## Monitoring & Health Checks
+### Monitoring & Health Checks
 
-### Health Endpoints
+#### Health Endpoints
 
 - **Liveness**: `/actuator/health/liveness` (port 8081)
 - **Readiness**: `/actuator/health/readiness` (port 8081)
 - **Metrics**: `/actuator/prometheus` (port 8081)
 
-### Monitoring Stack
+#### Monitoring Stack
 
 Production deployments include:
 
@@ -169,9 +169,9 @@ Production deployments include:
 - Alerting rules for service health
 - Grafana dashboards
 
-## Troubleshooting
+### Troubleshooting
 
-### Common Issues
+#### Common Issues
 
 1. **Database Connection Failures**
 
@@ -191,7 +191,7 @@ Production deployments include:
    curl http://localhost:8081/actuator/health
    ```
 
-### Rollback
+#### Rollback
 
 ```bash
 # Rollback to previous version
@@ -201,7 +201,7 @@ helm rollback iqscaffold-user-service -n iqscaffold-production-env
 helm uninstall iqscaffold-user-service -n iqscaffold-production-env
 ```
 
-## Security
+### Security
 
 - All sensitive values passed via `--set` flags
 - TLS enabled in production
