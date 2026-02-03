@@ -56,7 +56,7 @@ helm upgrade --install --atomic --wait --timeout 5m iqscaffold-user-service ./ \
   --values ./values-dev.yaml \
   --set image.tag=wip \
   --set externalServices.postgresql.password=${INFRA_DATABASE_PASSWORD} \
-  --set externalServices.rabbitmq.password=${INFRA_MESSAGING_PASSWORD} \
+  --set externalServices.rabbitmq.password=${INFRA_RABBITMQ_PASSWORD} \
   --set config.jwt.secretKey=${JWT_SECRET_KEY} \
   --namespace iqscaffold-dev-env
 
@@ -66,7 +66,7 @@ helm upgrade --install --atomic --wait --timeout 5m iqscaffold-user-service ./ \
   --values ./values-production.yaml \
   --set image.tag=${DRONE_TAG} \
   --set externalServices.postgresql.password=${INFRA_DATABASE_PASSWORD} \
-  --set externalServices.rabbitmq.password=${INFRA_MESSAGING_PASSWORD} \
+  --set externalServices.rabbitmq.password=${INFRA_RABBITMQ_PASSWORD} \
   --set config.jwt.secretKey=${JWT_SECRET_KEY} \
   --namespace iqscaffold-production-env
 ```
@@ -125,7 +125,7 @@ helm upgrade --install user-service ./ \
 | ----------------- | -------------------------- | -------- | --------------------------- |
 | Database Password | `INFRA_DATABASE_PASSWORD`  | ✅       | PostgreSQL password         |
 | JWT Secret        | `JWT_SECRET_KEY`           | ✅       | JWT signing key (256+ bits) |
-| RabbitMQ Password | `INFRA_MESSAGING_PASSWORD` | ⚠️       | Message broker password     |
+| RabbitMQ Password | `INFRA_RABBITMQ_PASSWORD` | ⚠️       | Message broker password     |
 | Redis Password    | `REDIS_PASSWORD`           | ⚠️       | Cache password              |
 | S3 Access Key     | `S3_ACCESS_KEY`            | ⚠️       | Object storage access       |
 | S3 Secret Key     | `S3_SECRET_KEY`            | ⚠️       | Object storage secret       |
