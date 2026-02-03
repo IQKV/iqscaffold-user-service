@@ -144,6 +144,9 @@ This is the authentication hub for the IQ Scaffold microservices platform. It ce
 
 ### Tenancy Implementation
 
+<details>
+<summary>Click to expand tenancy implementation details</summary>
+
 - Strategy: Hibernate schema-per-tenant; each tenant's data isolated in its own schema
 - Context: `TenantContext` controls current tenant; repositories are tenant-agnostic
 - Service layer: cross-tenant operations run by iterating tenants and executing in context
@@ -173,6 +176,8 @@ var stats = tenantRepository
   )
   .toList();
 ```
+
+</details>
 
 ### Testing Approach
 
@@ -286,6 +291,9 @@ var stats = tenantRepository
 
 #### Self-Service Provisioning
 
+<details>
+<summary>Click to expand self-service provisioning API</summary>
+
 - `POST /api/v1/public/signup` - Self-service tenant signup (no authentication required)
 
 **Request:**
@@ -331,7 +339,12 @@ var stats = tenantRepository
 - Rate limited to 3 signups per hour per IP
 - Default quotas: 10 users, 1GB storage, 1000 req/min
 
+</details>
+
 #### Authentication
+
+<details>
+<summary>Click to expand authentication endpoints</summary>
 
 - `POST /api/v1/auth/signup` - Register new user (requires existing tenant)
 - `POST /api/v1/auth/login` - Authenticate user
@@ -342,14 +355,24 @@ var stats = tenantRepository
 - `POST /api/v1/auth/password/forgot` - Initiate password reset
 - `POST /api/v1/auth/password/reset` - Reset password
 
+</details>
+
 ### Protected Endpoints (Requires Authentication)
+
+<details>
+<summary>Click to expand protected endpoints</summary>
 
 - `GET /api/v1/users/me` - Get current user
 - `PATCH /api/v1/users/me/password` - Change password
 - `POST /api/v1/auth/logout` - Logout current session
 - `POST /api/v1/auth/logout-all` - Logout all sessions
 
+</details>
+
 ### Admin Endpoints (Requires ADMIN/TENANT_OWNER/SUPER_ADMIN Authority)
+
+<details>
+<summary>Click to expand admin endpoints</summary>
 
 #### User Management
 
@@ -385,19 +408,31 @@ var stats = tenantRepository
 - `DELETE /api/v1/admin/tenants/{id}` - Delete tenant
 - `GET /api/v1/admin/tenants/statistics` - Get tenant statistics
 
+</details>
+
 ### User Preference Endpoints (Self-Service)
+
+<details>
+<summary>Click to expand user preference endpoints</summary>
 
 - `GET /api/v1/users/me/preferences` - Get my preferences
 - `PATCH /api/v1/users/me/preferences` - Update my preferences
 - `DELETE /api/v1/users/me/preferences` - Delete my preferences (reset to defaults)
 
+</details>
+
 ### Monitoring Endpoints
+
+<details>
+<summary>Click to expand monitoring endpoints</summary>
 
 - `/actuator/health` - Health status
 - `/actuator/metrics` - Application metrics
 - `/actuator/prometheus` - Prometheus metrics
 - `/swagger-ui.html` - API documentation
 - `/.well-known/jwks.json` - JWK Set for token validation
+
+</details>
 
 ## Learning Points
 
@@ -452,6 +487,9 @@ The patterns demonstrated here apply to any domain requiring centralized authent
 
 ### Consuming Authentication
 
+<details>
+<summary>Click to expand authentication consumption examples</summary>
+
 Other microservices validate JWT tokens using the JWK Set endpoint:
 
 ```yaml
@@ -478,7 +516,12 @@ public ResponseEntity<?> protectedEndpoint(Authentication auth) {
 }
 ```
 
+</details>
+
 ### JWT Token Structure
+
+<details>
+<summary>Click to expand JWT token structure</summary>
 
 Access tokens carry comprehensive user context:
 
@@ -502,7 +545,12 @@ Access tokens carry comprehensive user context:
 }
 ```
 
+</details>
+
 ### Authority Structure
+
+<details>
+<summary>Click to expand authority structure details</summary>
 
 The service manages six system-wide authorities stored in the PUBLIC schema:
 
@@ -514,6 +562,8 @@ The service manages six system-wide authorities stored in the PUBLIC schema:
 - **USER** - Regular user with basic access
 
 **Key Design**: Authorities are stored in PUBLIC schema (system-wide) while user-authority mappings are in tenant schemas. This ensures consistent authority definitions across all tenants while maintaining tenant isolation for user data.
+
+</details>
 
 ---
 
