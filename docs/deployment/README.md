@@ -126,7 +126,7 @@ helm upgrade --install user-service ./ \
 | Database Password | `INFRA_POSTGRESQL_PASSWORD`  | ✅       | PostgreSQL password         |
 | JWT Secret        | `JWT_SECRET_KEY`           | ✅       | JWT signing key (256+ bits) |
 | RabbitMQ Password | `INFRA_RABBITMQ_PASSWORD` | ⚠️       | Message broker password     |
-| Redis Password    | `REDIS_PASSWORD`           | ⚠️       | Cache password              |
+| Redis Password    | `INFRA_REDIS_PASSWORD`           | ⚠️       | Cache password              |
 | S3 Access Key     | `S3_ACCESS_KEY`            | ⚠️       | Object storage access       |
 | S3 Secret Key     | `S3_SECRET_KEY`            | ⚠️       | Object storage secret       |
 | SMTP Username     | `SMTP_USERNAME`            | ⚠️       | Email service username      |
