@@ -55,8 +55,8 @@ helm upgrade --install --atomic --wait --timeout 5m iqscaffold-user-service ./ \
   --values ./values.yaml \
   --values ./values-dev.yaml \
   --set image.tag=wip \
-  --set externalServices.postgresql.password=${INFRA_DATABASE_PASSWORD} \
-  --set externalServices.rabbitmq.password=${INFRA_RABBITMQ_PASSWORD} \
+  --set infraServices.postgresql.password=${INFRA_POSTGRESQL_PASSWORD} \
+  --set infraServices.rabbitmq.password=${INFRA_RABBITMQ_PASSWORD} \
   --set config.jwt.secretKey=${JWT_SECRET_KEY} \
   --namespace iqscaffold-dev-env
 
@@ -65,8 +65,8 @@ helm upgrade --install --atomic --wait --timeout 5m iqscaffold-user-service ./ \
   --values ./values.yaml \
   --values ./values-production.yaml \
   --set image.tag=${DRONE_TAG} \
-  --set externalServices.postgresql.password=${INFRA_DATABASE_PASSWORD} \
-  --set externalServices.rabbitmq.password=${INFRA_RABBITMQ_PASSWORD} \
+  --set infraServices.postgresql.password=${INFRA_POSTGRESQL_PASSWORD} \
+  --set infraServices.rabbitmq.password=${INFRA_RABBITMQ_PASSWORD} \
   --set config.jwt.secretKey=${JWT_SECRET_KEY} \
   --namespace iqscaffold-production-env
 ```
@@ -83,7 +83,7 @@ cd charts/IQKV/iqscaffold-user-service
 # Deploy to development
 helm upgrade --install user-service ./ \
   --values values-dev.yaml \
-  --set externalServices.postgresql.password="your-db-password" \
+  --set infraServices.postgresql.password="your-db-password" \
   --set config.jwt.secretKey="your-jwt-secret" \
   --namespace iqscaffold-dev-env \
   --create-namespace
@@ -105,11 +105,11 @@ helm upgrade --install user-service ./ \
 ```bash
 helm upgrade --install user-service ./ \
   --values values-production.yaml \
-  --set externalServices.postgresql.password="${DB_PASSWORD}" \
-  --set externalServices.redis.password="${REDIS_PASSWORD}" \
-  --set externalServices.rabbitmq.password="${RABBITMQ_PASSWORD}" \
-  --set externalServices.s3.accessKey="${S3_ACCESS_KEY}" \
-  --set externalServices.s3.secretKey="${S3_SECRET_KEY}" \
+  --set infraServices.postgresql.password="${DB_PASSWORD}" \
+  --set infraServices.redis.password="${REDIS_PASSWORD}" \
+  --set infraServices.rabbitmq.password="${RABBITMQ_PASSWORD}" \
+  --set infraServices.s3.accessKey="${S3_ACCESS_KEY}" \
+  --set infraServices.s3.secretKey="${S3_SECRET_KEY}" \
   --set config.jwt.secretKey="${JWT_SECRET_KEY}" \
   --set config.email.smtp.username="${SMTP_USERNAME}" \
   --set config.email.smtp.password="${SMTP_PASSWORD}" \
@@ -123,7 +123,7 @@ helm upgrade --install user-service ./ \
 
 | Secret            | Environment Variable       | Required | Description                 |
 | ----------------- | -------------------------- | -------- | --------------------------- |
-| Database Password | `INFRA_DATABASE_PASSWORD`  | ✅       | PostgreSQL password         |
+| Database Password | `INFRA_POSTGRESQL_PASSWORD`  | ✅       | PostgreSQL password         |
 | JWT Secret        | `JWT_SECRET_KEY`           | ✅       | JWT signing key (256+ bits) |
 | RabbitMQ Password | `INFRA_RABBITMQ_PASSWORD` | ⚠️       | Message broker password     |
 | Redis Password    | `REDIS_PASSWORD`           | ⚠️       | Cache password              |
