@@ -24,7 +24,8 @@ public class TestLiquibaseConfiguration {
     return new TenantLiquibaseRunner(
         dataSource,
         "classpath:db/changelog/tenant/master.xml",
-        "classpath:db/changelog/system/master.xml"
+        "classpath:db/changelog/system/master.xml",
+        "demo" // Enable demo context for tests
     );
   }
 }
