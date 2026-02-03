@@ -20,48 +20,36 @@ class TenantLiquibaseRunnerTest {
   @Test
   @DisplayName("Should handle empty contexts")
   void shouldHandleEmptyContexts() {
-    var runner = new TenantLiquibaseRunner(
+    // Should not throw exception during construction
+    assertDoesNotThrow(() -> new TenantLiquibaseRunner(
         dataSource,
         "classpath:db/changelog/tenant/master.xml",
         "classpath:db/changelog/system/master.xml",
         "" // empty contexts
-    );
-
-    // Should not throw exception
-    assertDoesNotThrow(() -> {
-      // Just verify construction works - actual execution would need database
-    });
+    ));
   }
 
   @Test
   @DisplayName("Should handle demo context")
   void shouldHandleDemoContext() {
-    var runner = new TenantLiquibaseRunner(
+    // Should not throw exception during construction
+    assertDoesNotThrow(() -> new TenantLiquibaseRunner(
         dataSource,
         "classpath:db/changelog/tenant/master.xml",
         "classpath:db/changelog/system/master.xml",
         "demo"
-    );
-
-    // Should not throw exception
-    assertDoesNotThrow(() -> {
-      // Just verify construction works - actual execution would need database
-    });
+    ));
   }
 
   @Test
   @DisplayName("Should handle multiple contexts")
   void shouldHandleMultipleContexts() {
-    var runner = new TenantLiquibaseRunner(
+    // Should not throw exception during construction
+    assertDoesNotThrow(() -> new TenantLiquibaseRunner(
         dataSource,
         "classpath:db/changelog/tenant/master.xml",
         "classpath:db/changelog/system/master.xml",
         "demo,production,test"
-    );
-
-    // Should not throw exception
-    assertDoesNotThrow(() -> {
-      // Just verify construction works - actual execution would need database
-    });
+    ));
   }
 }
