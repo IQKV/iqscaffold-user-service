@@ -266,7 +266,7 @@ iqscaffold:
   # Authentication Configuration
   auth:
     jwt:
-      secret-key: ${IQSCAFFOLD_AUTH_JWT_SECRET:change-me-in-production}
+      secret-key: ${JWT_SECRET_KEY:change-me-in-production}
       access-token-expiry: PT15M  # 15 minutes
       refresh-token-expiry: P7D   # 7 days
       issuer: iqscaffold-user-service

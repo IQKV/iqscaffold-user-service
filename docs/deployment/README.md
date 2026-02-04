@@ -60,7 +60,7 @@ The service uses Drone CI/CD pipeline with 10 stages:
 | `INFRA_RABBITMQ_PASSWORD`         | RabbitMQ message broker password  | Application configuration                  |
 | `INFRA_S3_ACCESS_KEY`             | S3 storage access key             | Application configuration                  |
 | `INFRA_S3_SECRET_KEY`             | S3 storage secret key             | Application configuration                  |
-| `JWT_SECRET_KEY`                  | JWT token signing key             | Application security                       |
+| `JWT_SECRET_KEY`                  | JWT symmetric signing key (HS256) | Application security                       |
 | `GOOGLE_OAUTH2_CLIENT_ID`         | Google OAuth2 client ID           | Authentication integration                 |
 | `GOOGLE_OAUTH2_CLIENT_SECRET`     | Google OAuth2 client secret       | Authentication integration                 |
 | `SMTP_USERNAME`                   | Email service username            | Email notifications                        |
@@ -139,7 +139,7 @@ helm upgrade --install user-service ./ \
   --set infraServices.rabbitmq.password="your-rabbitmq-password" \
   --set infraServices.s3.accessKey="your-s3-access-key" \
   --set infraServices.s3.secretKey="your-s3-secret-key" \
-  --set config.jwt.secretKey="your-jwt-secret" \
+  --set config.jwt.secretKey="your-secure-symmetric-key" \
   --set config.oauth2.google.clientId="your-google-client-id" \
   --set config.oauth2.google.clientSecret="your-google-client-secret" \
   --set config.email.smtp.username="your-smtp-username" \
@@ -159,7 +159,7 @@ drone secret add --repository IQKV/iqscaffold-user-service --name INFRA_S3_ACCES
 drone secret add --repository IQKV/iqscaffold-user-service --name INFRA_MINIO_SECRET_KEY --data "your-minio-secret-key"
 
 # Application secrets
-drone secret add --repository IQKV/iqscaffold-user-service --name JWT_SECRET_KEY --data "your-jwt-secret-key"
+drone secret add --repository IQKV/iqscaffold-user-service --name JWT_SECRET_KEY --data "your-secure-symmetric-key"
 drone secret add --repository IQKV/iqscaffold-user-service --name GOOGLE_OAUTH2_CLIENT_ID --data "your-google-client-id"
 drone secret add --repository IQKV/iqscaffold-user-service --name GOOGLE_OAUTH2_CLIENT_SECRET --data "your-google-client-secret"
 drone secret add --repository IQKV/iqscaffold-user-service --name SMTP_USERNAME --data "your-smtp-username"

@@ -140,7 +140,7 @@ public class HealthCheckConfig {
     public Health health() {
       try {
         // Test JWT service functionality by checking if we can access JWT configuration
-        var jwtSecretPresent = System.getenv("IQSCAFFOLD_AUTH_JWT_SECRET") != null
+        var jwtSecretPresent = System.getenv("JWT_SECRET_KEY") != null
                                || System.getProperty("iqscaffold.auth.jwt.secret-key") != null;
 
         if (jwtSecretPresent) {

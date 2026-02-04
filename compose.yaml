@@ -141,7 +141,7 @@ services:
       IQSCAFFOLD_S3_URL_EXPIRATION: 60
 
       # JWT Configuration
-      IQSCAFFOLD_AUTH_JWT_SECRET: local-development-secret-key-not-for-production-use
+      JWT_SECRET_KEY: local-development-secret-key-not-for-production-use
       IQSCAFFOLD_AUTH_JWT_ISSUER: iqscaffold-user-service
 
       # Email Configuration

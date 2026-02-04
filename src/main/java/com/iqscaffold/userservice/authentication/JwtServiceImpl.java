@@ -12,6 +12,9 @@ import com.iqscaffold.userservice.tenancy.TenantContext;
 import com.iqscaffold.userservice.usermanagement.User;
 import com.iqscaffold.userservice.usermanagement.UserContext;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
+import org.springframework.security.oauth2.jose.jws.SignatureAlgorithm;
+import org.springframework.security.oauth2.jwt.JwsHeader;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtClaimsSet;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
@@ -23,13 +26,20 @@ import org.springframework.stereotype.Service;
 /**
  * Implementation of JwtService providing comprehensive JWT token management.
  *
- * <p>This service implements enterprise-grade JWT token handling with the following capabilities:
+ * <p>
+ * This service implements enterprise-grade JWT token handling with the
+ * following capabilities:
  * <ul>
- *   <li><strong>Token Generation</strong> - Creates access and refresh tokens with user context claims</li>
- *   <li><strong>Token Validation</strong> - Verifies signatures, expiration, and blacklist status</li>
- *   <li><strong>Token Blacklisting</strong> - Immediate token revocation using Redis</li>
- *   <li><strong>Multi-Device Support</strong> - Per-device and global token management</li>
- *   <li><strong>Key Rotation Support</strong> - Works with rotating RSA key pairs</li>
+ * <li><strong>Token Generation</strong> - Creates access and refresh tokens
+ * with user context claims</li>
+ * <li><strong>Token Validation</strong> - Verifies signatures, expiration, and
+ * blacklist status</li>
+ * <li><strong>Token Blacklisting</strong> - Immediate token revocation using
+ * Redis</li>
+ * <li><strong>Multi-Device Support</strong> - Per-device and global token
+ * management</li>
+ * <li><strong>Key Rotation Support</strong> - Works with rotating RSA key
+ * pairs</li>
  * </ul>
  *
  * @see JwtService
@@ -46,8 +56,8 @@ public class JwtServiceImpl implements JwtService {
   private final com.iqscaffold.userservice.organization.OrganizationRepository organizationRepository;
 
   public JwtServiceImpl(final JwtEncoder jwtEncoder, final JwtDecoder jwtDecoder,
-                        final JwtConfiguration jwtConfiguration, final RedisTemplate<String, String> redisTemplate,
-                        final com.iqscaffold.userservice.organization.OrganizationRepository organizationRepository) {
+      final JwtConfiguration jwtConfiguration, final RedisTemplate<String, String> redisTemplate,
+      final com.iqscaffold.userservice.organization.OrganizationRepository organizationRepository) {
     this.jwtEncoder = jwtEncoder;
     this.jwtDecoder = jwtDecoder;
     this.jwtConfiguration = jwtConfiguration;
@@ -63,7 +73,8 @@ public class JwtServiceImpl implements JwtService {
     var userContext = createUserContext(user);
     var claims = createTokenClaims(userContext, now, expiry, "access");
 
-    var jwt = jwtEncoder.encode(JwtEncoderParameters.from(claims));
+    var header = createJwsHeader();
+    var jwt = jwtEncoder.encode(JwtEncoderParameters.from(header, claims));
     return jwt.getTokenValue();
   }
 
@@ -82,7 +93,8 @@ public class JwtServiceImpl implements JwtService {
         .claim(JwtClaimNames.TENANT_ID, user.getTenantId())
         .build();
 
-    var jwt = jwtEncoder.encode(JwtEncoderParameters.from(claims));
+    var header = createJwsHeader();
+    var jwt = jwtEncoder.encode(JwtEncoderParameters.from(header, claims));
     return jwt.getTokenValue();
   }
 
@@ -119,8 +131,7 @@ public class JwtServiceImpl implements JwtService {
 
     return new UserContext(
         userId, username, email, authorities, permissions,
-        firstName, lastName, tenantId, organizationId, customClaims
-    );
+        firstName, lastName, tenantId, organizationId, customClaims);
   }
 
   @Override
@@ -211,8 +222,7 @@ public class JwtServiceImpl implements JwtService {
         user.getLastName(),
         user.getTenantId(),
         organizationId,
-        Map.of("preferredLocale", user.getPreferredLocale())
-    );
+        Map.of("preferredLocale", user.getPreferredLocale()));
   }
 
   /**
@@ -236,6 +246,18 @@ public class JwtServiceImpl implements JwtService {
         .claim(JwtClaimNames.ORGANIZATION_ID, userContext.organizationId())
         .claim(JwtClaimNames.PREFERRED_LOCALE, userContext.customClaims().get("preferredLocale"))
         .build();
+  }
+
+  /**
+   * Create JWS header based on configured algorithm.
+   */
+  private JwsHeader createJwsHeader() {
+    var algorithm = jwtConfiguration.getAlgorithm();
+    if (algorithm.startsWith("HS")) {
+      return JwsHeader.with(MacAlgorithm.from(algorithm)).build();
+    } else {
+      return JwsHeader.with(SignatureAlgorithm.from(algorithm)).build();
+    }
   }
 
   /**
@@ -307,8 +329,7 @@ public class JwtServiceImpl implements JwtService {
         JwtClaimNames.LAST_NAME,
         JwtClaimNames.TENANT_ID,
         JwtClaimNames.ORGANIZATION_ID,
-        JwtClaimNames.PREFERRED_LOCALE
-    );
+        JwtClaimNames.PREFERRED_LOCALE);
 
     return allClaims.entrySet().stream()
         .filter(entry -> !standardClaims.contains(entry.getKey()))

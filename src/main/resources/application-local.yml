@@ -96,7 +96,7 @@ iqscaffold:
   # Authentication Configuration
   auth:
     jwt:
-      secret-key: ${IQSCAFFOLD_AUTH_JWT_SECRET:local-development-secret-key-not-for-production-use}
+      secret-key: ${JWT_SECRET_KEY:local-development-secret-key-not-for-production-use}
       access-token-expiry: PT30M  # Extended for development
       refresh-token-expiry: P30D  # Extended for development
       issuer: iqscaffold-user-service-local

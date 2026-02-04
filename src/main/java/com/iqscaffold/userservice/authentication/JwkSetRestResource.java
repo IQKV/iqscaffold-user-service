@@ -12,7 +12,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * JWK Set endpoint for public key distribution.
- * Allows downstream services to dynamically fetch public keys for JWT validation.
+ * Allows downstream services to dynamically fetch public keys for JWT
+ * validation.
  */
 @RestController
 @RequestMapping("/.well-known")
@@ -25,15 +26,16 @@ public class JwkSetRestResource {
     this.jwkSource = jwkSource;
   }
 
-  @Operation(
-      summary = "Get JWK Set",
-      description = "Returns the JSON Web Key Set containing public keys for JWT validation. " +
-                    "Downstream services use this endpoint to dynamically fetch public keys."
-  )
+  @Operation(summary = "Get JWK Set", description = "Returns the JSON Web Key Set containing public keys for JWT validation. "
+      +
+      "Downstream services use this endpoint to dynamically fetch public keys.")
   @GetMapping("/jwks.json")
   public Map<String, Object> jwkSet() {
     try {
-      var jwkSelector = new com.nimbusds.jose.jwk.JWKSelector(new com.nimbusds.jose.jwk.JWKMatcher.Builder().build());
+      var jwkSelector = new com.nimbusds.jose.jwk.JWKSelector(
+          new com.nimbusds.jose.jwk.JWKMatcher.Builder()
+              .publicOnly(true)
+              .build());
       var jwks = jwkSource.get(jwkSelector, null);
       return new com.nimbusds.jose.jwk.JWKSet(jwks).toJSONObject();
     } catch (final Exception e) {
