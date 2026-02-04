@@ -44,27 +44,27 @@ The service uses Drone CI/CD pipeline with 10 stages:
 <details>
 <summary>🔐 Required Drone Secrets</summary>
 
-| Secret Name | Purpose | Used In |
-|-------------|---------|---------|
-| `NEXUS_DEPLOYER_USERNAME` | Nexus repository authentication | Artifact publishing, dependency resolution |
-| `NEXUS_DEPLOYER_PASSWORD` | Nexus repository authentication | Artifact publishing, dependency resolution |
-| `SONAR_HOST` | SonarQube server URL | Static code analysis |
-| `SONAR_TOKEN` | SonarQube authentication token | Static code analysis |
-| `SLACK_WEBHOOK` | Slack notifications webhook URL | Build status notifications |
-| `GITHUB_API_ACCESS_TOKEN` | GitHub API access for releases | Release creation, changelog generation |
-| `SVC_CONTAINER_REGISTRY_USERNAME` | Container registry authentication | Docker image publishing |
-| `SVC_CONTAINER_REGISTRY_PASSWORD` | Container registry authentication | Docker image publishing |
-| `HELM_CHARTS_REPOSITORY` | Helm charts repository URL | Kubernetes deployments |
-| `INFRA_POSTGRESQL_PASSWORD` | PostgreSQL database password | Application configuration |
-| `INFRA_REDIS_PASSWORD` | Redis cache password | Application configuration |
-| `INFRA_RABBITMQ_PASSWORD` | RabbitMQ message broker password | Application configuration |
-| `INFRA_S3_ACCESS_KEY` | S3 storage access key | Application configuration |
-| `INFRA_S3_SECRET_KEY` | S3 storage secret key | Application configuration |
-| `JWT_SECRET_KEY` | JWT token signing key | Application security |
-| `GOOGLE_OAUTH2_CLIENT_ID` | Google OAuth2 client ID | Authentication integration |
-| `GOOGLE_OAUTH2_CLIENT_SECRET` | Google OAuth2 client secret | Authentication integration |
-| `SMTP_USERNAME` | Email service username | Email notifications |
-| `SMTP_PASSWORD` | Email service password | Email notifications |
+| Secret Name                       | Purpose                           | Used In                                    |
+| --------------------------------- | --------------------------------- | ------------------------------------------ |
+| `NEXUS_DEPLOYER_USERNAME`         | Nexus repository authentication   | Artifact publishing, dependency resolution |
+| `NEXUS_DEPLOYER_PASSWORD`         | Nexus repository authentication   | Artifact publishing, dependency resolution |
+| `SONAR_HOST`                      | SonarQube server URL              | Static code analysis                       |
+| `SONAR_TOKEN`                     | SonarQube authentication token    | Static code analysis                       |
+| `SLACK_WEBHOOK`                   | Slack notifications webhook URL   | Build status notifications                 |
+| `GITHUB_API_ACCESS_TOKEN`         | GitHub API access for releases    | Release creation, changelog generation     |
+| `SVC_CONTAINER_REGISTRY_USERNAME` | Container registry authentication | Docker image publishing                    |
+| `SVC_CONTAINER_REGISTRY_PASSWORD` | Container registry authentication | Docker image publishing                    |
+| `HELM_CHARTS_REPOSITORY`          | Helm charts repository URL        | Kubernetes deployments                     |
+| `INFRA_POSTGRESQL_PASSWORD`       | PostgreSQL database password      | Application configuration                  |
+| `INFRA_REDIS_PASSWORD`            | Redis cache password              | Application configuration                  |
+| `INFRA_RABBITMQ_PASSWORD`         | RabbitMQ message broker password  | Application configuration                  |
+| `INFRA_S3_ACCESS_KEY`             | S3 storage access key             | Application configuration                  |
+| `INFRA_S3_SECRET_KEY`             | S3 storage secret key             | Application configuration                  |
+| `JWT_SECRET_KEY`                  | JWT token signing key             | Application security                       |
+| `GOOGLE_OAUTH2_CLIENT_ID`         | Google OAuth2 client ID           | Authentication integration                 |
+| `GOOGLE_OAUTH2_CLIENT_SECRET`     | Google OAuth2 client secret       | Authentication integration                 |
+| `SMTP_USERNAME`                   | Email service username            | Email notifications                        |
+| `SMTP_PASSWORD`                   | Email service password            | Email notifications                        |
 
 </details>
 
@@ -80,6 +80,9 @@ The service uses Drone CI/CD pipeline with 10 stages:
 #### Deployment Commands
 
 The pipeline uses these Helm commands for deployment:
+
+<details>
+<summary>Helm Commands</summary>
 
 ```bash
 # Development (WIP branches)
@@ -117,6 +120,8 @@ helm upgrade --install --atomic --wait --timeout 5m iqscaffold-user-service ./ \
   --namespace iqscaffold-production-env
 ```
 
+</details>
+
 ### Manual Deployment
 
 #### Quick Start
@@ -143,78 +148,6 @@ helm upgrade --install user-service ./ \
   --create-namespace
 ```
 
-#### Environment-Specific Deployments
-
-#### Development
-
-```bash
-helm upgrade --install user-service ./ \
-  --values values-dev.yaml \
-  --set infraServices.postgresql.password="${DB_PASSWORD}" \
-  --set infraServices.redis.password="${REDIS_PASSWORD}" \
-  --set infraServices.rabbitmq.password="${RABBITMQ_PASSWORD}" \
-  --set infraServices.s3.accessKey="${S3_ACCESS_KEY}" \
-  --set infraServices.s3.secretKey="${S3_SECRET_KEY}" \
-  --set config.jwt.secretKey="${JWT_SECRET_KEY}" \
-  --set config.oauth2.google.clientId="${GOOGLE_CLIENT_ID}" \
-  --set config.oauth2.google.clientSecret="${GOOGLE_CLIENT_SECRET}" \
-  --set config.email.smtp.username="${SMTP_USERNAME}" \
-  --set config.email.smtp.password="${SMTP_PASSWORD}" \
-  --namespace iqscaffold-dev-env \
-  --create-namespace
-```
-
-#### Production
-
-```bash
-helm upgrade --install user-service ./ \
-  --values values-production.yaml \
-  --set infraServices.postgresql.password="${DB_PASSWORD}" \
-  --set infraServices.redis.password="${REDIS_PASSWORD}" \
-  --set infraServices.rabbitmq.password="${RABBITMQ_PASSWORD}" \
-  --set infraServices.s3.accessKey="${S3_ACCESS_KEY}" \
-  --set infraServices.s3.secretKey="${S3_SECRET_KEY}" \
-  --set config.jwt.secretKey="${JWT_SECRET_KEY}" \
-  --set config.oauth2.google.clientId="${GOOGLE_CLIENT_ID}" \
-  --set config.oauth2.google.clientSecret="${GOOGLE_CLIENT_SECRET}" \
-  --set config.email.smtp.username="${SMTP_USERNAME}" \
-  --set config.email.smtp.password="${SMTP_PASSWORD}" \
-  --namespace iqscaffold-production-env \
-  --create-namespace
-```
-
-### Configuration
-
-### Required Drone Secrets
-
-The following secrets must be configured in your Drone CI system for the pipeline to function correctly:
-
-| Secret Name | Description | Usage | Required |
-|-------------|-------------|-------|----------|
-| `HELM_CHARTS_REPOSITORY` | Git repository URL containing Helm charts | Used to clone charts repository for deployment | ✅ |
-| `NEXUS_DEPLOYER_USERNAME` | Nexus repository username | Maven artifact deployment | ✅ |
-| `NEXUS_DEPLOYER_PASSWORD` | Nexus repository password | Maven artifact deployment | ✅ |
-| `SVC_CONTAINER_REGISTRY_USERNAME` | Container registry username | Docker image publishing | ✅ |
-| `SVC_CONTAINER_REGISTRY_PASSWORD` | Container registry password | Docker image publishing | ✅ |
-| `GITHUB_API_ACCESS_TOKEN` | GitHub API token | Release creation and changelog | ✅ |
-| `SONAR_HOST` | SonarQube server URL | Code quality analysis | ✅ |
-| `SONAR_TOKEN` | SonarQube authentication token | Code quality analysis | ✅ |
-| `SLACK_WEBHOOK` | Slack webhook URL for notifications | Build status notifications | ✅ |
-| `INFRA_POSTGRESQL_PASSWORD` | PostgreSQL database password | Database connection | ✅ |
-| `INFRA_REDIS_PASSWORD` | Redis cache password | Cache connection | ✅ |
-| `INFRA_RABBITMQ_PASSWORD` | RabbitMQ message broker password | Message queue connection | ✅ |
-| `INFRA_S3_ACCESS_KEY` | MinIO object storage access key | Object storage connection | ✅ |
-| `INFRA_MINIO_SECRET_KEY` | MinIO object storage secret key | Object storage connection | ✅ |
-| `JWT_SECRET_KEY` | JWT signing secret key | Authentication tokens | ✅ |
-| `GOOGLE_OAUTH2_CLIENT_ID` | Google OAuth2 client ID | Social authentication | ⚠️ |
-| `GOOGLE_OAUTH2_CLIENT_SECRET` | Google OAuth2 client secret | Social authentication | ⚠️ |
-| `SMTP_USERNAME` | SMTP server username | Email notifications | ⚠️ |
-| `SMTP_PASSWORD` | SMTP server password | Email notifications | ⚠️ |
-
-**Legend:**
-- ✅ **Required**: Pipeline will fail without this secret
-- ⚠️ **Optional**: Feature-specific, pipeline continues but functionality may be limited
-
 #### Secret Configuration Examples
 
 ```bash
@@ -232,47 +165,7 @@ drone secret add --repository IQKV/iqscaffold-user-service --name GOOGLE_OAUTH2_
 drone secret add --repository IQKV/iqscaffold-user-service --name SMTP_USERNAME --data "your-smtp-username"
 drone secret add --repository IQKV/iqscaffold-user-service --name SMTP_PASSWORD --data "your-smtp-password"
 
-# CI/CD secrets
-drone secret add --repository IQKV/iqscaffold-user-service --name HELM_CHARTS_REPOSITORY --data "https://github.com/KnowHowDevOps/helm-charts.git"
-drone secret add --repository IQKV/iqscaffold-user-service --name SLACK_WEBHOOK --data "https://hooks.slack.com/services/YOUR/SLACK/WEBHOOK"
 ```
-
-#### Required Secrets
-
-| Secret                  | Environment Variable          | Required | Description                 |
-| ----------------------- | ----------------------------- | -------- | --------------------------- |
-| Database Password       | `INFRA_POSTGRESQL_PASSWORD`   | ✅       | PostgreSQL password         |
-| Redis Password          | `INFRA_REDIS_PASSWORD`        | ✅       | Redis cache password        |
-| RabbitMQ Password       | `INFRA_RABBITMQ_PASSWORD`     | ✅       | Message broker password     |
-| S3 Access Key           | `INFRA_S3_ACCESS_KEY`      | ✅       | Object storage access key   |
-| S3 Secret Key           | `INFRA_MINIO_SECRET_KEY`      | ✅       | Object storage secret key   |
-| JWT Secret              | `JWT_SECRET_KEY`              | ✅       | JWT signing key (256+ bits) |
-| Google OAuth2 Client ID | `GOOGLE_OAUTH2_CLIENT_ID`     | ⚠️       | Google OAuth2 client ID     |
-| Google OAuth2 Secret    | `GOOGLE_OAUTH2_CLIENT_SECRET` | ⚠️       | Google OAuth2 client secret |
-| SMTP Username           | `SMTP_USERNAME`               | ⚠️       | Email service username      |
-| SMTP Password           | `SMTP_PASSWORD`               | ⚠️       | Email service password      |
-
-**Legend:**
-
-- ✅ **Required**: Service will fail to start without this secret
-- ⚠️ **Optional**: Feature-specific, service starts but functionality may be limited
-
-#### Environment Variable Mapping
-
-The Helm chart maps Drone CI secrets to application environment variables:
-
-| Drone Secret                  | Helm --set Parameter                | Application Environment Variable              |
-| ----------------------------- | ----------------------------------- | --------------------------------------------- |
-| `INFRA_POSTGRESQL_PASSWORD`   | `infraServices.postgresql.password` | `IQSCAFFOLD_DATABASE_PASSWORD`                |
-| `INFRA_REDIS_PASSWORD`        | `infraServices.redis.password`      | `IQSCAFFOLD_CACHE_REDIS_PASSWORD`             |
-| `INFRA_RABBITMQ_PASSWORD`     | `infraServices.rabbitmq.password`   | `IQSCAFFOLD_MESSAGING_RABBITMQ_PASSWORD`      |
-| `INFRA_S3_ACCESS_KEY`      | `infraServices.s3.accessKey`        | `IQSCAFFOLD_S3_ACCESS_KEY`                    |
-| `INFRA_MINIO_SECRET_KEY`      | `infraServices.s3.secretKey`        | `IQSCAFFOLD_S3_SECRET_KEY`                    |
-| `JWT_SECRET_KEY`              | `config.jwt.secretKey`              | `IQSCAFFOLD_AUTH_JWT_SECRET`                  |
-| `GOOGLE_OAUTH2_CLIENT_ID`     | `config.oauth2.google.clientId`     | `IQSCAFFOLD_AUTH_OAUTH2_GOOGLE_CLIENT_ID`     |
-| `GOOGLE_OAUTH2_CLIENT_SECRET` | `config.oauth2.google.clientSecret` | `IQSCAFFOLD_AUTH_OAUTH2_GOOGLE_CLIENT_SECRET` |
-| `SMTP_USERNAME`               | `config.email.smtp.username`        | `SMTP_USERNAME`                               |
-| `SMTP_PASSWORD`               | `config.email.smtp.password`        | `SMTP_PASSWORD`                               |
 
 #### External Services
 
