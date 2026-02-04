@@ -157,7 +157,7 @@ All demo users have verified emails and are enabled by default. Use the credenti
 
 ## Rollback
 
-The migration includes a comprehensive rollback that removes all demo data in reverse order:
+The migration includes rollback that removes all demo data in reverse order:
 1. User preferences
 2. User authorities
 3. Users

@@ -23,7 +23,7 @@
         <!-- Demo Organization linked to tenant -->
         <insert tableName="organizations" schemaName="public">
             <column name="name" value="Demo Tech Solutions"/>
-            <column name="description" value="Demo organization showcasing multi-tenant SaaS capabilities with comprehensive user management"/>
+            <column name="description" value="Demo organization showcasing multi-tenant SaaS capabilities with user management"/>
             <column name="industry" value="Technology"/>
             <column name="website" value="https://demo.iqscaffold.com"/>
             <column name="phone" value="+1-555-0123"/>
@@ -180,7 +180,7 @@
         </insert>
         <!-- Create user preferences for demo users -->
         
-        <!-- 1. Super Admin preferences - System administrator with comprehensive monitoring setup -->
+        <!-- 1. Super Admin preferences - System administrator with monitoring setup -->
         <insert tableName="user_preferences">
             <column name="user_id" valueComputed="(SELECT id FROM users WHERE username = 'superadmin')"/>
             <column name="locale" value="en"/>
