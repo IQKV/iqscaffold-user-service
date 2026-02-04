@@ -66,6 +66,7 @@ class JwtServiceTest {
     org.mockito.Mockito.lenient().when(jwtConfiguration.getAccessTokenExpiry()).thenReturn(Duration.ofMinutes(15));
     org.mockito.Mockito.lenient().when(jwtConfiguration.getRefreshTokenExpiry()).thenReturn(Duration.ofDays(7));
     org.mockito.Mockito.lenient().when(jwtConfiguration.getIssuer()).thenReturn("test-issuer");
+    org.mockito.Mockito.lenient().when(jwtConfiguration.getAlgorithm()).thenReturn("HS256");
 
     service = new JwtServiceImpl(jwtEncoder, jwtDecoder, jwtConfiguration, redisTemplate, organizationRepository);
 
@@ -290,8 +291,7 @@ class JwtServiceTest {
         Instant.now(),
         Instant.now().plusSeconds(3600),
         java.util.Map.of("alg", "HS256"),
-        java.util.Map.of("sub", "1")
-    );
+        java.util.Map.of("sub", "1"));
   }
 
   private Jwt createMockJwtWithId(String jwtId) {
@@ -300,8 +300,7 @@ class JwtServiceTest {
         Instant.now(),
         Instant.now().plusSeconds(3600),
         java.util.Map.of("alg", "HS256"),
-        java.util.Map.of("sub", "1", "jti", jwtId)
-    );
+        java.util.Map.of("sub", "1", "jti", jwtId));
   }
 
   private Jwt createMockJwtWithIdAndExpiry(String jwtId, Instant issuedAt, Instant expiry) {
@@ -310,8 +309,7 @@ class JwtServiceTest {
         issuedAt,
         expiry,
         java.util.Map.of("alg", "HS256"),
-        java.util.Map.of("sub", "1", "jti", jwtId)
-    );
+        java.util.Map.of("sub", "1", "jti", jwtId));
   }
 
   private Jwt createMockJwtWithClaims() {
@@ -323,16 +321,15 @@ class JwtServiceTest {
     claims.put("permissions", java.util.List.of());
     claims.put("firstName", "Test");
     claims.put("lastName", "User");
-    claims.put("tenant_id", "tenant-123");  // Use underscore, not camelCase
-    claims.put("organization_id", 1L);  // Add organization_id
+    claims.put("tenant_id", "tenant-123"); // Use underscore, not camelCase
+    claims.put("organization_id", 1L); // Add organization_id
 
     return new Jwt(
         "token-value",
         Instant.now(),
         Instant.now().plusSeconds(3600),
         java.util.Map.of("alg", "HS256"),
-        claims
-    );
+        claims);
   }
 
   private void setUserId(User user, Long id) {

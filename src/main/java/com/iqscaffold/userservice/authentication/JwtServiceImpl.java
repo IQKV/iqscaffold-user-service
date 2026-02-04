@@ -253,10 +253,11 @@ public class JwtServiceImpl implements JwtService {
    */
   private JwsHeader createJwsHeader() {
     var algorithm = jwtConfiguration.getAlgorithm();
-    if (algorithm.startsWith("HS")) {
+    if (algorithm != null && algorithm.startsWith("HS")) {
       return JwsHeader.with(MacAlgorithm.from(algorithm)).build();
     } else {
-      return JwsHeader.with(SignatureAlgorithm.from(algorithm)).build();
+      var sigAlg = algorithm != null ? algorithm : "RS256";
+      return JwsHeader.with(SignatureAlgorithm.from(sigAlg)).build();
     }
   }
 
