@@ -23,6 +23,9 @@ The IQ Scaffold User Service is deployed using Helm charts and automated CI/CD p
 
 #### Drone Pipeline Overview
 
+<details>
+<summary>📋 Pipeline Stages</summary>
+
 The service uses Drone CI/CD pipeline with 10 stages:
 
 1. **VerifyCode** - Code quality, tests, static analysis
@@ -35,6 +38,35 @@ The service uses Drone CI/CD pipeline with 10 stages:
 8. **PromoteDeployment** - Release promotion
 9. **RollbackDeployment** - Release rollback
 10. **ReleasePackage** - Automated version management
+
+</details>
+
+<details>
+<summary>🔐 Required Drone Secrets</summary>
+
+| Secret Name | Purpose | Used In |
+|-------------|---------|---------|
+| `NEXUS_DEPLOYER_USERNAME` | Nexus repository authentication | Artifact publishing, dependency resolution |
+| `NEXUS_DEPLOYER_PASSWORD` | Nexus repository authentication | Artifact publishing, dependency resolution |
+| `SONAR_HOST` | SonarQube server URL | Static code analysis |
+| `SONAR_TOKEN` | SonarQube authentication token | Static code analysis |
+| `SLACK_WEBHOOK` | Slack notifications webhook URL | Build status notifications |
+| `GITHUB_API_ACCESS_TOKEN` | GitHub API access for releases | Release creation, changelog generation |
+| `SVC_CONTAINER_REGISTRY_USERNAME` | Container registry authentication | Docker image publishing |
+| `SVC_CONTAINER_REGISTRY_PASSWORD` | Container registry authentication | Docker image publishing |
+| `HELM_CHARTS_REPOSITORY` | Helm charts repository URL | Kubernetes deployments |
+| `INFRA_POSTGRESQL_PASSWORD` | PostgreSQL database password | Application configuration |
+| `INFRA_REDIS_PASSWORD` | Redis cache password | Application configuration |
+| `INFRA_RABBITMQ_PASSWORD` | RabbitMQ message broker password | Application configuration |
+| `INFRA_S3_ACCESS_KEY` | S3 storage access key | Application configuration |
+| `INFRA_S3_SECRET_KEY` | S3 storage secret key | Application configuration |
+| `JWT_SECRET_KEY` | JWT token signing key | Application security |
+| `GOOGLE_OAUTH2_CLIENT_ID` | Google OAuth2 client ID | Authentication integration |
+| `GOOGLE_OAUTH2_CLIENT_SECRET` | Google OAuth2 client secret | Authentication integration |
+| `SMTP_USERNAME` | Email service username | Email notifications |
+| `SMTP_PASSWORD` | Email service password | Email notifications |
+
+</details>
 
 #### Branch Deployment Strategy
 
@@ -59,7 +91,7 @@ helm upgrade --install --atomic --wait --timeout 5m iqscaffold-user-service ./ \
   --set infraServices.redis.password=${INFRA_REDIS_PASSWORD} \
   --set infraServices.rabbitmq.password=${INFRA_RABBITMQ_PASSWORD} \
   --set infraServices.s3.accessKey=${INFRA_S3_ACCESS_KEY} \
-  --set infraServices.s3.secretKey=${INFRA_S3_SECRET_KEY} \
+  --set infraServices.s3.secretKey=${INFRA_MINIO_SECRET_KEY} \
   --set config.jwt.secretKey=${JWT_SECRET_KEY} \
   --set config.oauth2.google.clientId=${GOOGLE_OAUTH2_CLIENT_ID} \
   --set config.oauth2.google.clientSecret=${GOOGLE_OAUTH2_CLIENT_SECRET} \
@@ -76,7 +108,7 @@ helm upgrade --install --atomic --wait --timeout 5m iqscaffold-user-service ./ \
   --set infraServices.redis.password=${INFRA_REDIS_PASSWORD} \
   --set infraServices.rabbitmq.password=${INFRA_RABBITMQ_PASSWORD} \
   --set infraServices.s3.accessKey=${INFRA_S3_ACCESS_KEY} \
-  --set infraServices.s3.secretKey=${INFRA_S3_SECRET_KEY} \
+  --set infraServices.s3.secretKey=${INFRA_MINIO_SECRET_KEY} \
   --set config.jwt.secretKey=${JWT_SECRET_KEY} \
   --set config.oauth2.google.clientId=${GOOGLE_OAUTH2_CLIENT_ID} \
   --set config.oauth2.google.clientSecret=${GOOGLE_OAUTH2_CLIENT_SECRET} \
@@ -153,29 +185,56 @@ helm upgrade --install user-service ./ \
 
 ### Configuration
 
-#### Drone CI Secrets
+### Required Drone Secrets
 
-The following secrets must be configured in Drone CI for automated deployments:
+The following secrets must be configured in your Drone CI system for the pipeline to function correctly:
+
+| Secret Name | Description | Usage | Required |
+|-------------|-------------|-------|----------|
+| `HELM_CHARTS_REPOSITORY` | Git repository URL containing Helm charts | Used to clone charts repository for deployment | ✅ |
+| `NEXUS_DEPLOYER_USERNAME` | Nexus repository username | Maven artifact deployment | ✅ |
+| `NEXUS_DEPLOYER_PASSWORD` | Nexus repository password | Maven artifact deployment | ✅ |
+| `SVC_CONTAINER_REGISTRY_USERNAME` | Container registry username | Docker image publishing | ✅ |
+| `SVC_CONTAINER_REGISTRY_PASSWORD` | Container registry password | Docker image publishing | ✅ |
+| `GITHUB_API_ACCESS_TOKEN` | GitHub API token | Release creation and changelog | ✅ |
+| `SONAR_HOST` | SonarQube server URL | Code quality analysis | ✅ |
+| `SONAR_TOKEN` | SonarQube authentication token | Code quality analysis | ✅ |
+| `SLACK_WEBHOOK` | Slack webhook URL for notifications | Build status notifications | ✅ |
+| `INFRA_POSTGRESQL_PASSWORD` | PostgreSQL database password | Database connection | ✅ |
+| `INFRA_REDIS_PASSWORD` | Redis cache password | Cache connection | ✅ |
+| `INFRA_RABBITMQ_PASSWORD` | RabbitMQ message broker password | Message queue connection | ✅ |
+| `INFRA_S3_ACCESS_KEY` | MinIO object storage access key | Object storage connection | ✅ |
+| `INFRA_MINIO_SECRET_KEY` | MinIO object storage secret key | Object storage connection | ✅ |
+| `JWT_SECRET_KEY` | JWT signing secret key | Authentication tokens | ✅ |
+| `GOOGLE_OAUTH2_CLIENT_ID` | Google OAuth2 client ID | Social authentication | ⚠️ |
+| `GOOGLE_OAUTH2_CLIENT_SECRET` | Google OAuth2 client secret | Social authentication | ⚠️ |
+| `SMTP_USERNAME` | SMTP server username | Email notifications | ⚠️ |
+| `SMTP_PASSWORD` | SMTP server password | Email notifications | ⚠️ |
+
+**Legend:**
+- ✅ **Required**: Pipeline will fail without this secret
+- ⚠️ **Optional**: Feature-specific, pipeline continues but functionality may be limited
+
+#### Secret Configuration Examples
 
 ```bash
-# Infrastructure Secrets
+# Infrastructure secrets
 drone secret add --repository IQKV/iqscaffold-user-service --name INFRA_POSTGRESQL_PASSWORD --data "your-postgresql-password"
 drone secret add --repository IQKV/iqscaffold-user-service --name INFRA_REDIS_PASSWORD --data "your-redis-password"
 drone secret add --repository IQKV/iqscaffold-user-service --name INFRA_RABBITMQ_PASSWORD --data "your-rabbitmq-password"
-drone secret add --repository IQKV/iqscaffold-user-service --name INFRA_S3_ACCESS_KEY --data "your-s3-access-key"
-drone secret add --repository IQKV/iqscaffold-user-service --name INFRA_S3_SECRET_KEY --data "your-s3-secret-key"
+drone secret add --repository IQKV/iqscaffold-user-service --name INFRA_S3_ACCESS_KEY --data "your-minio-access-key"
+drone secret add --repository IQKV/iqscaffold-user-service --name INFRA_MINIO_SECRET_KEY --data "your-minio-secret-key"
 
-# Application Secrets
+# Application secrets
 drone secret add --repository IQKV/iqscaffold-user-service --name JWT_SECRET_KEY --data "your-jwt-secret-key"
 drone secret add --repository IQKV/iqscaffold-user-service --name GOOGLE_OAUTH2_CLIENT_ID --data "your-google-client-id"
 drone secret add --repository IQKV/iqscaffold-user-service --name GOOGLE_OAUTH2_CLIENT_SECRET --data "your-google-client-secret"
 drone secret add --repository IQKV/iqscaffold-user-service --name SMTP_USERNAME --data "your-smtp-username"
 drone secret add --repository IQKV/iqscaffold-user-service --name SMTP_PASSWORD --data "your-smtp-password"
 
-# Repository and Registry Secrets (already configured)
-drone secret add --repository IQKV/iqscaffold-user-service --name HELM_CHARTS_REPOSITORY --data "your-helm-charts-repo-url"
-drone secret add --repository IQKV/iqscaffold-user-service --name NEXUS_DEPLOYER_USERNAME --data "your-nexus-username"
-drone secret add --repository IQKV/iqscaffold-user-service --name NEXUS_DEPLOYER_PASSWORD --data "your-nexus-password"
+# CI/CD secrets
+drone secret add --repository IQKV/iqscaffold-user-service --name HELM_CHARTS_REPOSITORY --data "https://github.com/KnowHowDevOps/helm-charts.git"
+drone secret add --repository IQKV/iqscaffold-user-service --name SLACK_WEBHOOK --data "https://hooks.slack.com/services/YOUR/SLACK/WEBHOOK"
 ```
 
 #### Required Secrets
@@ -185,8 +244,8 @@ drone secret add --repository IQKV/iqscaffold-user-service --name NEXUS_DEPLOYER
 | Database Password       | `INFRA_POSTGRESQL_PASSWORD`   | ✅       | PostgreSQL password         |
 | Redis Password          | `INFRA_REDIS_PASSWORD`        | ✅       | Redis cache password        |
 | RabbitMQ Password       | `INFRA_RABBITMQ_PASSWORD`     | ✅       | Message broker password     |
-| S3 Access Key           | `INFRA_S3_ACCESS_KEY`         | ✅       | Object storage access key   |
-| S3 Secret Key           | `INFRA_S3_SECRET_KEY`         | ✅       | Object storage secret key   |
+| S3 Access Key           | `INFRA_S3_ACCESS_KEY`      | ✅       | Object storage access key   |
+| S3 Secret Key           | `INFRA_MINIO_SECRET_KEY`      | ✅       | Object storage secret key   |
 | JWT Secret              | `JWT_SECRET_KEY`              | ✅       | JWT signing key (256+ bits) |
 | Google OAuth2 Client ID | `GOOGLE_OAUTH2_CLIENT_ID`     | ⚠️       | Google OAuth2 client ID     |
 | Google OAuth2 Secret    | `GOOGLE_OAUTH2_CLIENT_SECRET` | ⚠️       | Google OAuth2 client secret |
@@ -207,8 +266,8 @@ The Helm chart maps Drone CI secrets to application environment variables:
 | `INFRA_POSTGRESQL_PASSWORD`   | `infraServices.postgresql.password` | `IQSCAFFOLD_DATABASE_PASSWORD`                |
 | `INFRA_REDIS_PASSWORD`        | `infraServices.redis.password`      | `IQSCAFFOLD_CACHE_REDIS_PASSWORD`             |
 | `INFRA_RABBITMQ_PASSWORD`     | `infraServices.rabbitmq.password`   | `IQSCAFFOLD_MESSAGING_RABBITMQ_PASSWORD`      |
-| `INFRA_S3_ACCESS_KEY`         | `infraServices.s3.accessKey`        | `IQSCAFFOLD_S3_ACCESS_KEY`                    |
-| `INFRA_S3_SECRET_KEY`         | `infraServices.s3.secretKey`        | `IQSCAFFOLD_S3_SECRET_KEY`                    |
+| `INFRA_S3_ACCESS_KEY`      | `infraServices.s3.accessKey`        | `IQSCAFFOLD_S3_ACCESS_KEY`                    |
+| `INFRA_MINIO_SECRET_KEY`      | `infraServices.s3.secretKey`        | `IQSCAFFOLD_S3_SECRET_KEY`                    |
 | `JWT_SECRET_KEY`              | `config.jwt.secretKey`              | `IQSCAFFOLD_AUTH_JWT_SECRET`                  |
 | `GOOGLE_OAUTH2_CLIENT_ID`     | `config.oauth2.google.clientId`     | `IQSCAFFOLD_AUTH_OAUTH2_GOOGLE_CLIENT_ID`     |
 | `GOOGLE_OAUTH2_CLIENT_SECRET` | `config.oauth2.google.clientSecret` | `IQSCAFFOLD_AUTH_OAUTH2_GOOGLE_CLIENT_SECRET` |
