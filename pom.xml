@@ -16,7 +16,12 @@
 
     <name>IQ Scaffold User Service</name>
     <description>Centralized authentication and user management service</description>
-
+    <properties>
+        <spring-boot.run.jvmArguments>-Duser.timezone=UTC</spring-boot.run.jvmArguments>
+        <checkstyle.skip>false</checkstyle.skip>
+        <maven.gitcommitid.skip>false</maven.gitcommitid.skip>
+        <jacoco.skip>false</jacoco.skip>
+    </properties>
     <dependencies>
         <!-- Spring Boot starters -->
         <dependency>
