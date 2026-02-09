@@ -1,12 +1,29 @@
 package com.iqscaffold.userservice.tenancy;
 
+import jakarta.annotation.PostConstruct;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.context.event.ApplicationReadyEvent;
-import org.springframework.context.event.EventListener;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
+/**
+ * Initializes system-level database schema using Liquibase migrations.
+ * 
+ * <p>This component runs system migrations in the public schema before
+ * the EntityManagerFactory is created. This ensures that system tables
+ * (tenants, authorities, etc.) exist before Hibernate schema validation.
+ * 
+ * <p>Execution order:
+ * <ol>
+ *   <li>DataSource bean creation</li>
+ *   <li>SystemLiquibaseInitializer @PostConstruct (this class)</li>
+ *   <li>EntityManagerFactory creation with schema validation</li>
+ *   <li>Application startup completes</li>
+ * </ol>
+ */
 @Component
+@Order(Integer.MIN_VALUE) // Run as early as possible
 public class SystemLiquibaseInitializer {
 
   private final TenantLiquibaseRunner runner;
@@ -16,12 +33,20 @@ public class SystemLiquibaseInitializer {
     this.runner = runner;
   }
 
-  @EventListener(ApplicationReadyEvent.class)
-  public void onReady() {
+  /**
+   * Runs system Liquibase migrations during bean initialization.
+   * This executes before EntityManagerFactory creation to ensure
+   * system tables exist for Hibernate schema validation.
+   */
+  @PostConstruct
+  public void initialize() {
+    logger.info("Initializing system schema with Liquibase migrations...");
     try {
       runner.runSystemChangelog();
+      logger.info("System schema initialization completed successfully");
     } catch (final Exception e) {
       logger.error("Failed to run system Liquibase changelog", e);
+      throw new IllegalStateException("System schema initialization failed", e);
     }
   }
 }

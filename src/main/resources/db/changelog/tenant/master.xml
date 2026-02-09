@@ -7,7 +7,6 @@
 
     <include file="db/changelog/tenant/20251110163000-initial-user-schema.xml"/>
     <include file="db/changelog/tenant/20251110163100-user-preferences-schema.xml"/>
-    <include file="db/changelog/tenant/20251110163200-payment-gateway-abstraction.xml"/>
     <include file="db/changelog/tenant/20250201120000-add-avatar-fields-to-user-preferences.xml"/>
     
     <!-- Demo data for development and testing (context: demo) -->

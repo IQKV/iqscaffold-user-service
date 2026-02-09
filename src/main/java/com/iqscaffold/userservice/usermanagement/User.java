@@ -199,7 +199,7 @@ public class User extends TenantAware {
   @JoinTable(
       name = "user_authorities",
       joinColumns = @JoinColumn(name = "user_id"),
-      inverseJoinColumns = @JoinColumn(name = "authority_id")
+      inverseJoinColumns = @JoinColumn(name = "authority_id", referencedColumnName = "id")
   )
   @Cache(usage = CacheConcurrencyStrategy.READ_WRITE, region = "com.iqscaffold.userservice.usermanagement.User.authorities")
   private Set<Authority> authorities = new HashSet<>();
