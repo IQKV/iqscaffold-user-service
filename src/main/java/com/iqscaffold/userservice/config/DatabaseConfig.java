@@ -1,6 +1,5 @@
 package com.iqscaffold.userservice.config;
 
-import com.iqscaffold.userservice.tenancy.SystemLiquibaseInitializer;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
