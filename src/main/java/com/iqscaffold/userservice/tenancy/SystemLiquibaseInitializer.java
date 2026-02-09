@@ -27,7 +27,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @Order(Integer.MIN_VALUE) // Run as early as possible
-@ConditionalOnProperty(name = "spring.liquibase.enabled", havingValue = "true", matchIfMissing = true)
+@ConditionalOnProperty(name = "iqscaffold.liquibase.system-schema.enabled", havingValue = "true", matchIfMissing = true)
 public class SystemLiquibaseInitializer implements InitializingBean {
 
   private final TenantLiquibaseRunner runner;
