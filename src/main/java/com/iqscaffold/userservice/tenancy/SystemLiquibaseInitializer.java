@@ -1,9 +1,8 @@
 package com.iqscaffold.userservice.tenancy;
 
-import jakarta.annotation.PostConstruct;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
@@ -17,14 +16,14 @@ import org.springframework.stereotype.Component;
  * <p>Execution order:
  * <ol>
  *   <li>DataSource bean creation</li>
- *   <li>SystemLiquibaseInitializer @PostConstruct (this class)</li>
+ *   <li>SystemLiquibaseInitializer afterPropertiesSet (this class)</li>
  *   <li>EntityManagerFactory creation with schema validation</li>
  *   <li>Application startup completes</li>
  * </ol>
  */
 @Component
 @Order(Integer.MIN_VALUE) // Run as early as possible
-public class SystemLiquibaseInitializer {
+public class SystemLiquibaseInitializer implements InitializingBean {
 
   private final TenantLiquibaseRunner runner;
   private static final Logger logger = LoggerFactory.getLogger(SystemLiquibaseInitializer.class);
@@ -38,8 +37,8 @@ public class SystemLiquibaseInitializer {
    * This executes before EntityManagerFactory creation to ensure
    * system tables exist for Hibernate schema validation.
    */
-  @PostConstruct
-  public void initialize() {
+  @Override
+  public void afterPropertiesSet() {
     logger.info("Initializing system schema with Liquibase migrations...");
     try {
       runner.runSystemChangelog();
