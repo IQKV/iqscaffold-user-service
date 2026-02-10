@@ -79,7 +79,6 @@ public record DatabaseConfigurationProperties(
   public record MigrationProperties(
       boolean enabled,
 
-      @NotBlank(message = "Migration contexts must not be blank")
       String contexts,
 
       boolean validateOnMigrate
