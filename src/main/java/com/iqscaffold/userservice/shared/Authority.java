@@ -117,23 +117,27 @@ public class Authority {
   }
 
   // Utility methods
+  @JsonIgnore
   public void addUser(User user) {
     var currentUsers = this.users;
     currentUsers.add(user);
     user.getAuthorities().add(this);
   }
 
+  @JsonIgnore
   public void removeUser(User user) {
     var currentUsers = this.users;
     currentUsers.remove(user);
     user.getAuthorities().remove(this);
   }
 
+  @JsonIgnore
   public boolean hasUser(User user) {
     var users = this.users;
     return users.contains(user);
   }
 
+  @JsonIgnore
   public int getUserCount() {
     var users = this.users;
     return users.size();
@@ -167,7 +171,6 @@ public class Authority {
         .append(", name='").append(name).append('\'')
         .append(", description='").append(description).append('\'')
         .append(", createdAt=").append(createdAt)
-        .append(", userCount=").append(users.size())
         .append('}');
     return sb.toString();
   }
