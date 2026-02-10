@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.context.properties.bind.Name;
 import org.springframework.validation.annotation.Validated;
 
 /**
@@ -39,12 +40,15 @@ public record S3ConfigurationProperties(
     String endpoint,
 
     @NotBlank(message = "S3 access key is required")
+    @Name("access-key")
     String accessKey,
 
     @NotBlank(message = "S3 secret key is required")
+    @Name("secret-key")
     String secretKey,
 
     @NotBlank(message = "S3 bucket name is required")
+    @Name("bucket-name")
     String bucketName,
 
     String region,
@@ -62,12 +66,15 @@ public record S3ConfigurationProperties(
   public record UploadConfig(
 
       @Positive(message = "Maximum file size must be positive")
+      @Name("max-file-size-bytes")
       Long maxFileSizeBytes,
 
       @NotNull(message = "Allowed MIME types list is required")
+      @Name("allowed-mime-types")
       String allowedMimeTypes,
 
       @Positive(message = "Presigned URL expiration must be positive")
+      @Name("presigned-url-expiration-minutes")
       Integer presignedUrlExpirationMinutes
   ) {
 
