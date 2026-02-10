@@ -22,7 +22,7 @@ public interface AuthorityRepository extends JpaRepository<Authority, Long> {
    * @param name the authority name to search for
    * @return Optional containing the authority if found
    */
-  @Cacheable(value = "authorities", key = "#name")
+  @Cacheable(value = "authorities", key = "#name", unless = "#result == null || #result.isEmpty()")
   Optional<Authority> findByName(String name);
 
   /**
@@ -45,7 +45,7 @@ public interface AuthorityRepository extends JpaRepository<Authority, Long> {
    * @param names the set of authority names to search for
    * @return List of authorities matching the names
    */
-  @Cacheable(value = "authorities", key = "#names.toString()")
+  @Cacheable(value = "authorities", key = "#names.toString()", unless = "#result == null || #result.isEmpty()")
   @Query("""
       SELECT a FROM Authority a 
       WHERE a.name IN :names
@@ -66,7 +66,7 @@ public interface AuthorityRepository extends JpaRepository<Authority, Long> {
    *
    * @return List of all authorities sorted by name
    */
-  @Cacheable(value = "authorities", key = "'all_authorities'")
+  @Cacheable(value = "authorities", key = "'all_authorities'", unless = "#result == null || #result.isEmpty()")
   @Query("""
       SELECT a FROM Authority a 
       ORDER BY a.name ASC
