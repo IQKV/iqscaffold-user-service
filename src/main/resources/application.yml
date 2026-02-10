@@ -286,6 +286,9 @@ iqscaffold:
     oauth2:
       enabled: false
       providers: { }
+    authorities:
+      default-authorities:
+        - USER
   
   # Platform Configuration - Extensible Feature and Authority Management
   platform:

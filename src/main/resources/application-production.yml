@@ -247,6 +247,9 @@ iqscaffold:
     oauth2:
       enabled: ${IQSCAFFOLD_AUTH_OAUTH2_ENABLED:false}
       providers: { }
+    authorities:
+      default-authorities:
+        - USER
 
   # Email Configuration - Production Environment
   email:

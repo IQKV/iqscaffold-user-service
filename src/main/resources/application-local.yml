@@ -102,6 +102,9 @@ iqscaffold:
       issuer: iqscaffold-user-service-local
       audience: iqscaffold-services-local
       algorithm: HS256
+    authorities:
+      default-authorities:
+        - USER
 
   # Email Configuration - Local Development
   email:

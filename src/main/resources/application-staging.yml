@@ -102,6 +102,9 @@ iqscaffold:
       issuer: iqscaffold-user-service-staging
       audience: iqscaffold-services-staging
       algorithm: HS256
+    authorities:
+      default-authorities:
+        - USER
 
   # Email Configuration - Staging Environment
   email:

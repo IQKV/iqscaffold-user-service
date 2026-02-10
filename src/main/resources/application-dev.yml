@@ -159,6 +159,9 @@ iqscaffold:
     oauth2:
       enabled: false
       providers: { }
+    authorities:
+      default-authorities:
+        - USER
 
   # Email Configuration - Development (MailHog from infra chart)
   email:
