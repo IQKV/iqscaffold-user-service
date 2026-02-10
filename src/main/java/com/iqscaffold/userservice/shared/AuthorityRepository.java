@@ -17,12 +17,11 @@ import org.springframework.stereotype.Repository;
 public interface AuthorityRepository extends JpaRepository<Authority, Long> {
 
   /**
-   * Find authority by name. Cached since authorities rarely change.
+   * Find authority by name.
    *
    * @param name the authority name to search for
    * @return Optional containing the authority if found
    */
-  @Cacheable(value = "authorities", key = "#name", unless = "#result == null || #result.empty")
   Optional<Authority> findByName(String name);
 
   /**
@@ -40,12 +39,11 @@ public interface AuthorityRepository extends JpaRepository<Authority, Long> {
   List<Authority> findByUserId(@Param("userId") Long userId);
 
   /**
-   * Find authorities by names. Cached with composite key based on authority names.
+   * Find authorities by names.
    *
    * @param names the set of authority names to search for
    * @return List of authorities matching the names
    */
-  @Cacheable(value = "authorities", key = "#names.toString()", unless = "#result == null || #result.isEmpty()")
   @Query("""
       SELECT a FROM Authority a 
       WHERE a.name IN :names
