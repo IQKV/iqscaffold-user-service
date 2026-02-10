@@ -22,13 +22,12 @@ management:
         http.server.requests: true
       percentiles:
         http.server.requests: 0.5,0.95,0.99
+    export:
+      prometheus:
+        enabled: true
   tracing:
     sampling:
       probability: 1.0
-  prometheus:
-    metrics:
-      export:
-        enabled: true
 
 spring:
   application:
@@ -174,7 +173,7 @@ springdoc:
       paths-to-match: /api/*/tenants/**
   show-actuator: true
   use-management-port: false
-spring:
+
 iqscaffold:
   # S3/MinIO Configuration
   object-storage:
