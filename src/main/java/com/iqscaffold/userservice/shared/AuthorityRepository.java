@@ -22,7 +22,7 @@ public interface AuthorityRepository extends JpaRepository<Authority, Long> {
    * @param name the authority name to search for
    * @return Optional containing the authority if found
    */
-  @Cacheable(value = "authorities", key = "#name", unless = "#result == null || #result.isEmpty()")
+  @Cacheable(value = "authorities", key = "#name", unless = "#result == null || !#result.isPresent()")
   Optional<Authority> findByName(String name);
 
   /**
