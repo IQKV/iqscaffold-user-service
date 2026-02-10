@@ -93,8 +93,8 @@ helm upgrade --install --atomic --wait --timeout 5m iqscaffold-user-service ./ \
   --set infraServices.postgresql.password=${INFRA_POSTGRESQL_PASSWORD} \
   --set infraServices.redis.password=${INFRA_REDIS_PASSWORD} \
   --set infraServices.rabbitmq.password=${INFRA_RABBITMQ_PASSWORD} \
-  --set infraServices.s3.accessKey=${INFRA_S3_ACCESS_KEY} \
-  --set infraServices.s3.secretKey=${INFRA_MINIO_SECRET_KEY} \
+  --set infraServices.objectstorage.accessKey=${INFRA_S3_ACCESS_KEY} \
+  --set infraServices.objectstorage.secretKey=${INFRA_MINIO_SECRET_KEY} \
   --set config.jwt.secretKey=${JWT_SECRET_KEY} \
   --set config.oauth2.google.clientId=${GOOGLE_OAUTH2_CLIENT_ID} \
   --set config.oauth2.google.clientSecret=${GOOGLE_OAUTH2_CLIENT_SECRET} \
@@ -110,8 +110,8 @@ helm upgrade --install --atomic --wait --timeout 5m iqscaffold-user-service ./ \
   --set infraServices.postgresql.password=${INFRA_POSTGRESQL_PASSWORD} \
   --set infraServices.redis.password=${INFRA_REDIS_PASSWORD} \
   --set infraServices.rabbitmq.password=${INFRA_RABBITMQ_PASSWORD} \
-  --set infraServices.s3.accessKey=${INFRA_S3_ACCESS_KEY} \
-  --set infraServices.s3.secretKey=${INFRA_MINIO_SECRET_KEY} \
+  --set infraServices.objectstorage.accessKey=${INFRA_S3_ACCESS_KEY} \
+  --set infraServices.objectstorage.secretKey=${INFRA_MINIO_SECRET_KEY} \
   --set config.jwt.secretKey=${JWT_SECRET_KEY} \
   --set config.oauth2.google.clientId=${GOOGLE_OAUTH2_CLIENT_ID} \
   --set config.oauth2.google.clientSecret=${GOOGLE_OAUTH2_CLIENT_SECRET} \
@@ -137,8 +137,8 @@ helm upgrade --install user-service ./ \
   --set infraServices.postgresql.password="your-db-password" \
   --set infraServices.redis.password="your-redis-password" \
   --set infraServices.rabbitmq.password="your-rabbitmq-password" \
-  --set infraServices.s3.accessKey="your-s3-access-key" \
-  --set infraServices.s3.secretKey="your-s3-secret-key" \
+  --set infraServices.objectstorage.accessKey="your-s3-access-key" \
+  --set infraServices.objectstorage.secretKey="your-s3-secret-key" \
   --set config.jwt.secretKey="your-secure-symmetric-key" \
   --set config.oauth2.google.clientId="your-google-client-id" \
   --set config.oauth2.google.clientSecret="your-google-client-secret" \
