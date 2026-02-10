@@ -199,6 +199,10 @@ iqscaffold:
       connection-timeout: PT20S
       idle-timeout: PT5M
       max-lifetime: PT20M
+    migration:
+      enabled: true
+      contexts: ${IQSCAFFOLD_LIQUIBASE_CONTEXTS:}
+      validate-on-migrate: true
 
   # Cache Configuration
   cache:
@@ -578,12 +582,5 @@ iqscaffold:
   # Liquibase Configuration
   liquibase:
     # Changelog file paths
-    systemChangeLog: classpath:db/changelog/system/master.xml
-    tenantChangeLog: classpath:db/changelog/tenant/master.xml
-    
-    # Context filtering for migrations (comma-separated)
-    # Empty = run all changesets, "demo" = include demo data, "!demo" = exclude demo data
-    contexts: ${IQSCAFFOLD_LIQUIBASE_CONTEXTS:}
-    
-    # System changelog runs once on startup for public schema (tenants table, etc.)
-    # Tenant changelog runs per-tenant schema during tenant provisioning
+    system-change-log: classpath:db/changelog/system/master.xml
+    tenant-change-log: classpath:db/changelog/tenant/master.xml

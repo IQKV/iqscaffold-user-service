@@ -68,6 +68,10 @@ iqscaffold:
       connection-timeout: PT20S
       idle-timeout: PT5M
       max-lifetime: PT20M
+    migration:
+      enabled: true
+      contexts: ${IQSCAFFOLD_LIQUIBASE_CONTEXTS:}
+      validate-on-migrate: true
 
   # Cache Configuration - Redis
   cache:
