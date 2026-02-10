@@ -1,16 +1,315 @@
-# Development Profile Configuration
-# This profile enables demo data for development
+# Development Environment Configuration (Kubernetes)
+# This configuration is for development deployment in Kubernetes cluster
+# Uses infrastructure services from iqscaffold-infra Helm chart
+
+server:
+  port: 8080
 
 spring:
-  profiles:
-    active: dev
+  # Database Configuration - Dev PostgreSQL from infra chart
+  datasource:
+    url: ${IQSCAFFOLD_DATABASE_URL:jdbc:postgresql://iqscaffold-infra-postgresql.iqscaffold-dev-env.svc.cluster.local:5432/iqscaffold_user}
+    username: ${IQSCAFFOLD_DATABASE_USERNAME:svc_user_dev_dba}
+    password: ${IQSCAFFOLD_DATABASE_PASSWORD:iqscaffold_dev_password}
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 2
+      connection-timeout: 20000
+      idle-timeout: 300000
+      max-lifetime: 1200000
+      leak-detection-threshold: 60000
 
-iqscaffold:
+  # JPA Configuration - Development Settings
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+        use_sql_comments: true
+        multiTenancy: SCHEMA
+        generate_statistics: true
+        jdbc:
+          batch_size: 20
+        order_inserts: true
+        order_updates: true
+    open-in-view: false
+
+  # Redis Configuration - Dev Redis from infra chart
+  data:
+    redis:
+      host: ${IQSCAFFOLD_CACHE_REDIS_HOST:iqscaffold-infra-redis-master.iqscaffold-dev-env.svc.cluster.local}
+      port: ${IQSCAFFOLD_CACHE_REDIS_PORT:6379}
+      password: ${IQSCAFFOLD_CACHE_REDIS_PASSWORD:iqscaffold_dev_password}
+      database: ${IQSCAFFOLD_CACHE_REDIS_DATABASE:0}
+
+  # RabbitMQ Configuration - Dev RabbitMQ from infra chart
+  rabbitmq:
+    host: ${IQSCAFFOLD_MESSAGING_RABBITMQ_HOST:iqscaffold-infra-rabbitmq.iqscaffold-dev-env.svc.cluster.local}
+    port: ${IQSCAFFOLD_MESSAGING_RABBITMQ_PORT:5672}
+    username: ${IQSCAFFOLD_MESSAGING_RABBITMQ_USERNAME:svc_infra_dev_rmq}
+    password: ${IQSCAFFOLD_MESSAGING_RABBITMQ_PASSWORD:iqscaffold_dev_password}
+    virtual-host: ${IQSCAFFOLD_MESSAGING_RABBITMQ_VHOST:/}
+
+  # Liquibase Configuration
+  # Disabled globally - migrations are run programmatically per schema via TenantLiquibaseRunner
   liquibase:
-    # Include demo context to load demo data
-    contexts: "demo"
+    enabled: false
 
+# IQ Scaffold Configuration - Development Environment
+iqscaffold:
+  # Database Configuration
+  database:
+    url: ${IQSCAFFOLD_DATABASE_URL:jdbc:postgresql://iqscaffold-infra-postgresql.iqscaffold-dev-env.svc.cluster.local:5432/iqscaffold_user}
+    username: ${IQSCAFFOLD_DATABASE_USERNAME:svc_user_dev_dba}
+    password: ${IQSCAFFOLD_DATABASE_PASSWORD:iqscaffold_dev_password}
+    pool:
+      maximum-size: 10
+      minimum-idle: 2
+      connection-timeout: PT20S
+      idle-timeout: PT5M
+      max-lifetime: PT20M
+
+  # Cache Configuration - Redis
+  cache:
+    redis:
+      host: ${IQSCAFFOLD_CACHE_REDIS_HOST:iqscaffold-infra-redis-master.iqscaffold-dev-env.svc.cluster.local}
+      port: ${IQSCAFFOLD_CACHE_REDIS_PORT:6379}
+      password: ${IQSCAFFOLD_CACHE_REDIS_PASSWORD:iqscaffold_dev_password}
+      database: ${IQSCAFFOLD_CACHE_REDIS_DATABASE:0}
+      timeout: PT2S
+      pool:
+        max-active: 8
+        max-idle: 8
+        min-idle: 0
+        max-wait: PT-1S
+      key-prefix: "iqscaffold:auth:dev"
+      default-ttl: PT1H
+      enable-statistics: true
+
+  # Messaging Configuration - RabbitMQ
+  messaging:
+    rabbitmq:
+      host: ${IQSCAFFOLD_MESSAGING_RABBITMQ_HOST:iqscaffold-infra-rabbitmq.iqscaffold-dev-env.svc.cluster.local}
+      port: ${IQSCAFFOLD_MESSAGING_RABBITMQ_PORT:5672}
+      username: ${IQSCAFFOLD_MESSAGING_RABBITMQ_USERNAME:svc_infra_dev_rmq}
+      password: ${IQSCAFFOLD_MESSAGING_RABBITMQ_PASSWORD:iqscaffold_dev_password}
+      virtual-host: ${IQSCAFFOLD_MESSAGING_RABBITMQ_VHOST:/}
+      connection-timeout: PT30S
+      requested-heartbeat: PT60S
+      publisher-confirms: true
+      publisher-returns: true
+      template:
+        mandatory: true
+        retry:
+          enabled: true
+          initial-interval: PT1S
+          max-attempts: 3
+          max-interval: PT10S
+          multiplier: 2.0
+      listener:
+        simple:
+          acknowledge-mode: auto
+          prefetch: 10
+          default-requeue-rejected: false
+          retry:
+            enabled: true
+            initial-interval: PT1S
+            max-attempts: 3
+            max-interval: PT10S
+            multiplier: 2.0
+      exchanges:
+        events: "iqscaffold.events"
+        dlx: "iqscaffold.dlx"
+      queues:
+        user-events: "iqscaffold.user.events"
+        notifications: "iqscaffold.notifications"
+        dlq: "iqscaffold.dlq"
+      routing-keys:
+        user-created: "user.created"
+        user-updated: "user.updated"
+        user-deleted: "user.deleted"
+        user-verified: "user.verified"
+        password-reset: "user.password.reset"
+        notification-email: "notification.email"
+
+  # Authentication Configuration
+  auth:
+    jwt:
+      secret-key: ${JWT_SECRET_KEY:dev-secret-key-not-for-production-use-only}
+      access-token-expiry: PT30M  # Extended for development
+      refresh-token-expiry: P7D
+      issuer: iqscaffold-user-service-dev
+      audience: iqscaffold-services-dev
+      algorithm: HS256
+    security:
+      password:
+        encoder-strength: 10
+        require-special-chars: false  # Relaxed for development
+        min-length: 6  # Relaxed for development
+      rate-limiting:
+        login-attempts: 10  # More lenient for development
+        lockout-duration: PT5M  # Shorter lockout for development
+      session:
+        timeout: PT4H  # Extended for development
+        concurrent-sessions: 3
+    oauth2:
+      enabled: false
+      providers: { }
+
+  # Email Configuration - Development (MailHog from infra chart)
+  email:
+    smtp:
+      host: ${SMTP_HOST:iqscaffold-infra-mailhog.iqscaffold-dev-env.svc.cluster.local}
+      port: ${SMTP_PORT:1025}
+      username: ${SMTP_USERNAME:}
+      password: ${SMTP_PASSWORD:}
+      auth: false
+      starttls: false
+      timeout: PT30S
+    sender:
+      from-email: ${EMAIL_FROM_EMAIL:noreply@iqscaffold.dev}
+      from-name: ${EMAIL_FROM_NAME:IQ Scaffold Platform (Dev)}
+      base-url: ${APP_BASE_URL:https://app.iqscaffold.dev}
+    verification:
+      token-expiry: PT24H
+      rate-limit: 5
+    templates:
+      verification-subject: "[DEV] Verify your IQ Scaffold account"
+      verification-template: "email/user-registration/email-verification.html"
+      password-reset-subject: "[DEV] Reset your IQ Scaffold password"
+      password-reset-template: "email/password-reset/initiate.html"
+      password-reset-confirmed-subject: "[DEV] Password Reset Successful - IQ Scaffold"
+      password-reset-confirmed-template: "email/password-reset/confirmed.html"
+      registration-confirmed-subject: "[DEV] Welcome to IQ Scaffold - Email Verified!"
+      registration-confirmed-template: "email/user-registration/email-confirmed.html"
+
+  # S3/MinIO Configuration - Dev MinIO from infra chart
+  s3:
+    endpoint: ${IQSCAFFOLD_S3_ENDPOINT:http://iqscaffold-infra-minio.iqscaffold-dev-env.svc.cluster.local:9000}
+    access-key: ${IQSCAFFOLD_S3_ACCESS_KEY:iqscaffold}
+    secret-key: ${IQSCAFFOLD_S3_SECRET_KEY:iqscaffold_password}
+    bucket-name: ${IQSCAFFOLD_S3_BUCKET_NAME:user-avatars}
+    region: ${IQSCAFFOLD_S3_REGION:us-east-1}
+    ssl: ${IQSCAFFOLD_S3_SSL:false}
+    upload:
+      max-file-size-bytes: ${IQSCAFFOLD_S3_UPLOAD_MAX_FILE_SIZE_BYTES:5242880} # 5MB
+      allowed-mime-types: ${IQSCAFFOLD_S3_UPLOAD_ALLOWED_MIME_TYPES:image/jpeg,image/png,image/webp,image/gif}
+      presigned-url-expiration-minutes: ${IQSCAFFOLD_S3_UPLOAD_PRESIGNED_URL_EXPIRATION_MINUTES:60} # 1 hour
+
+  # Observability Configuration - Development
+  observability:
+    tracing:
+      enabled: true
+      service-name: iqscaffold-user-service-dev
+      sampling-rate: 1.0
+      endpoint: ${IQSCAFFOLD_OBSERVABILITY_TRACING_ENDPOINT:http://localhost:4317}
+      timeout: PT10S
+      export-timeout: PT30S
+      batch-size: 512
+    metrics:
+      enabled: true
+      path: /actuator/prometheus
+      prefix: iqscaffold_user_dev
+      include-host-tag: true
+      include-application-tag: true
+      include-environment-tag: true
+      custom-tags:
+        environment: dev
+        service: user-service
+    logging:
+      level: DEBUG
+      format: console
+      include-correlation-id: true
+      include-trace-id: true
+      include-span-id: true
+      include-user-id: true
+      include-tenant-id: true
+      correlation-id-header: X-Correlation-ID
+      request-id-header: X-Request-ID
+      tenant-id-header: X-Tenant-ID
+      enable-sql-logging: true
+      enable-security-events: true
+      enable-performance-logging: true
+
+  tenant-id-header: X-Tenant-ID
+
+  # Internationalization Configuration
+  i18n:
+    supported-locales:
+      - en
+      - es
+      - fr
+    default-locale: en
+    message-basename: i18n/messages
+    message-cache-duration: PT1H
+    fallback-to-system-locale: false
+    use-code-as-default-message: true
+
+  # Tenancy Configuration
+  tenancy:
+    schema:
+      prefix: tenant_
+      default: public
+
+  # Liquibase Configuration
+  liquibase:
+    systemChangeLog: classpath:db/changelog/system/master.xml
+    tenantChangeLog: classpath:db/changelog/tenant/master.xml
+    contexts: ${IQSCAFFOLD_LIQUIBASE_CONTEXTS:}
+
+# Logging Configuration - Development
 logging:
   level:
-    com.iqscaffold.userservice.tenancy.TenantLiquibaseRunner: DEBUG
+    com.iqscaffold: DEBUG
+    org.springframework.security: INFO
+    org.springframework.web: INFO
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
     liquibase: INFO
+    com.zaxxer.hikari: INFO
+    org.springframework.amqp: INFO
+    org.springframework.rabbit: INFO
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level [%X{correlationId:-}] [%X{traceId:-}] [%X{spanId:-}] %logger{36} - %msg%n"
+
+# Management Configuration - Development
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus,liquibase
+  endpoint:
+    health:
+      show-details: when-authorized
+    liquibase:
+      enabled: true
+    prometheus:
+      enabled: true
+  metrics:
+    distribution:
+      percentiles-histogram:
+        http.server.requests: true
+      percentiles:
+        http.server.requests: 0.5,0.95,0.99
+  tracing:
+    sampling:
+      probability: 1.0
+  prometheus:
+    metrics:
+      export:
+        enabled: true
+
+# SpringDoc Configuration - Development
+springdoc:
+  api-docs:
+    enabled: true
+    path: /api-docs
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui.html
+    try-it-out-enabled: true
+  show-actuator: true
