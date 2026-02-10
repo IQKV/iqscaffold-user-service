@@ -1,6 +1,5 @@
 package com.iqscaffold.userservice.usermanagement;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Cacheable;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -22,6 +21,7 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.iqscaffold.userservice.shared.Authority;
 import com.iqscaffold.userservice.shared.TenantAware;
 import org.hibernate.annotations.Cache;

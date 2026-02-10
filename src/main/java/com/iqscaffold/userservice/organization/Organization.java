@@ -1,6 +1,5 @@
 package com.iqscaffold.userservice.organization;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Cacheable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -19,6 +18,7 @@ import jakarta.persistence.Table;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.iqscaffold.userservice.shared.PaymentGatewayProvider;
 import com.iqscaffold.userservice.tenancy.Tenant;
 import org.hibernate.annotations.Cache;
