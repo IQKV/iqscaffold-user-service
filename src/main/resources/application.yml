@@ -13,21 +13,22 @@ management:
     health:
       show-details: when-authorized
     liquibase:
-      enabled: true
+      access: read_only
     prometheus:
-      enabled: true
+      access: read_only
   metrics:
     distribution:
       percentiles-histogram:
         http.server.requests: true
       percentiles:
         http.server.requests: 0.5,0.95,0.99
-    export:
-      prometheus:
-        enabled: true
   tracing:
     sampling:
       probability: 1.0
+  prometheus:
+    metrics:
+      export:
+        enabled: true
 
 spring:
   application:
