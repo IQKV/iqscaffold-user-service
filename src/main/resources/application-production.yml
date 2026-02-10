@@ -177,7 +177,7 @@ iqscaffold:
         max-active: 32
         max-idle: 16
         min-idle: 4
-        max-wait: PT-1S
+        max-wait: -1ms
       key-prefix: "iqscaffold:auth:production"
       default-ttl: PT15M
       enable-statistics: false

@@ -92,7 +92,7 @@ iqscaffold:
         max-active: 16
         max-idle: 8
         min-idle: 2
-        max-wait: PT-1S
+        max-wait: -1ms
       key-prefix: "iqscaffold:auth:staging"
       default-ttl: PT30M
       enable-statistics: false

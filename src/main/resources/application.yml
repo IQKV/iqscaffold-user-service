@@ -215,7 +215,7 @@ iqscaffold:
         max-active: 8
         max-idle: 8
         min-idle: 0
-        max-wait: PT-1S
+        max-wait: -1ms
       key-prefix: "iqscaffold:auth"
       default-ttl: PT1H
       enable-statistics: false
