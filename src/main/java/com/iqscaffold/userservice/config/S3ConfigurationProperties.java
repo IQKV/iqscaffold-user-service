@@ -36,21 +36,27 @@ import org.springframework.validation.annotation.Validated;
 @Validated
 public record S3ConfigurationProperties(
 
+    @NotBlank(message = "S3 endpoint URL is required")
     String endpoint,
 
+    @NotBlank(message = "S3 access key is required")
     @Name("access-key")
     String accessKey,
 
+    @NotBlank(message = "S3 secret key is required")
     @Name("secret-key")
     String secretKey,
 
+    @NotBlank(message = "S3 bucket name is required")
     @Name("bucket-name")
     String bucketName,
 
     String region,
 
+    @NotNull(message = "SSL configuration is required")
     Boolean ssl,
 
+    @NotNull(message = "Upload configuration is required")
     UploadConfig upload
 ) {
 
@@ -59,26 +65,18 @@ public record S3ConfigurationProperties(
    */
   public record UploadConfig(
 
+      @Positive(message = "Maximum file size must be positive")
       @Name("max-file-size-bytes")
       Long maxFileSizeBytes,
 
+      @NotNull(message = "Allowed MIME types list is required")
       @Name("allowed-mime-types")
       String allowedMimeTypes,
 
+      @Positive(message = "Presigned URL expiration must be positive")
       @Name("presigned-url-expiration-minutes")
       Integer presignedUrlExpirationMinutes
   ) {
-
-    /**
-     * Default constructor with sensible defaults for profile picture uploads.
-     */
-    public UploadConfig() {
-      this(
-          5 * 1024 * 1024L, // 5MB max file size
-          "image/jpeg,image/png,image/webp,image/gif",
-          60 // 1 hour expiration for presigned URLs
-      );
-    }
 
     /**
      * Get allowed MIME types as a list
@@ -89,19 +87,5 @@ public record S3ConfigurationProperties(
       return java.util.Arrays.asList(allowedMimeTypes.split(","));
     }
   }
-
-  /**
-   * Default constructor with common MinIO development settings.
-   */
-  public S3ConfigurationProperties() {
-    this(
-        "http://localhost:9000",
-        "",
-        "",
-        "user-avatars",
-        "us-east-1",
-        false,
-        new UploadConfig()
-    );
-  }
 }
+
