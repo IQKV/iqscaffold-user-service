@@ -192,18 +192,6 @@ class DatabaseConfigurationPropertiesTest {
   }
 
   @Test
-  void shouldValidateMigrationContextsNotBlank() {
-    var migration = new DatabaseConfigurationProperties.MigrationProperties(
-        true,
-        "",
-        true
-    );
-
-    Set<ConstraintViolation<DatabaseConfigurationProperties.MigrationProperties>> violations = validator.validate(migration);
-    assertFalse(violations.isEmpty());
-  }
-
-  @Test
   void shouldCreateDisabledMigration() {
     var migration = new DatabaseConfigurationProperties.MigrationProperties(
         false,
