@@ -1,5 +1,6 @@
 package com.iqscaffold.userservice.tenancy;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Cacheable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -94,6 +95,7 @@ public class Tenant {
   private String archivedReason;
 
   @OneToOne(mappedBy = "tenant", fetch = FetchType.LAZY)
+  @JsonIgnore
   private Organization organization;
 
   // Default constructor for JPA

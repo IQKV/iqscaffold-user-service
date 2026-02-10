@@ -50,6 +50,9 @@ public class RedisConfig extends AbstractHttpSessionApplicationInitializer {
     var objectMapper = new ObjectMapper();
     objectMapper.registerModule(new JavaTimeModule());
     objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+    objectMapper.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
+    // Prevent serialization of Hibernate lazy-loaded collections
+    objectMapper.configure(com.fasterxml.jackson.databind.SerializationFeature.FAIL_ON_SELF_REFERENCES, false);
     objectMapper.activateDefaultTyping(
         objectMapper.getPolymorphicTypeValidator(),
         ObjectMapper.DefaultTyping.NON_FINAL

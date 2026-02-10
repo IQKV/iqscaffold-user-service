@@ -1,5 +1,6 @@
 package com.iqscaffold.userservice.shared;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Cacheable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -64,6 +65,7 @@ public class Authority {
 
   @ManyToMany(mappedBy = "authorities", fetch = FetchType.LAZY)
   @Cache(usage = CacheConcurrencyStrategy.READ_WRITE, region = "com.iqscaffold.userservice.shared.Authority.users")
+  @JsonIgnore
   private Set<User> users = new HashSet<>();
 
   // Default constructor for JPA

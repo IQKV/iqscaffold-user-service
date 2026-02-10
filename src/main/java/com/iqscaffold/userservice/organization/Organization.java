@@ -1,5 +1,6 @@
 package com.iqscaffold.userservice.organization;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Cacheable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -167,6 +168,7 @@ public class Organization {
   private Integer maxUsers;
 
   @OneToOne(mappedBy = "organization")
+  @JsonIgnore
   private OrganizationPreference preference;
 
   @CreationTimestamp

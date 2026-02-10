@@ -1,5 +1,6 @@
 package com.iqscaffold.userservice.usermanagement;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Cacheable;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -205,6 +206,7 @@ public class User extends TenantAware {
   private Set<Authority> authorities = new HashSet<>();
 
   @OneToOne(mappedBy = "user")
+  @JsonIgnore
   private UserPreference preference;
 
   // Default constructor for JPA
