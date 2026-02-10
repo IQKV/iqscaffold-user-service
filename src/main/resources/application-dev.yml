@@ -188,17 +188,17 @@ iqscaffold:
       registration-confirmed-template: "email/user-registration/email-confirmed.html"
 
   # S3/MinIO Configuration - Dev MinIO from infra chart
-  s3:
-    endpoint: ${IQSCAFFOLD_S3_ENDPOINT:http://iqscaffold-infra-minio.iqscaffold-dev-env.svc.cluster.local:9000}
-    access-key: ${IQSCAFFOLD_S3_ACCESS_KEY:iqscaffold}
-    secret-key: ${IQSCAFFOLD_S3_SECRET_KEY:iqscaffold_password}
-    bucket-name: ${IQSCAFFOLD_S3_BUCKET_NAME:user-avatars}
-    region: ${IQSCAFFOLD_S3_REGION:us-east-1}
-    ssl: ${IQSCAFFOLD_S3_SSL:false}
+  object-storage:
+    endpoint: ${IQSCAFFOLD_OBJECTSTORAGE_ENDPOINT:http://iqscaffold-infra-minio.iqscaffold-dev-env.svc.cluster.local:9000}
+    access-key: ${IQSCAFFOLD_OBJECTSTORAGE_ACCESS_KEY:iqscaffold}
+    secret-key: ${IQSCAFFOLD_OBJECTSTORAGE_SECRET_KEY:iqscaffold_password}
+    bucket-name: ${IQSCAFFOLD_OBJECTSTORAGE_BUCKET_NAME:user-avatars}
+    region: ${IQSCAFFOLD_OBJECTSTORAGE_REGION:us-east-1}
+    ssl: ${IQSCAFFOLD_OBJECTSTORAGE_SSL:false}
     upload:
-      max-file-size-bytes: ${IQSCAFFOLD_S3_UPLOAD_MAX_FILE_SIZE_BYTES:5242880} # 5MB
-      allowed-mime-types: ${IQSCAFFOLD_S3_UPLOAD_ALLOWED_MIME_TYPES:image/jpeg,image/png,image/webp,image/gif}
-      presigned-url-expiration-minutes: ${IQSCAFFOLD_S3_UPLOAD_PRESIGNED_URL_EXPIRATION_MINUTES:60} # 1 hour
+      max-file-size-bytes: ${IQSCAFFOLD_OBJECTSTORAGE_UPLOAD_MAX_FILE_SIZE_BYTES:5242880} # 5MB
+      allowed-mime-types: ${IQSCAFFOLD_OBJECTSTORAGE_UPLOAD_ALLOWED_MIME_TYPES:image/jpeg,image/png,image/webp,image/gif}
+      presigned-url-expiration-minutes: ${IQSCAFFOLD_OBJECTSTORAGE_UPLOAD_PRESIGNED_URL_EXPIRATION_MINUTES:60} # 1 hour
 
   # Observability Configuration - Development
   observability:

@@ -32,7 +32,7 @@ import org.springframework.validation.annotation.Validated;
  *
  * @author IQ Scaffold
  */
-@ConfigurationProperties(prefix = "iqscaffold.s3")
+@ConfigurationProperties(prefix = "iqscaffold.object-storage")
 @Validated
 public record S3ConfigurationProperties(
 

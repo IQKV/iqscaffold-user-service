@@ -160,21 +160,21 @@ iqscaffold:
       format: json  # JSON format for staging
   
   # S3/MinIO Configuration - Staging Environment
-  s3:
-    endpoint: ${IQSCAFFOLD_S3_ENDPOINT:https://s3.staging.example.com}
-    access-key: ${IQSCAFFOLD_S3_ACCESS_KEY}
-    secret-key: ${IQSCAFFOLD_S3_SECRET_KEY}
-    bucket-name: ${IQSCAFFOLD_S3_BUCKET_NAME:user-avatars-staging}
-    region: ${IQSCAFFOLD_S3_REGION:us-east-1}
-    ssl: ${IQSCAFFOLD_S3_SSL:true}
+  object-storage:
+    endpoint: ${IQSCAFFOLD_OBJECTSTORAGE_ENDPOINT:https://s3.staging.example.com}
+    access-key: ${IQSCAFFOLD_OBJECTSTORAGE_ACCESS_KEY}
+    secret-key: ${IQSCAFFOLD_OBJECTSTORAGE_SECRET_KEY}
+    bucket-name: ${IQSCAFFOLD_OBJECTSTORAGE_BUCKET_NAME:user-avatars-staging}
+    region: ${IQSCAFFOLD_OBJECTSTORAGE_REGION:us-east-1}
+    ssl: ${IQSCAFFOLD_OBJECTSTORAGE_SSL:true}
     upload:
-      max-file-size-bytes: ${IQSCAFFOLD_S3_MAX_FILE_SIZE:5242880} # 5MB
+      max-file-size-bytes: ${IQSCAFFOLD_OBJECTSTORAGE_MAX_FILE_SIZE:5242880} # 5MB
       allowed-mime-types:
         - image/jpeg
         - image/png
         - image/webp
         - image/gif
-      presigned-url-expiration-minutes: ${IQSCAFFOLD_S3_URL_EXPIRATION:60} # 1 hour
+      presigned-url-expiration-minutes: ${IQSCAFFOLD_OBJECTSTORAGE_URL_EXPIRATION:60} # 1 hour
   
   tenant-id-header: X-Tenant-ID
   
