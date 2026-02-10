@@ -2,6 +2,9 @@ package com.iqscaffold.userservice.config;
 
 import java.time.Duration;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.iqscaffold.userservice.tenancy.TenantContext;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -40,11 +43,36 @@ public class RedisConfig extends AbstractHttpSessionApplicationInitializer {
   }
 
   /**
+   * Configure ObjectMapper for Redis serialization with Java 8 date/time support.
+   */
+  @Bean
+  public ObjectMapper redisObjectMapper() {
+    var objectMapper = new ObjectMapper();
+    objectMapper.registerModule(new JavaTimeModule());
+    objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+    objectMapper.activateDefaultTyping(
+        objectMapper.getPolymorphicTypeValidator(),
+        ObjectMapper.DefaultTyping.NON_FINAL
+    );
+    return objectMapper;
+  }
+
+  /**
+   * Configure GenericJackson2JsonRedisSerializer with custom ObjectMapper.
+   */
+  @Bean
+  public GenericJackson2JsonRedisSerializer redisSerializer(ObjectMapper redisObjectMapper) {
+    return new GenericJackson2JsonRedisSerializer(redisObjectMapper);
+  }
+
+  /**
    * Configure RedisTemplate with proper serializers for key-value operations. Uses String serializer for keys and Jackson JSON serializer for values.
    */
   @Bean
   @Primary
-  public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory connectionFactory) {
+  public RedisTemplate<String, Object> redisTemplate(
+      RedisConnectionFactory connectionFactory,
+      GenericJackson2JsonRedisSerializer redisSerializer) {
     var template = new RedisTemplate<String, Object>();
     template.setConnectionFactory(connectionFactory);
 
@@ -53,8 +81,8 @@ public class RedisConfig extends AbstractHttpSessionApplicationInitializer {
     template.setHashKeySerializer(new StringRedisSerializer());
 
     // Use JSON serializer for values
-    template.setValueSerializer(new GenericJackson2JsonRedisSerializer());
-    template.setHashValueSerializer(new GenericJackson2JsonRedisSerializer());
+    template.setValueSerializer(redisSerializer);
+    template.setHashValueSerializer(redisSerializer);
 
     template.afterPropertiesSet();
     return template;
@@ -64,7 +92,9 @@ public class RedisConfig extends AbstractHttpSessionApplicationInitializer {
    * Configure tenant-aware Redis template with automatic key prefixing. All keys are automatically prefixed with tenant ID for isolation.
    */
   @Bean
-  public RedisTemplate<String, Object> tenantAwareRedisTemplate(RedisConnectionFactory connectionFactory) {
+  public RedisTemplate<String, Object> tenantAwareRedisTemplate(
+      RedisConnectionFactory connectionFactory,
+      GenericJackson2JsonRedisSerializer redisSerializer) {
     var template = new RedisTemplate<String, Object>();
     template.setConnectionFactory(connectionFactory);
 
@@ -73,8 +103,8 @@ public class RedisConfig extends AbstractHttpSessionApplicationInitializer {
     template.setHashKeySerializer(new TenantAwareStringRedisSerializer());
 
     // Use JSON serializer for values
-    template.setValueSerializer(new GenericJackson2JsonRedisSerializer());
-    template.setHashValueSerializer(new GenericJackson2JsonRedisSerializer());
+    template.setValueSerializer(redisSerializer);
+    template.setHashValueSerializer(redisSerializer);
 
     template.afterPropertiesSet();
     return template;
@@ -85,13 +115,15 @@ public class RedisConfig extends AbstractHttpSessionApplicationInitializer {
    */
   @Bean
   @Primary
-  public CacheManager tenantAwareCacheManager(RedisConnectionFactory connectionFactory) {
+  public CacheManager tenantAwareCacheManager(
+      RedisConnectionFactory connectionFactory,
+      GenericJackson2JsonRedisSerializer redisSerializer) {
     var cacheConfiguration = RedisCacheConfiguration.defaultCacheConfig()
         .entryTtl(Duration.ofMinutes(30)) // Default TTL of 30 minutes
         .serializeKeysWith(RedisSerializationContext.SerializationPair
             .fromSerializer(new TenantAwareStringRedisSerializer()))
         .serializeValuesWith(RedisSerializationContext.SerializationPair
-            .fromSerializer(new GenericJackson2JsonRedisSerializer()))
+            .fromSerializer(redisSerializer))
         .disableCachingNullValues(); // Don't cache null values
 
     return RedisCacheManager.builder(connectionFactory)
@@ -116,13 +148,15 @@ public class RedisConfig extends AbstractHttpSessionApplicationInitializer {
    * Configure a session-specific cache manager for session storage with tenant isolation.
    */
   @Bean("sessionCacheManager")
-  public CacheManager sessionCacheManager(RedisConnectionFactory connectionFactory) {
+  public CacheManager sessionCacheManager(
+      RedisConnectionFactory connectionFactory,
+      GenericJackson2JsonRedisSerializer redisSerializer) {
     var sessionCacheConfiguration = RedisCacheConfiguration.defaultCacheConfig()
         .entryTtl(Duration.ofMinutes(30)) // Session TTL of 30 minutes
         .serializeKeysWith(RedisSerializationContext.SerializationPair
             .fromSerializer(new TenantAwareSessionKeySerializer()))
         .serializeValuesWith(RedisSerializationContext.SerializationPair
-            .fromSerializer(new GenericJackson2JsonRedisSerializer()))
+            .fromSerializer(redisSerializer))
         .disableCachingNullValues();
 
     return RedisCacheManager.builder(connectionFactory)
