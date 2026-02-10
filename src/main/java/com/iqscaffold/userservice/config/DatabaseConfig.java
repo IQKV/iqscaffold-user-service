@@ -9,14 +9,18 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
  * Database configuration for User Service. Configures JPA repositories, entity scanning, and transaction management.
  */
 @Configuration
-@EnableJpaRepositories(basePackages = {
-    "com.iqscaffold.userservice.usermanagement",
-    "com.iqscaffold.userservice.tenancy",
-    "com.iqscaffold.userservice.organization",
-    "com.iqscaffold.userservice.emailverification",
-    "com.iqscaffold.userservice.security",
-    "com.iqscaffold.userservice.shared"
-})
+@EnableJpaRepositories(
+    basePackages = {
+        "com.iqscaffold.userservice.usermanagement",
+        "com.iqscaffold.userservice.tenancy",
+        "com.iqscaffold.userservice.organization",
+        "com.iqscaffold.userservice.emailverification",
+        "com.iqscaffold.userservice.security",
+        "com.iqscaffold.userservice.shared"
+    },
+    entityManagerFactoryRef = "entityManagerFactory",
+    transactionManagerRef = "transactionManager"
+)
 @EntityScan(basePackages = {
     "com.iqscaffold.userservice.usermanagement",
     "com.iqscaffold.userservice.tenancy",
