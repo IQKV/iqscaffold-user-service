@@ -171,9 +171,6 @@
                 <constraints nullable="true"/>
             </column>
             <!-- Two-factor authentication settings -->
-            <column name="enable_two_factor_auth" type="BOOLEAN" defaultValueBoolean="false">
-                <constraints nullable="false"/>
-            </column>
             <column name="require_two_factor_auth" type="BOOLEAN" defaultValueBoolean="false">
                 <constraints nullable="false"/>
             </column>

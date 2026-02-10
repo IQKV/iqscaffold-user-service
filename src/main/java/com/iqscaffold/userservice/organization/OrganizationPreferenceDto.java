@@ -22,7 +22,7 @@ public record OrganizationPreferenceDto(
     Integer sessionTimeoutMinutes,
     Integer maxLoginAttempts,
     Integer lockoutDurationMinutes,
-    Boolean twoFactorAuthRequired,
+    Boolean requireTwoFactorAuth,
     String notificationEmail,
     LocalDateTime createdAt,
     LocalDateTime updatedAt

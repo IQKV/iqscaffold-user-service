@@ -30,7 +30,7 @@ class OrganizationPreferenceEntityTest {
     assertThat(preference.getSessionTimeoutMinutes()).isEqualTo(30);
     assertThat(preference.getMaxLoginAttempts()).isEqualTo(5);
     assertThat(preference.getLockoutDurationMinutes()).isEqualTo(15);
-    assertThat(preference.getTwoFactorAuthRequired()).isFalse();
+    assertThat(preference.getRequireTwoFactorAuth()).isFalse();
   }
 
   @Test
@@ -52,7 +52,7 @@ class OrganizationPreferenceEntityTest {
     preference.setSessionTimeoutMinutes(60);
     preference.setMaxLoginAttempts(3);
     preference.setLockoutDurationMinutes(30);
-    preference.setTwoFactorAuthRequired(true);
+    preference.setRequireTwoFactorAuth(true);
     preference.setNotificationEmail("notify@example.com");
 
     assertThat(preference.getDefaultLocale()).isEqualTo("fr");
@@ -68,7 +68,7 @@ class OrganizationPreferenceEntityTest {
     assertThat(preference.getSessionTimeoutMinutes()).isEqualTo(60);
     assertThat(preference.getMaxLoginAttempts()).isEqualTo(3);
     assertThat(preference.getLockoutDurationMinutes()).isEqualTo(30);
-    assertThat(preference.getTwoFactorAuthRequired()).isTrue();
+    assertThat(preference.getRequireTwoFactorAuth()).isTrue();
     assertThat(preference.getNotificationEmail()).isEqualTo("notify@example.com");
   }
 

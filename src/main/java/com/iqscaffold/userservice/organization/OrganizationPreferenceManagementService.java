@@ -196,8 +196,8 @@ public class OrganizationPreferenceManagementService {
     if (request.lockoutDurationMinutes() != null) {
       preference.setLockoutDurationMinutes(request.lockoutDurationMinutes());
     }
-    if (request.twoFactorAuthRequired() != null) {
-      preference.setTwoFactorAuthRequired(request.twoFactorAuthRequired());
+    if (request.requireTwoFactorAuth() != null) {
+      preference.setRequireTwoFactorAuth(request.requireTwoFactorAuth());
     }
     if (request.notificationEmail() != null) {
       preference.setNotificationEmail(request.notificationEmail());
@@ -309,8 +309,8 @@ public class OrganizationPreferenceManagementService {
     if (request.lockoutDurationMinutes() != null) {
       preference.setLockoutDurationMinutes(request.lockoutDurationMinutes());
     }
-    if (request.twoFactorAuthRequired() != null) {
-      preference.setTwoFactorAuthRequired(request.twoFactorAuthRequired());
+    if (request.requireTwoFactorAuth() != null) {
+      preference.setRequireTwoFactorAuth(request.requireTwoFactorAuth());
     }
     if (request.notificationEmail() != null) {
       preference.setNotificationEmail(request.notificationEmail());
@@ -336,7 +336,7 @@ public class OrganizationPreferenceManagementService {
         preference.getSessionTimeoutMinutes(),
         preference.getMaxLoginAttempts(),
         preference.getLockoutDurationMinutes(),
-        preference.getTwoFactorAuthRequired(),
+        preference.getRequireTwoFactorAuth(),
         preference.getNotificationEmail(),
         preference.getCreatedAt(),
         preference.getUpdatedAt()

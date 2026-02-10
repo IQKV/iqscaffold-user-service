@@ -69,8 +69,8 @@ public class OrganizationPreference {
   @Column(name = "lockout_duration_minutes")
   private Integer lockoutDurationMinutes = 15;
 
-  @Column(name = "two_factor_auth_required")
-  private Boolean twoFactorAuthRequired = false;
+  @Column(name = "require_two_factor_auth")
+  private Boolean requireTwoFactorAuth = false;
 
   @Column(name = "allow_user_registration")
   private Boolean allowUserRegistration = true;
@@ -212,12 +212,12 @@ public class OrganizationPreference {
     this.lockoutDurationMinutes = lockoutDurationMinutes;
   }
 
-  public Boolean getTwoFactorAuthRequired() {
-    return twoFactorAuthRequired;
+  public Boolean getRequireTwoFactorAuth() {
+    return requireTwoFactorAuth;
   }
 
-  public void setTwoFactorAuthRequired(Boolean twoFactorAuthRequired) {
-    this.twoFactorAuthRequired = twoFactorAuthRequired;
+  public void setRequireTwoFactorAuth(Boolean requireTwoFactorAuth) {
+    this.requireTwoFactorAuth = requireTwoFactorAuth;
   }
 
   public String getNotificationEmail() {

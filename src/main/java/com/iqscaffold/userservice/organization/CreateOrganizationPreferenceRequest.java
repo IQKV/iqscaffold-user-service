@@ -45,7 +45,7 @@ public record CreateOrganizationPreferenceRequest(
     @Min(value = 1, message = "Lockout duration must be at least 1 minute")
     Integer lockoutDurationMinutes,
 
-    Boolean twoFactorAuthRequired,
+    Boolean requireTwoFactorAuth,
 
     @Email(message = "Notification email must be valid")
     @Size(max = 255, message = "Notification email must not exceed 255 characters")
