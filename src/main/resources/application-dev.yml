@@ -3,37 +3,15 @@
 # Uses infrastructure services from iqscaffold-infra Helm chart
 
 spring:
-  # Database Configuration - Dev PostgreSQL from infra chart
-  datasource:
-    url: ${IQSCAFFOLD_DATABASE_URL:jdbc:postgresql://iqscaffold-infra-postgresql.iqscaffold-dev-env.svc.cluster.local:5432/iqscaffold_user}
-    username: ${IQSCAFFOLD_DATABASE_USERNAME:svc_user_dev_dba}
-    password: ${IQSCAFFOLD_DATABASE_PASSWORD:iqscaffold_dev_password}
-
-  # JPA Configuration - Development Settings
   jpa:
     show-sql: true
 
-  # Redis Configuration - Dev Redis from infra chart
-  data:
-    redis:
-      host: ${IQSCAFFOLD_CACHE_REDIS_HOST:iqscaffold-infra-redis-master.iqscaffold-dev-env.svc.cluster.local}
-      password: ${IQSCAFFOLD_CACHE_REDIS_PASSWORD:iqscaffold_dev_password}
-
-  # RabbitMQ Configuration - Dev RabbitMQ from infra chart
-  rabbitmq:
-    host: ${IQSCAFFOLD_MESSAGING_RABBITMQ_HOST:iqscaffold-infra-rabbitmq.iqscaffold-dev-env.svc.cluster.local}
-    username: ${IQSCAFFOLD_MESSAGING_RABBITMQ_USERNAME:svc_infra_dev_rmq}
-    password: ${IQSCAFFOLD_MESSAGING_RABBITMQ_PASSWORD:iqscaffold_dev_password}
-
-# IQ Scaffold Configuration - Development Environment
 iqscaffold:
-  # Database Configuration
   database:
     url: ${IQSCAFFOLD_DATABASE_URL:jdbc:postgresql://iqscaffold-infra-postgresql.iqscaffold-dev-env.svc.cluster.local:5432/iqscaffold_user}
     username: ${IQSCAFFOLD_DATABASE_USERNAME:svc_user_dev_dba}
     password: ${IQSCAFFOLD_DATABASE_PASSWORD:iqscaffold_dev_password}
 
-  # Cache Configuration - Redis
   cache:
     redis:
       host: ${IQSCAFFOLD_CACHE_REDIS_HOST:iqscaffold-infra-redis-master.iqscaffold-dev-env.svc.cluster.local}
@@ -41,32 +19,29 @@ iqscaffold:
       key-prefix: "iqscaffold:auth:dev"
       enable-statistics: true
 
-  # Messaging Configuration - RabbitMQ
   messaging:
     rabbitmq:
       host: ${IQSCAFFOLD_MESSAGING_RABBITMQ_HOST:iqscaffold-infra-rabbitmq.iqscaffold-dev-env.svc.cluster.local}
       username: ${IQSCAFFOLD_MESSAGING_RABBITMQ_USERNAME:svc_infra_dev_rmq}
       password: ${IQSCAFFOLD_MESSAGING_RABBITMQ_PASSWORD:iqscaffold_dev_password}
 
-  # Authentication Configuration
   auth:
     jwt:
       secret-key: ${JWT_SECRET_KEY:dev-secret-key-not-for-production-use-only}
-      access-token-expiry: PT30M  # Extended for development
+      access-token-expiry: PT30M
       issuer: iqscaffold-user-service-dev
       audience: iqscaffold-services-dev
     security:
       password:
-        require-special-chars: false  # Relaxed for development
-        min-length: 6  # Relaxed for development
+        require-special-chars: false
+        min-length: 6
       rate-limiting:
-        login-attempts: 10  # More lenient for development
-        lockout-duration: PT5M  # Shorter lockout for development
+        login-attempts: 10
+        lockout-duration: PT5M
       session:
-        timeout: PT4H  # Extended for development
+        timeout: PT4H
         concurrent-sessions: 3
 
-  # Email Configuration - Development (MailHog from infra chart)
   email:
     smtp:
       host: ${SMTP_HOST:iqscaffold-infra-mailhog.iqscaffold-dev-env.svc.cluster.local}
@@ -85,13 +60,11 @@ iqscaffold:
       password-reset-confirmed-subject: "[DEV] Password Reset Successful - IQ Scaffold"
       registration-confirmed-subject: "[DEV] Welcome to IQ Scaffold - Email Verified!"
 
-  # S3/MinIO Configuration - Dev MinIO from infra chart
   object-storage:
     endpoint: ${IQSCAFFOLD_OBJECTSTORAGE_ENDPOINT:http://iqscaffold-infra-minio.iqscaffold-dev-env.svc.cluster.local:9000}
     access-key: ${IQSCAFFOLD_OBJECTSTORAGE_ACCESS_KEY:iqscaffold}
     secret-key: ${IQSCAFFOLD_OBJECTSTORAGE_SECRET_KEY:iqscaffold_password}
 
-  # Observability Configuration - Development
   observability:
     metrics:
       prefix: iqscaffold_user_dev
@@ -102,7 +75,6 @@ iqscaffold:
       enable-sql-logging: true
       enable-performance-logging: true
 
-# Logging Configuration - Development
 logging:
   level:
     com.iqscaffold: DEBUG

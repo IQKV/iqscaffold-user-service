@@ -1,13 +1,8 @@
 # Test Profile Configuration
 # This profile enables demo data for testing
 
-spring:
-  profiles:
-    active: test
-
 iqscaffold:
   liquibase:
-    # Include demo context for test data
     contexts: "demo"
 
 logging:

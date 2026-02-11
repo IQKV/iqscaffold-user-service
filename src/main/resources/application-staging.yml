@@ -2,32 +2,19 @@
 # This configuration is optimized for staging with moderate logging and security
 
 spring:
-  # Database Configuration - Staging PostgreSQL
   datasource:
-    url: ${IQSCAFFOLD_DATABASE_URL:jdbc:postgresql://postgres-staging:5432/iqscaffold_user_staging}
-    password: ${IQSCAFFOLD_DATABASE_PASSWORD}
     hikari:
       maximum-pool-size: 20
       minimum-idle: 5
 
-  # Redis Configuration - Staging Redis
   data:
     redis:
-      host: ${IQSCAFFOLD_CACHE_REDIS_HOST:redis-staging}
-      password: ${IQSCAFFOLD_CACHE_REDIS_PASSWORD}
       lettuce:
         pool:
           max-active: 16
           min-idle: 2
 
-  # Messaging Configuration - Staging RabbitMQ
-  rabbitmq:
-    host: ${IQSCAFFOLD_MESSAGING_RABBITMQ_HOST:rabbitmq-staging}
-    password: ${IQSCAFFOLD_MESSAGING_RABBITMQ_PASSWORD}
-
-# IQ Scaffold Configuration - Staging Environment
 iqscaffold:
-  # Database Configuration
   database:
     url: ${IQSCAFFOLD_DATABASE_URL:jdbc:postgresql://postgres-staging:5432/iqscaffold_user_staging}
     password: ${IQSCAFFOLD_DATABASE_PASSWORD}
@@ -35,7 +22,6 @@ iqscaffold:
       maximum-size: 20
       minimum-idle: 5
 
-  # Cache Configuration - Redis
   cache:
     redis:
       host: ${IQSCAFFOLD_CACHE_REDIS_HOST:redis-staging}
@@ -46,7 +32,6 @@ iqscaffold:
       key-prefix: "iqscaffold:auth:staging"
       default-ttl: PT30M
 
-  # Authentication Configuration
   auth:
     jwt:
       secret-key: ${JWT_SECRET_KEY}
@@ -59,7 +44,6 @@ iqscaffold:
         timeout: PT4H
         concurrent-sessions: 3
 
-  # Email Configuration - Staging Environment
   email:
     smtp:
       host: ${SMTP_HOST:smtp.gmail.com}
@@ -75,19 +59,6 @@ iqscaffold:
       password-reset-confirmed-subject: "[STAGING] Password Reset Successful - IQ Scaffold"
       registration-confirmed-subject: "[STAGING] Welcome to IQ Scaffold - Email Verified!"
 
-  # Observability Configuration - Staging
-  observability:
-    tracing:
-      sampling-rate: 0.1  # Reduced sampling for staging
-      endpoint: ${IQSCAFFOLD_OBSERVABILITY_TRACING_ENDPOINT:http://otel-collector:4317}
-    metrics:
-      prefix: iqscaffold_user_staging
-      custom-tags:
-        environment: staging
-    logging:
-      format: json  # JSON format for staging
-
-  # S3/MinIO Configuration - Staging Environment
   object-storage:
     endpoint: ${IQSCAFFOLD_OBJECTSTORAGE_ENDPOINT:https://s3.staging.example.com}
     access-key: ${IQSCAFFOLD_OBJECTSTORAGE_ACCESS_KEY}
@@ -95,7 +66,17 @@ iqscaffold:
     bucket-name: ${IQSCAFFOLD_OBJECTSTORAGE_BUCKET_NAME:user-avatars-staging}
     ssl: ${IQSCAFFOLD_OBJECTSTORAGE_SSL:true}
 
-# Logging Configuration - Staging
+  observability:
+    tracing:
+      sampling-rate: 0.1
+      endpoint: ${IQSCAFFOLD_OBSERVABILITY_TRACING_ENDPOINT:http://otel-collector:4317}
+    metrics:
+      prefix: iqscaffold_user_staging
+      custom-tags:
+        environment: staging
+    logging:
+      format: json
+
 logging:
   level:
     com.iqscaffold: INFO
@@ -104,13 +85,11 @@ logging:
     org.hibernate.SQL: WARN
     com.zaxxer.hikari: WARN
 
-# Management Configuration - Staging
 management:
   tracing:
     sampling:
-      probability: 0.1  # Reduced sampling for staging
+      probability: 0.1
 
-# SpringDoc Configuration - Staging
 springdoc:
   swagger-ui:
     try-it-out-enabled: false

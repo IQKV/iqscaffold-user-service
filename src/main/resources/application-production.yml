@@ -15,20 +15,14 @@ server:
     include-exception: false
 
 spring:
-  # Output Configuration
   output:
     ansi:
       enabled: never
 
-  # Internationalization Configuration
   messages:
     use-code-as-default-message: false
 
-  # Database Configuration - Production PostgreSQL
   datasource:
-    url: ${IQSCAFFOLD_DATABASE_URL}
-    username: ${IQSCAFFOLD_DATABASE_USERNAME}
-    password: ${IQSCAFFOLD_DATABASE_PASSWORD}
     hikari:
       maximum-pool-size: 50
       minimum-idle: 10
@@ -36,7 +30,6 @@ spring:
       auto-commit: false
       connection-test-query: SELECT 1
 
-  # JPA Configuration - Production Settings
   jpa:
     properties:
       hibernate:
@@ -49,11 +42,8 @@ spring:
           fail_on_pagination_over_collection_fetch: true
           plan_cache_max_size: 2048
 
-  # Redis Configuration - Production Redis
   data:
     redis:
-      host: ${IQSCAFFOLD_CACHE_REDIS_HOST}
-      password: ${IQSCAFFOLD_CACHE_REDIS_PASSWORD}
       connect-timeout: 2000ms
       lettuce:
         pool:
@@ -62,11 +52,7 @@ spring:
           min-idle: 4
         shutdown-timeout: 100ms
 
-  # Messaging Configuration - Production RabbitMQ
   rabbitmq:
-    host: ${IQSCAFFOLD_MESSAGING_RABBITMQ_HOST}
-    username: ${IQSCAFFOLD_MESSAGING_RABBITMQ_USERNAME}
-    password: ${IQSCAFFOLD_MESSAGING_RABBITMQ_PASSWORD}
     listener:
       simple:
         prefetch: 10
@@ -78,9 +64,7 @@ spring:
           max-interval: 10000ms
           multiplier: 2.0
 
-# IQ Scaffold Configuration - Production Environment
 iqscaffold:
-  # Database Configuration
   database:
     url: ${IQSCAFFOLD_DATABASE_URL}
     username: ${IQSCAFFOLD_DATABASE_USERNAME}
@@ -89,7 +73,6 @@ iqscaffold:
       maximum-size: 50
       minimum-idle: 10
 
-  # Cache Configuration - Redis
   cache:
     redis:
       host: ${IQSCAFFOLD_CACHE_REDIS_HOST}
@@ -101,7 +84,6 @@ iqscaffold:
       key-prefix: "iqscaffold:auth:production"
       default-ttl: PT15M
 
-  # Messaging Configuration - RabbitMQ
   messaging:
     rabbitmq:
       host: ${IQSCAFFOLD_MESSAGING_RABBITMQ_HOST}
@@ -118,7 +100,6 @@ iqscaffold:
             max-interval: PT10S
             multiplier: 2.0
 
-  # Authentication Configuration
   auth:
     jwt:
       secret-key: ${JWT_SECRET_KEY}
@@ -132,14 +113,12 @@ iqscaffold:
     oauth2:
       enabled: ${IQSCAFFOLD_AUTH_OAUTH2_ENABLED:false}
 
-  # Email Configuration - Production Environment
   email:
     smtp:
       host: ${SMTP_HOST}
       username: ${SMTP_USERNAME}
       password: ${SMTP_PASSWORD}
 
-  # S3/MinIO Configuration - Production Environment
   object-storage:
     endpoint: ${IQSCAFFOLD_OBJECTSTORAGE_ENDPOINT:https://s3.amazonaws.com}
     access-key: ${IQSCAFFOLD_OBJECTSTORAGE_ACCESS_KEY}
@@ -148,10 +127,9 @@ iqscaffold:
     region: ${IQSCAFFOLD_OBJECTSTORAGE_REGION:us-west-2}
     ssl: ${IQSCAFFOLD_OBJECTSTORAGE_SSL:true}
 
-  # Observability Configuration - Production
   observability:
     tracing:
-      sampling-rate: 0.01  # 1% sampling for production
+      sampling-rate: 0.01
       endpoint: ${IQSCAFFOLD_OBSERVABILITY_TRACING_ENDPOINT:http://otel-collector:4317}
       batch-size: 1024
     metrics:
@@ -160,13 +138,11 @@ iqscaffold:
     logging:
       level: WARN
       format: json
-      include-user-id: false  # Disabled for privacy
+      include-user-id: false
 
-  # Liquibase Configuration
   liquibase:
-    contexts: "!demo"  # Exclude demo data in production
+    contexts: "!demo"
 
-# Logging Configuration - Production
 logging:
   level:
     root: WARN
@@ -178,7 +154,6 @@ logging:
   pattern:
     console: '{"timestamp":"%d{yyyy-MM-dd HH:mm:ss.SSS}","level":"%level","thread":"%thread","logger":"%logger{36}","correlationId":"%X{correlationId:-}","traceId":"%X{traceId:-}","spanId":"%X{spanId:-}","tenantId":"%X{tenantId:-}","message":"%msg"}%n'
 
-# Management Configuration - Production
 management:
   endpoints:
     web:
@@ -203,10 +178,9 @@ management:
     sampling:
       probability: 0.01
 
-# SpringDoc OpenAPI Configuration - Production
 springdoc:
   api-docs:
-    enabled: false  # Disabled in production for security
+    enabled: false
   swagger-ui:
-    enabled: false  # Disabled in production for security
+    enabled: false
   show-actuator: false

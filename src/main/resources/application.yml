@@ -58,9 +58,9 @@ spring:
   
   # Database Configuration
   datasource:
-    url: ${IQSCAFFOLD_DATABASE_URL:jdbc:postgresql://localhost:5432/iqscaffold_user}
-    username: ${IQSCAFFOLD_DATABASE_USERNAME:iqscaffold_user}
-    password: ${IQSCAFFOLD_DATABASE_PASSWORD:iqscaffold_password}
+    url: ${iqscaffold.database.url}
+    username: ${iqscaffold.database.username}
+    password: ${iqscaffold.database.password}
     driver-class-name: org.postgresql.Driver
     hikari:
       maximum-pool-size: 10
@@ -103,11 +103,11 @@ spring:
   # Redis Configuration
   data:
     redis:
-      host: ${IQSCAFFOLD_CACHE_REDIS_HOST:localhost}
-      port: ${IQSCAFFOLD_CACHE_REDIS_PORT:6379}
-      password: ${IQSCAFFOLD_CACHE_REDIS_PASSWORD:}
-      database: ${IQSCAFFOLD_CACHE_REDIS_DATABASE:0}
-      timeout: 2000ms
+      host: ${iqscaffold.cache.redis.host}
+      port: ${iqscaffold.cache.redis.port}
+      password: ${iqscaffold.cache.redis.password}
+      database: ${iqscaffold.cache.redis.database}
+      timeout: ${iqscaffold.cache.redis.timeout}
       lettuce:
         pool:
           max-active: 8
@@ -117,13 +117,13 @@ spring:
 
   # Messaging Configuration - RabbitMQ
   rabbitmq:
-    host: ${IQSCAFFOLD_MESSAGING_RABBITMQ_HOST:localhost}
-    port: ${IQSCAFFOLD_MESSAGING_RABBITMQ_PORT:5672}
-    username: ${IQSCAFFOLD_MESSAGING_RABBITMQ_USERNAME:iqscaffold}
-    password: ${IQSCAFFOLD_MESSAGING_RABBITMQ_PASSWORD:iqscaffold_password}
-    virtual-host: ${IQSCAFFOLD_MESSAGING_RABBITMQ_VHOST:/}
-    connection-timeout: 30000ms
-    requested-heartbeat: 60s
+    host: ${iqscaffold.messaging.rabbitmq.host}
+    port: ${iqscaffold.messaging.rabbitmq.port}
+    username: ${iqscaffold.messaging.rabbitmq.username}
+    password: ${iqscaffold.messaging.rabbitmq.password}
+    virtual-host: ${iqscaffold.messaging.rabbitmq.virtual-host}
+    connection-timeout: ${iqscaffold.messaging.rabbitmq.connection-timeout}
+    requested-heartbeat: ${iqscaffold.messaging.rabbitmq.requested-heartbeat}
     publisher-confirm-type: correlated
     publisher-returns: true
     template:

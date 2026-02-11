@@ -2,79 +2,66 @@
 # This configuration is optimized for development with debug logging and relaxed security
 
 spring:
-  # Database Configuration - Local PostgreSQL
-  datasource:
-    url: ${IQSCAFFOLD_DATABASE_URL:jdbc:postgresql://localhost:5432/iqscaffold_user_local}
-
-  # JPA Configuration - Development Settings
   jpa:
     show-sql: true
 
-# IQ Scaffold Configuration - Local Environment
 iqscaffold:
-  # Database Configuration
   database:
     url: ${IQSCAFFOLD_DATABASE_URL:jdbc:postgresql://localhost:5432/iqscaffold_user_local}
 
-  # Cache Configuration - Redis
   cache:
     redis:
       key-prefix: "iqscaffold:auth:local"
       enable-statistics: true
 
-  # Authentication Configuration
   auth:
     jwt:
       secret-key: ${JWT_SECRET_KEY:local-development-secret-key-not-for-production-use}
-      access-token-expiry: PT30M  # Extended for development
-      refresh-token-expiry: P30D  # Extended for development
+      access-token-expiry: PT30M
+      refresh-token-expiry: P30D
       issuer: iqscaffold-user-service-local
       audience: iqscaffold-services-local
     security:
       password:
-        require-special-chars: false  # Relaxed for development
-        min-length: 6  # Relaxed for development
+        require-special-chars: false
+        min-length: 6
       rate-limiting:
-        login-attempts: 10  # More lenient for development
-        lockout-duration: PT5M  # Shorter lockout for development
+        login-attempts: 10
+        lockout-duration: PT5M
       session:
-        timeout: PT8H  # Extended for development
+        timeout: PT8H
         concurrent-sessions: 5
 
-  # Email Configuration - Local Development
   email:
     smtp:
-      port: ${SMTP_PORT:1025}  # MailHog default port for local development
-      auth: false  # Disabled for local MailHog
-      starttls: false  # Disabled for local development
+      port: ${SMTP_PORT:1025}
+      auth: false
+      starttls: false
     sender:
       from-email: ${EMAIL_FROM_EMAIL:noreply@iqscaffold.local}
       from-name: ${EMAIL_FROM_NAME:IQ Scaffold Platform (Local)}
       base-url: ${APP_BASE_URL:http://localhost:3000}
     verification:
-      rate-limit: 10  # More lenient for development
+      rate-limit: 10
     templates:
       verification-subject: "[LOCAL] Verify your IQ Scaffold account"
       password-reset-subject: "[LOCAL] Reset your IQ Scaffold password"
       password-reset-confirmed-subject: "[LOCAL] Password Reset Successful - IQ Scaffold"
       registration-confirmed-subject: "[LOCAL] Welcome to IQ Scaffold - Email Verified!"
 
-  # Observability Configuration - Development
+  object-storage:
+    bucket-name: ${IQSCAFFOLD_OBJECTSTORAGE_BUCKET_NAME:user-avatars-local}
+
   observability:
     metrics:
       prefix: iqscaffold_user_local
       custom-tags:
         environment: local
     logging:
-      level: DEBUG  # Verbose logging for development
+      level: DEBUG
       enable-sql-logging: true
       enable-performance-logging: true
 
-  # S3/MinIO Configuration - Local Development
-  object-storage:
-    bucket-name: ${IQSCAFFOLD_OBJECTSTORAGE_BUCKET_NAME:user-avatars-local}
-
-# Logging Configuration - Development
 logging:
   level:
     com.iqscaffold: DEBUG
@@ -86,12 +73,11 @@ logging:
     org.springframework.amqp: DEBUG
     org.springframework.rabbit: DEBUG
 
-# Management Configuration - Development
 management:
   endpoints:
     web:
       exposure:
-        include: "*"  # Expose all endpoints for development
+        include: "*"
   endpoint:
     health:
-      show-details: always  # Always show health details in development
+      show-details: always
