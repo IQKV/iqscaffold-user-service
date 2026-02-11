@@ -3,7 +3,6 @@
 # All sensitive values MUST be provided via environment variables or Kubernetes secrets
 
 server:
-  port: 8080
   shutdown: graceful
   compression:
     enabled: true
@@ -16,30 +15,13 @@ server:
     include-exception: false
 
 spring:
-  # Application Configuration
-  application:
-    name: iqscaffold-user-service
-
   # Output Configuration
   output:
     ansi:
       enabled: never
 
-  # Multipart Configuration
-  servlet:
-    multipart:
-      enabled: true
-      max-file-size: 10MB
-      max-request-size: 10MB
-      file-size-threshold: 2KB
-      resolve-lazily: false
-
   # Internationalization Configuration
   messages:
-    basename: i18n/messages
-    encoding: UTF-8
-    cache-duration: PT1H
-    fallback-to-system-locale: false
     use-code-as-default-message: false
 
   # Database Configuration - Production PostgreSQL
@@ -47,92 +29,46 @@ spring:
     url: ${IQSCAFFOLD_DATABASE_URL}
     username: ${IQSCAFFOLD_DATABASE_USERNAME}
     password: ${IQSCAFFOLD_DATABASE_PASSWORD}
-    driver-class-name: org.postgresql.Driver
     hikari:
       maximum-pool-size: 50
       minimum-idle: 10
-      connection-timeout: 20000
-      idle-timeout: 300000
-      max-lifetime: 1200000
-      leak-detection-threshold: 60000
       pool-name: UserServiceHikariCP
       auto-commit: false
       connection-test-query: SELECT 1
 
   # JPA Configuration - Production Settings
   jpa:
-    hibernate:
-      ddl-auto: none
-    show-sql: false
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.PostgreSQLDialect
-        format_sql: false
-        use_sql_comments: false
-        multiTenancy: SCHEMA
-        generate_statistics: false
         jdbc:
           batch_size: 100
           fetch_size: 50
           time_zone: UTC
-        order_inserts: true
-        order_updates: true
         query:
           in_clause_parameter_padding: true
           fail_on_pagination_over_collection_fetch: true
           plan_cache_max_size: 2048
-        # Second Level Cache Configuration
-        cache:
-          use_second_level_cache: true
-          use_query_cache: true
-          region:
-            factory_class: org.hibernate.cache.jcache.JCacheRegionFactory
-          use_structured_entries: true
-        javax:
-          cache:
-            provider: org.ehcache.jsr107.EhcacheCachingProvider
-            uri: classpath:ehcache.xml
-    open-in-view: false
 
   # Redis Configuration - Production Redis
   data:
     redis:
       host: ${IQSCAFFOLD_CACHE_REDIS_HOST}
-      port: ${IQSCAFFOLD_CACHE_REDIS_PORT:6379}
       password: ${IQSCAFFOLD_CACHE_REDIS_PASSWORD}
-      database: ${IQSCAFFOLD_CACHE_REDIS_DATABASE:0}
-      timeout: 2000ms
       connect-timeout: 2000ms
       lettuce:
         pool:
           max-active: 32
           max-idle: 16
           min-idle: 4
-          max-wait: -1ms
         shutdown-timeout: 100ms
 
   # Messaging Configuration - Production RabbitMQ
   rabbitmq:
     host: ${IQSCAFFOLD_MESSAGING_RABBITMQ_HOST}
-    port: ${IQSCAFFOLD_MESSAGING_RABBITMQ_PORT:5672}
     username: ${IQSCAFFOLD_MESSAGING_RABBITMQ_USERNAME}
     password: ${IQSCAFFOLD_MESSAGING_RABBITMQ_PASSWORD}
-    virtual-host: ${IQSCAFFOLD_MESSAGING_RABBITMQ_VHOST:/}
-    connection-timeout: 30000ms
-    requested-heartbeat: 60s
-    publisher-confirm-type: correlated
-    publisher-returns: true
-    template:
-      mandatory: true
-      retry:
-        enabled: true
-        initial-interval: 1000ms
-        max-attempts: 3
-        max-interval: 10000ms
-        multiplier: 2.0
     listener:
       simple:
-        acknowledge-mode: auto
         prefetch: 10
         default-requeue-rejected: false
         retry:
@@ -141,11 +77,6 @@ spring:
           max-attempts: 3
           max-interval: 10000ms
           multiplier: 2.0
-
-  # Liquibase Configuration
-  # Disabled globally - migrations are run programmatically per schema via TenantLiquibaseRunner
-  liquibase:
-    enabled: false
 
 # IQ Scaffold Configuration - Production Environment
 iqscaffold:
@@ -157,54 +88,27 @@ iqscaffold:
     pool:
       maximum-size: 50
       minimum-idle: 10
-      connection-timeout: PT20S
-      idle-timeout: PT5M
-      max-lifetime: PT20M
-    migration:
-      enabled: true
-      contexts: ${IQSCAFFOLD_LIQUIBASE_CONTEXTS:}
-      validate-on-migrate: true
 
   # Cache Configuration - Redis
   cache:
     redis:
       host: ${IQSCAFFOLD_CACHE_REDIS_HOST}
-      port: ${IQSCAFFOLD_CACHE_REDIS_PORT:6379}
       password: ${IQSCAFFOLD_CACHE_REDIS_PASSWORD}
-      database: ${IQSCAFFOLD_CACHE_REDIS_DATABASE:0}
-      timeout: PT2S
       pool:
         max-active: 32
         max-idle: 16
         min-idle: 4
-        max-wait: -1ms
       key-prefix: "iqscaffold:auth:production"
       default-ttl: PT15M
-      enable-statistics: false
 
   # Messaging Configuration - RabbitMQ
   messaging:
     rabbitmq:
       host: ${IQSCAFFOLD_MESSAGING_RABBITMQ_HOST}
-      port: ${IQSCAFFOLD_MESSAGING_RABBITMQ_PORT:5672}
       username: ${IQSCAFFOLD_MESSAGING_RABBITMQ_USERNAME}
       password: ${IQSCAFFOLD_MESSAGING_RABBITMQ_PASSWORD}
-      virtual-host: ${IQSCAFFOLD_MESSAGING_RABBITMQ_VHOST:/}
-      connection-timeout: PT30S
-      requested-heartbeat: PT60S
-      publisher-confirms: true
-      publisher-returns: true
-      template:
-        mandatory: true
-        retry:
-          enabled: true
-          initial-interval: PT1S
-          max-attempts: 3
-          max-interval: PT10S
-          multiplier: 2.0
       listener:
         simple:
-          acknowledge-mode: auto
           prefetch: 10
           default-requeue-rejected: false
           retry:
@@ -213,74 +117,27 @@ iqscaffold:
             max-attempts: 3
             max-interval: PT10S
             multiplier: 2.0
-      exchanges:
-        events: "iqscaffold.events"
-        dlx: "iqscaffold.dlx"
-      queues:
-        user-events: "iqscaffold.user.events"
-        notifications: "iqscaffold.notifications"
-        dlq: "iqscaffold.dlq"
-      routing-keys:
-        user-created: "user.created"
-        user-updated: "user.updated"
-        user-deleted: "user.deleted"
-        user-verified: "user.verified"
-        password-reset: "user.password.reset"
-        notification-email: "notification.email"
 
   # Authentication Configuration
   auth:
     jwt:
       secret-key: ${JWT_SECRET_KEY}
-      access-token-expiry: PT15M
-      refresh-token-expiry: P7D
-      issuer: iqscaffold-user-service
-      audience: iqscaffold-services
-      algorithm: HS256
     security:
       password:
         encoder-strength: 14
-        require-special-chars: true
         min-length: 12
       rate-limiting:
         login-attempts: 3
         lockout-duration: PT30M
-      session:
-        timeout: PT2H
-        concurrent-sessions: 2
     oauth2:
       enabled: ${IQSCAFFOLD_AUTH_OAUTH2_ENABLED:false}
-      providers: { }
-    authorities:
-      default-authorities:
-        - USER
 
   # Email Configuration - Production Environment
   email:
     smtp:
       host: ${SMTP_HOST}
-      port: ${SMTP_PORT:587}
       username: ${SMTP_USERNAME}
       password: ${SMTP_PASSWORD}
-      auth: true
-      starttls: true
-      timeout: PT30S
-    sender:
-      from-email: ${EMAIL_FROM_EMAIL:noreply@iqscaffold.com}
-      from-name: ${EMAIL_FROM_NAME:IQ Scaffold Platform}
-      base-url: ${APP_BASE_URL:https://app.iqscaffold.com}
-    verification:
-      token-expiry: PT24H
-      rate-limit: 3
-    templates:
-      verification-subject: "Verify your IQ Scaffold account"
-      verification-template: "email/user-registration/email-verification.html"
-      password-reset-subject: "Reset your IQ Scaffold password"
-      password-reset-template: "email/password-reset/initiate.html"
-      password-reset-confirmed-subject: "Password Reset Successful - IQ Scaffold"
-      password-reset-confirmed-template: "email/password-reset/confirmed.html"
-      registration-confirmed-subject: "Welcome to IQ Scaffold - Email Verified!"
-      registration-confirmed-template: "email/user-registration/email-confirmed.html"
 
   # S3/MinIO Configuration - Production Environment
   object-storage:
@@ -290,70 +147,23 @@ iqscaffold:
     bucket-name: ${IQSCAFFOLD_OBJECTSTORAGE_BUCKET_NAME:user-avatars-production}
     region: ${IQSCAFFOLD_OBJECTSTORAGE_REGION:us-west-2}
     ssl: ${IQSCAFFOLD_OBJECTSTORAGE_SSL:true}
-    upload:
-      max-file-size-bytes: ${IQSCAFFOLD_OBJECTSTORAGE_UPLOAD_MAX_FILE_SIZE_BYTES:5242880} # 5MB
-      allowed-mime-types: ${IQSCAFFOLD_OBJECTSTORAGE_UPLOAD_ALLOWED_MIME_TYPES:image/jpeg,image/png,image/webp,image/gif}
-      presigned-url-expiration-minutes: ${IQSCAFFOLD_OBJECTSTORAGE_UPLOAD_PRESIGNED_URL_EXPIRATION_MINUTES:60} # 1 hour
 
   # Observability Configuration - Production
   observability:
     tracing:
-      enabled: true
-      service-name: iqscaffold-user-service
       sampling-rate: 0.01  # 1% sampling for production
       endpoint: ${IQSCAFFOLD_OBSERVABILITY_TRACING_ENDPOINT:http://otel-collector:4317}
-      timeout: PT10S
-      export-timeout: PT30S
       batch-size: 1024
     metrics:
-      enabled: true
-      path: /actuator/prometheus
-      prefix: iqscaffold_user
-      include-host-tag: true
-      include-application-tag: true
-      include-environment-tag: true
       custom-tags:
         environment: production
-        service: user-service
     logging:
       level: WARN
       format: json
-      include-correlation-id: true
-      include-trace-id: true
-      include-span-id: true
       include-user-id: false  # Disabled for privacy
-      include-tenant-id: true
-      correlation-id-header: X-Correlation-ID
-      request-id-header: X-Request-ID
-      tenant-id-header: X-Tenant-ID
-      enable-sql-logging: false
-      enable-security-events: true
-      enable-performance-logging: false
-
-  tenant-id-header: X-Tenant-ID
-
-  # Internationalization Configuration
-  i18n:
-    supported-locales:
-      - en
-      - es
-      - fr
-    default-locale: en
-    message-basename: i18n/messages
-    message-cache-duration: PT1H
-    fallback-to-system-locale: false
-    use-code-as-default-message: false
-
-  # Tenancy Configuration
-  tenancy:
-    schema:
-      prefix: tenant_
-      default: public
 
   # Liquibase Configuration
   liquibase:
-    systemChangeLog: classpath:db/changelog/system/master.xml
-    tenantChangeLog: classpath:db/changelog/tenant/master.xml
     contexts: "!demo"  # Exclude demo data in production
 
 # Logging Configuration - Production
@@ -362,27 +172,18 @@ logging:
     root: WARN
     com.iqscaffold: INFO
     com.iqscaffold.userservice.security: INFO
-    org.springframework.security: WARN
-    org.springframework.web: WARN
     org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver: ERROR
     org.hibernate.SQL: ERROR
     org.hibernate.type.descriptor.sql.BasicBinder: ERROR
-    liquibase: INFO
-    com.zaxxer.hikari: WARN
-    org.springframework.amqp: WARN
-    org.springframework.rabbit: WARN
   pattern:
     console: '{"timestamp":"%d{yyyy-MM-dd HH:mm:ss.SSS}","level":"%level","thread":"%thread","logger":"%logger{36}","correlationId":"%X{correlationId:-}","traceId":"%X{traceId:-}","spanId":"%X{spanId:-}","tenantId":"%X{tenantId:-}","message":"%msg"}%n'
 
 # Management Configuration - Production
 management:
-  server:
-    port: 8081
   endpoints:
     web:
       exposure:
         include: health,info,metrics,prometheus
-      base-path: /actuator
   endpoint:
     health:
       show-details: never
@@ -390,29 +191,17 @@ management:
         enabled: true
     liquibase:
       enabled: false
-    prometheus:
-      enabled: true
   health:
     livenessstate:
       enabled: true
     readinessstate:
       enabled: true
   metrics:
-    distribution:
-      percentiles-histogram:
-        http.server.requests: true
-      percentiles:
-        http.server.requests: 0.5,0.95,0.99
     tags:
-      application: ${spring.application.name}
       environment: production
   tracing:
     sampling:
       probability: 0.01
-  prometheus:
-    metrics:
-      export:
-        enabled: true
 
 # SpringDoc OpenAPI Configuration - Production
 springdoc:
