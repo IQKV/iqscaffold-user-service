@@ -1,7 +1,7 @@
 services:
   # PostgreSQL Database for User Service - Local Development
   postgres-user:
-    image: postgres:15.8-alpine
+    image: postgres:17-alpine
     container_name: iqscaffold-user-postgres-dev
     environment:
       POSTGRES_DB: iqscaffold_user_local
