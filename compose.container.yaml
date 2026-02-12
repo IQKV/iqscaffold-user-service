@@ -23,6 +23,12 @@ services:
       file: compose.base.yaml
       service: minio-init-user
 
+  # User Service - Full platform run including build phase
+  user-service:
+    extends:
+      file: compose.base.yaml
+      service: user-service
+
 networks:
   user-service-network:
     name: iqscaffold-user-network-dev
@@ -35,3 +41,7 @@ volumes:
     name: iqscaffold_user_redis_data_dev
   minio_user_data:
     name: iqscaffold_user_minio_data_dev
+  auth_logs:
+    name: iqscaffold_user_logs_dev
+  auth_tmp:
+    name: iqscaffold_user_tmp_dev
