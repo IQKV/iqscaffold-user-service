@@ -22,22 +22,66 @@
     </springProfile>
 
     <springProfile name="dev">
-        <!-- Development Environment (Kubernetes) - Human Readable with Debug Info -->
+        <!-- Development Environment (Kubernetes) - Human Readable with FULL Debug Info -->
         <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
             <encoder>
                 <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level [%X{correlationId:-}] [%X{traceId:-}] [%X{spanId:-}] [%X{tenantId:-}] %logger{36} - %msg%n</pattern>
             </encoder>
         </appender>
 
-        <logger name="com.iqscaffold" level="DEBUG"/>
-        <logger name="org.springframework.security" level="DEBUG"/>
-        <logger name="org.springframework.web" level="INFO"/>
+        <!-- Application Loggers - TRACE level for maximum visibility -->
+        <logger name="com.iqscaffold" level="TRACE"/>
+        <logger name="com.iqscaffold.userservice" level="TRACE"/>
+        <logger name="com.iqscaffold.userservice.security" level="TRACE"/>
+        <logger name="com.iqscaffold.userservice.rest" level="TRACE"/>
+        <logger name="com.iqscaffold.userservice.service" level="TRACE"/>
+        <logger name="com.iqscaffold.userservice.exception" level="TRACE"/>
+        
+        <!-- Spring Security - TRACE level to see all security decisions -->
+        <logger name="org.springframework.security" level="TRACE"/>
+        <logger name="org.springframework.security.web" level="TRACE"/>
+        <logger name="org.springframework.security.web.FilterChainProxy" level="TRACE"/>
+        <logger name="org.springframework.security.web.access" level="TRACE"/>
+        <logger name="org.springframework.security.authentication" level="TRACE"/>
+        <logger name="org.springframework.security.oauth2" level="TRACE"/>
+        
+        <!-- Spring Web - DEBUG level to see request/response details -->
+        <logger name="org.springframework.web" level="DEBUG"/>
+        <logger name="org.springframework.web.servlet" level="DEBUG"/>
+        <logger name="org.springframework.web.servlet.mvc" level="DEBUG"/>
+        <logger name="org.springframework.web.servlet.DispatcherServlet" level="DEBUG"/>
+        <logger name="org.springframework.http" level="DEBUG"/>
+        <logger name="org.springframework.http.converter" level="DEBUG"/>
+        
+        <!-- Database - DEBUG level for SQL queries -->
         <logger name="org.hibernate.SQL" level="DEBUG"/>
         <logger name="org.hibernate.type.descriptor.sql.BasicBinder" level="TRACE"/>
+        <logger name="org.hibernate.engine.jdbc" level="DEBUG"/>
+        <logger name="org.springframework.jdbc" level="DEBUG"/>
+        <logger name="org.springframework.transaction" level="DEBUG"/>
+        
+        <!-- Connection Pool - DEBUG level -->
+        <logger name="com.zaxxer.hikari" level="DEBUG"/>
+        <logger name="com.zaxxer.hikari.HikariConfig" level="DEBUG"/>
+        <logger name="com.zaxxer.hikari.pool" level="DEBUG"/>
+        
+        <!-- Liquibase - INFO level (too verbose at DEBUG) -->
         <logger name="liquibase" level="INFO"/>
-        <logger name="com.zaxxer.hikari" level="INFO"/>
+        
+        <!-- Redis - DEBUG level -->
+        <logger name="org.springframework.data.redis" level="DEBUG"/>
+        
+        <!-- RabbitMQ - DEBUG level -->
+        <logger name="org.springframework.amqp" level="DEBUG"/>
+        
+        <!-- Jackson JSON - DEBUG level to see serialization/deserialization -->
+        <logger name="com.fasterxml.jackson" level="DEBUG"/>
+        
+        <!-- Validation - DEBUG level -->
+        <logger name="org.springframework.validation" level="DEBUG"/>
+        <logger name="org.hibernate.validator" level="DEBUG"/>
 
-        <root level="INFO">
+        <root level="DEBUG">
             <appender-ref ref="CONSOLE"/>
         </root>
     </springProfile>
