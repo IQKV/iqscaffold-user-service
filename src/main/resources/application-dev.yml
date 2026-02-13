@@ -49,9 +49,9 @@ iqscaffold:
       auth: false
       starttls: false
     sender:
-      from-email: ${EMAIL_FROM_EMAIL:noreply@iqscaffold.dev}
+      from-email: ${EMAIL_FROM_EMAIL:noreply@iqscaffold.com}
       from-name: ${EMAIL_FROM_NAME:IQ Scaffold Platform (Dev)}
-      base-url: ${APP_BASE_URL:https://app.iqscaffold.dev}
+      base-url: ${APP_BASE_URL:https://app.iqscaffold.com}
     verification:
       rate-limit: 5
     templates:
