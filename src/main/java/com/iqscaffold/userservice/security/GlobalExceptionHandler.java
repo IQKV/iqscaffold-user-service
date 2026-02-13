@@ -253,6 +253,7 @@ public class GlobalExceptionHandler {
         request);
     pd.setProperty("code", "VALIDATION_ERROR");
     pd.setProperty("fields", fieldErrors);
+    logger.warn("Constraint violation: {} - {}", MDC.get(UserServiceConstants.MDC.CORRELATION_ID), ex.getMessage());
     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(pd);
   }
 
@@ -287,6 +288,7 @@ public class GlobalExceptionHandler {
         ex.getMessage(),
         request);
     pd.setProperty("code", "AUTH_ACCOUNT_LOCKED");
+    logger.warn("Account locked: {} - {}", MDC.get(UserServiceConstants.MDC.CORRELATION_ID), ex.getMessage());
     return ResponseEntity.status(HttpStatus.LOCKED).body(pd);
   }
 
@@ -326,6 +328,8 @@ public class GlobalExceptionHandler {
         ex.getMessage(),
         request);
     pd.setProperty("code", errorCode);
+    logger.warn("User registration failed: {} - {} (code: {})", 
+        MDC.get(UserServiceConstants.MDC.CORRELATION_ID), ex.getMessage(), errorCode);
     return ResponseEntity.status(status).body(pd);
   }
 
@@ -362,6 +366,8 @@ public class GlobalExceptionHandler {
         ex.getMessage(),
         request);
     pd.setProperty("code", errorCode);
+    logger.warn("User management failed: {} - {} (code: {})", 
+        MDC.get(UserServiceConstants.MDC.CORRELATION_ID), ex.getMessage(), errorCode);
     return ResponseEntity.status(status).body(pd);
   }
 
@@ -459,14 +465,31 @@ public class GlobalExceptionHandler {
   }
 
   @ExceptionHandler(Exception.class)
+  @ApiResponse(
+      responseCode = "500",
+      description = "Internal server error - unexpected system error",
+      content = @Content(
+          mediaType = "application/problem+json",
+          schema = @Schema(implementation = ProblemDetail.class)
+      )
+  )
   public ResponseEntity<ProblemDetail> handleGenericException(
       Exception ex, HttpServletRequest request) {
+    // Log the full exception with stack trace for debugging
+    logger.error("Unexpected error occurred: {} - {} at {}", 
+        MDC.get(UserServiceConstants.MDC.CORRELATION_ID), 
+        ex.getMessage(), 
+        request.getRequestURI(), 
+        ex);
+    
     var pd = problem("https://problems.iqscaffold.com/internal-error",
         "Internal system error",
         HttpStatus.INTERNAL_SERVER_ERROR,
         "An unexpected error occurred",
         request);
     pd.setProperty("code", "SYSTEM_INTERNAL_ERROR");
+    pd.setProperty("exceptionType", ex.getClass().getSimpleName());
+    
     return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(pd);
   }
 
