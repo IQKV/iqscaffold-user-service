@@ -3,11 +3,14 @@ package com.iqscaffold.userservice.config;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
 import org.springframework.web.servlet.config.annotation.ContentNegotiationConfigurer;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
- * Web configuration for HTTP standards, content negotiation, and CORS. Implements proper Content-Type and Accept header handling.
+ * Web configuration for HTTP standards and content negotiation.
+ * Implements proper Content-Type and Accept header handling.
+ * 
+ * Note: CORS is handled by the API Gateway (iqscaffold-gateway-service).
+ * This service does not configure CORS to avoid duplicate headers.
  */
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
