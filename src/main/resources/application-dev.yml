@@ -52,6 +52,7 @@ iqscaffold:
       from-email: ${EMAIL_FROM_EMAIL:noreply@iqscaffold.com}
       from-name: ${EMAIL_FROM_NAME:IQ Scaffold Platform (Dev)}
       base-url: ${APP_BASE_URL:https://app.iqscaffold.com}
+      auth-base-url: ${AUTH_BASE_URL:https://auth.iqscaffold.com}
     verification:
       rate-limit: 5
     templates:

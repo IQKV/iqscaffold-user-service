@@ -152,6 +152,7 @@ services:
       EMAIL_FROM_EMAIL: noreply@iqscaffold.site
       EMAIL_FROM_NAME: IQ Scaffold Platform
       APP_BASE_URL: http://localhost:3000
+      AUTH_BASE_URL: http://localhost:3001
 
       # OAuth2 Configuration
       IQSCAFFOLD_AUTH_OAUTH2_GOOGLE_ENABLED: false

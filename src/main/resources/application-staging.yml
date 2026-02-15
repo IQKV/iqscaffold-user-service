@@ -53,6 +53,7 @@ iqscaffold:
       from-email: ${EMAIL_FROM_EMAIL:noreply@iqscaffold.website}
       from-name: ${EMAIL_FROM_NAME:IQ Scaffold Platform (Staging)}
       base-url: ${APP_BASE_URL:https://iqscaffold.website}
+      auth-base-url: ${AUTH_BASE_URL:https://auth.iqscaffold.website}
     templates:
       verification-subject: "[STAGING] Verify your IQ Scaffold account"
       password-reset-subject: "[STAGING] Reset your IQ Scaffold password"

@@ -175,7 +175,8 @@ public record IqScaffoldProperties(
     public record Sender(
         @NotBlank String fromEmail,
         @NotBlank String fromName,
-        @NotBlank String baseUrl
+        @NotBlank String baseUrl,
+        @NotBlank String authBaseUrl
     ) {
 
     }

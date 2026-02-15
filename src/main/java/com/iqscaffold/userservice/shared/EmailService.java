@@ -113,12 +113,13 @@ public class EmailService implements EmailOperations {
   @Override
   public String buildVerificationUrl(String token) {
     var senderConfig = properties.email().sender();
-    var baseUrl = senderConfig.baseUrl();
+    var authBaseUrl = senderConfig.authBaseUrl();
 
     // Ensure base URL doesn't end with slash
-    var cleanBaseUrl = baseUrl.endsWith("/") ? baseUrl.substring(0, baseUrl.length() - 1) : baseUrl;
+    var cleanBaseUrl = authBaseUrl.endsWith("/") ? authBaseUrl.substring(0, authBaseUrl.length() - 1) : authBaseUrl;
 
-    return cleanBaseUrl + "/api/v1/auth/email/verify?token=" + token;
+    // Link to frontend verification page, not API endpoint
+    return cleanBaseUrl + "/verify-email?token=" + token;
   }
 
   /**
@@ -198,8 +199,8 @@ public class EmailService implements EmailOperations {
    * Build password reset URL based on base URL configuration.
    */
   public String buildPasswordResetUrl(String token) {
-    var baseUrl = properties.email().sender().baseUrl();
-    var cleanBaseUrl = baseUrl.endsWith("/") ? baseUrl.substring(0, baseUrl.length() - 1) : baseUrl;
+    var authBaseUrl = properties.email().sender().authBaseUrl();
+    var cleanBaseUrl = authBaseUrl.endsWith("/") ? authBaseUrl.substring(0, authBaseUrl.length() - 1) : authBaseUrl;
     return cleanBaseUrl + "/reset-password?token=" + token;
   }
 
@@ -362,8 +363,8 @@ public class EmailService implements EmailOperations {
    * Build login URL based on base URL configuration.
    */
   private String buildLoginUrl() {
-    var baseUrl = properties.email().sender().baseUrl();
-    var cleanBaseUrl = baseUrl.endsWith("/") ? baseUrl.substring(0, baseUrl.length() - 1) : baseUrl;
+    var authBaseUrl = properties.email().sender().authBaseUrl();
+    var cleanBaseUrl = authBaseUrl.endsWith("/") ? authBaseUrl.substring(0, authBaseUrl.length() - 1) : authBaseUrl;
     return cleanBaseUrl + "/login";
   }
 

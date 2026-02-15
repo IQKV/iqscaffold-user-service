@@ -41,6 +41,7 @@ iqscaffold:
       from-email: ${EMAIL_FROM_EMAIL:noreply@iqscaffold.local}
       from-name: ${EMAIL_FROM_NAME:IQ Scaffold Platform (Local)}
       base-url: ${APP_BASE_URL:http://localhost:3000}
+      auth-base-url: ${AUTH_BASE_URL:http://localhost:3001}
     verification:
       rate-limit: 10
     templates:

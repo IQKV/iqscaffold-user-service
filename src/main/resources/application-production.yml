@@ -118,6 +118,11 @@ iqscaffold:
       host: ${SMTP_HOST}
       username: ${SMTP_USERNAME}
       password: ${SMTP_PASSWORD}
+    sender:
+      from-email: ${EMAIL_FROM_EMAIL:noreply@iqscaffold.com}
+      from-name: ${EMAIL_FROM_NAME:IQ Scaffold Platform}
+      base-url: ${APP_BASE_URL:https://app.iqscaffold.com}
+      auth-base-url: ${AUTH_BASE_URL:https://auth.iqscaffold.com}
 
   object-storage:
     endpoint: ${IQSCAFFOLD_OBJECTSTORAGE_ENDPOINT:https://s3.amazonaws.com}

@@ -74,7 +74,8 @@ class EmailServiceTest {
     senderConfig = new IqScaffoldProperties.Email.Sender(
         "noreply@iqscaffold.com",
         "IQ Scaffold",
-        "https://app.iqscaffold.com"
+        "https://app.iqscaffold.com",
+        "https://auth.iqscaffold.com"
     );
 
     templatesConfig = new IqScaffoldProperties.Email.Template(
@@ -124,7 +125,7 @@ class EmailServiceTest {
     var url = emailService.buildVerificationUrl(token);
 
     // Assert
-    assertThat(url).isEqualTo("https://app.iqscaffold.com/api/v1/auth/email/verify?token=test-token-123");
+    assertThat(url).isEqualTo("https://auth.iqscaffold.com/verify-email?token=test-token-123");
   }
 
   @Test
@@ -134,7 +135,8 @@ class EmailServiceTest {
     var senderConfigWithSlash = new IqScaffoldProperties.Email.Sender(
         "noreply@iqscaffold.com",
         "IQ Scaffold",
-        "https://app.iqscaffold.com/"
+        "https://app.iqscaffold.com/",
+        "https://auth.iqscaffold.com/"
     );
     var emailConfigWithSlash = new IqScaffoldProperties.Email(null, senderConfigWithSlash, null, templatesConfig);
     when(properties.email()).thenReturn(emailConfigWithSlash);
@@ -144,7 +146,7 @@ class EmailServiceTest {
     var url = emailService.buildVerificationUrl(token);
 
     // Assert
-    assertThat(url).isEqualTo("https://app.iqscaffold.com/api/v1/auth/email/verify?token=test-token-123");
+    assertThat(url).isEqualTo("https://auth.iqscaffold.com/verify-email?token=test-token-123");
   }
 
   @Test
@@ -200,7 +202,7 @@ class EmailServiceTest {
     var url = emailService.buildPasswordResetUrl(token);
 
     // Assert
-    assertThat(url).isEqualTo("https://app.iqscaffold.com/reset-password?token=reset-token-123");
+    assertThat(url).isEqualTo("https://auth.iqscaffold.com/reset-password?token=reset-token-123");
   }
 
   @Test
