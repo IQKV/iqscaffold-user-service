@@ -29,21 +29,4 @@ public class WebConfig implements WebMvcConfigurer {
         .mediaType("xml", MediaType.APPLICATION_XML)
         .mediaType("html", MediaType.TEXT_HTML);
   }
-
-  @Override
-  public void addCorsMappings(CorsRegistry registry) {
-    registry.addMapping("/api/**")
-        .allowedOriginPatterns("*")
-        .allowedMethods("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS")
-        .allowedHeaders("*")
-        .allowCredentials(true)
-        .exposedHeaders(
-            "X-Correlation-ID",
-            "X-Request-ID",
-            "X-Rate-Limit-Remaining",
-            "X-Rate-Limit-Reset",
-            "Location"
-        )
-        .maxAge(3600);
-  }
 }
