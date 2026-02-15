@@ -118,7 +118,7 @@ public class EmailService implements EmailOperations {
     // Ensure base URL doesn't end with slash
     var cleanBaseUrl = authBaseUrl.endsWith("/") ? authBaseUrl.substring(0, authBaseUrl.length() - 1) : authBaseUrl;
 
-    // Link to frontend verification page, not API endpoint
+    // Link to frontend verification page
     return cleanBaseUrl + "/verify-email?token=" + token;
   }
 

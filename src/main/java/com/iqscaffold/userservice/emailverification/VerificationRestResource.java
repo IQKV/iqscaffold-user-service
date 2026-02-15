@@ -37,23 +37,28 @@ public class VerificationRestResource {
       summary = "Verify email address",
       description = """
           Verify user email address using the verification token sent via email.
+          This endpoint is called from the frontend verification page without requiring authentication.
           
           ## Features
           - Token validation and expiration check
           - User account activation
           - Single-use token enforcement
           - Multi-tenant support
+          - No authentication required (uses token for security)
           
           ## Process
-          1. User clicks verification link in email
-          2. Token is validated for authenticity and expiration
-          3. User account is activated (emailVerified = true)
-          4. Token is invalidated to prevent reuse
+          1. User clicks verification link in email (frontend URL)
+          2. Frontend page calls this API endpoint with token
+          3. Token is validated for authenticity and expiration
+          4. User account is activated (emailVerified = true)
+          5. Token is invalidated to prevent reuse
+          6. Frontend redirects to login page with success message
           
           ## Security
           - Tokens expire after 24 hours
           - Single-use tokens prevent replay attacks
           - Tenant isolation enforced
+          - Endpoint is publicly accessible (permitAll)
           """,
       tags = {"Email Verification"}
   )
