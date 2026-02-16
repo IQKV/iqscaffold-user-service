@@ -43,7 +43,7 @@
         <insert tableName="users">
             <column name="username" value="superadmin"/>
             <column name="email" value="superadmin@iqscaffold.com"/>
-            <column name="password_hash" value="$2a$12$LQv3c1yqBWVHxkd0LHAkCOYz6TtxMQJqhN8/LewfBzj6w00L0Rvxe"/>
+            <column name="password_hash" value="$2a$12$j11AQV6EU6V1puScpR.BhOSRmlBNCPXmGbV5Oj9N2CYCDQVKgrYoy"/>
             <column name="first_name" value="System"/>
             <column name="last_name" value="Administrator"/>
             <column name="enabled" valueBoolean="true"/>
@@ -57,7 +57,7 @@
         <insert tableName="users">
             <column name="username" value="owner"/>
             <column name="email" value="owner@demo.iqscaffold.com"/>
-            <column name="password_hash" value="$2a$12$8Xv2c1yqBWVHxkd0LHAkCOYz6TtxMQJqhN8/LewfBzj6w00L0Rvxe"/>
+            <column name="password_hash" value="$2a$12$jkoCykSJELToSKz3k2LkaOFinG3snsTkTaPVTsU16Dw7zSZqqHOnm"/>
             <column name="first_name" value="Alice"/>
             <column name="last_name" value="Johnson"/>
             <column name="enabled" valueBoolean="true"/>
@@ -71,7 +71,7 @@
         <insert tableName="users">
             <column name="username" value="admin"/>
             <column name="email" value="admin@demo.iqscaffold.com"/>
-            <column name="password_hash" value="$2a$12$9Yv3c1yqBWVHxkd0LHAkCOYz6TtxMQJqhN8/LewfBzj6w00L0Rvxe"/>
+            <column name="password_hash" value="$2a$12$XfKe/7oVzBAvPbTSM5vBG.hhwQTFoWxXbwmAy6.9h6hLIElo5c1MK"/>
             <column name="first_name" value="Bob"/>
             <column name="last_name" value="Smith"/>
             <column name="enabled" valueBoolean="true"/>
@@ -85,7 +85,7 @@
         <insert tableName="users">
             <column name="username" value="billing"/>
             <column name="email" value="billing@demo.iqscaffold.com"/>
-            <column name="password_hash" value="$2a$12$AZv4c1yqBWVHxkd0LHAkCOYz6TtxMQJqhN8/LewfBzj6w00L0Rvxe"/>
+            <column name="password_hash" value="$2a$12$KZoirRm8XKMnyd4P02uGROiKsV4DJlwafwVbVFlGZL44L/RaGqGkG"/>
             <column name="first_name" value="Carol"/>
             <column name="last_name" value="Williams"/>
             <column name="enabled" valueBoolean="true"/>
@@ -99,7 +99,7 @@
         <insert tableName="users">
             <column name="username" value="finance"/>
             <column name="email" value="finance@demo.iqscaffold.com"/>
-            <column name="password_hash" value="$2a$12$BXv5c1yqBWVHxkd0LHAkCOYz6TtxMQJqhN8/LewfBzj6w00L0Rvxe"/>
+            <column name="password_hash" value="$2a$12$5G64mX2sh4yAYuMUAs6CpeHd.Ip5c42nerEuxM368bVLT2EsXNTbm"/>
             <column name="first_name" value="David"/>
             <column name="last_name" value="Brown"/>
             <column name="enabled" valueBoolean="true"/>
@@ -112,7 +112,7 @@
         <insert tableName="users">
             <column name="username" value="manager"/>
             <column name="email" value="manager@demo.iqscaffold.com"/>
-            <column name="password_hash" value="$2a$12$CYv6c1yqBWVHxkd0LHAkCOYz6TtxMQJqhN8/LewfBzj6w00L0Rvxe"/>
+            <column name="password_hash" value="$2a$12$k66Cp.XbOJAmv5okTSeYye7nZNRQn5FALtn8mnStl2h3C0j/IEPB."/>
             <column name="first_name" value="Emma"/>
             <column name="last_name" value="Davis"/>
             <column name="enabled" valueBoolean="true"/>
@@ -126,7 +126,7 @@
         <insert tableName="users">
             <column name="username" value="user"/>
             <column name="email" value="user@demo.iqscaffold.com"/>
-            <column name="password_hash" value="$2a$12$DZv7c1yqBWVHxkd0LHAkCOYz6TtxMQJqhN8/LewfBzj6w00L0Rvxe"/>
+            <column name="password_hash" value="$2a$12$YEdtE2ZpuH6lpIcEFHTp1.XUzHpzkZfLoR.1lIF7VXWhEnTktY9W."/>
             <column name="first_name" value="Frank"/>
             <column name="last_name" value="Miller"/>
             <column name="enabled" valueBoolean="true"/>
