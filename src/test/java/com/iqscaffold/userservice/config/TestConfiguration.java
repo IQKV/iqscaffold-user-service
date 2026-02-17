@@ -13,6 +13,7 @@ import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
 import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
 import org.hibernate.context.spi.CurrentTenantIdentifierResolver;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
@@ -59,7 +60,8 @@ public class TestConfiguration {
   @Primary
   public JwtDecoder testJwtDecoder(final JWKSource<SecurityContext> jwkSource) {
     try {
-      final RSAKey rsaKey = (RSAKey) jwkSource.get(null, null).get(0);
+      final com.nimbusds.jose.jwk.JWKSelector jwkSelector = new com.nimbusds.jose.jwk.JWKSelector(new com.nimbusds.jose.jwk.JWKMatcher.Builder().build());
+      final RSAKey rsaKey = (RSAKey) jwkSource.get(jwkSelector, null).get(0);
       return NimbusJwtDecoder.withPublicKey(rsaKey.toRSAPublicKey()).build();
     } catch (final Exception e) {
       throw new RuntimeException("Failed to create test JWT decoder", e);

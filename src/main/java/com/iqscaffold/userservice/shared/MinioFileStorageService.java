@@ -20,6 +20,7 @@ import io.minio.http.Method;
 import org.apache.tika.Tika;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -53,6 +54,7 @@ import org.springframework.web.multipart.MultipartFile;
  * @author IQ Scaffold
  */
 @Service
+@ConditionalOnProperty(name = "iqscaffold.storage.minio.enabled", havingValue = "true", matchIfMissing = true)
 public class MinioFileStorageService implements FileStorageService {
 
   private static final Logger log = LoggerFactory.getLogger(MinioFileStorageService.class);

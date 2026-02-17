@@ -65,6 +65,9 @@ iqscaffold:
   liquibase:
     system-schema:
       enabled: false
+  storage:
+    minio:
+      enabled: false
 
 # Logging configuration for entity graph testing
 logging:

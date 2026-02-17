@@ -3,6 +3,7 @@ package com.iqscaffold.userservice.config;
 import io.minio.MinioClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -32,6 +33,7 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 @EnableConfigurationProperties(S3ConfigurationProperties.class)
+@ConditionalOnProperty(name = "iqscaffold.storage.minio.enabled", havingValue = "true", matchIfMissing = true)
 public class S3Config {
 
   private static final Logger log = LoggerFactory.getLogger(S3Config.class);
