@@ -17,7 +17,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
-import org.springframework.boot.autoconfigure.amqp.SimpleRabbitListenerContainerFactoryConfigurer;
+import org.springframework.boot.amqp.autoconfigure.SimpleRabbitListenerContainerFactoryConfigurer;
 
 
 @ExtendWith(MockitoExtension.class)
