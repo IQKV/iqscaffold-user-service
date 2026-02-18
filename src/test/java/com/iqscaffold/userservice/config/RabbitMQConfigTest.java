@@ -3,10 +3,6 @@ package com.iqscaffold.userservice.config;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.eq;
-import static org.mockito.Mockito.verify;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,7 +13,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
-import org.springframework.boot.amqp.autoconfigure.SimpleRabbitListenerContainerFactoryConfigurer;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -31,9 +26,6 @@ class RabbitMQConfigTest {
 
   @Mock
   private ConnectionFactory connectionFactory;
-
-  @Mock
-  private SimpleRabbitListenerContainerFactoryConfigurer configurer;
 
   private RabbitMQConfig rabbitMQConfig;
 
@@ -146,14 +138,11 @@ class RabbitMQConfigTest {
 
   @Test
   void shouldCreateRabbitListenerContainerFactory() {
-    doNothing().when(configurer).configure(any(), any());
-
-    var factory = rabbitMQConfig.rabbitListenerContainerFactory(connectionFactory, configurer);
+    var factory = rabbitMQConfig.rabbitListenerContainerFactory(connectionFactory);
 
     assertNotNull(factory);
     // Note: getMessageConverter() method may not be available directly on factory
     // assertNotNull(factory.getMessageConverter());
-    verify(configurer).configure(any(), eq(connectionFactory));
   }
 
   @Test
