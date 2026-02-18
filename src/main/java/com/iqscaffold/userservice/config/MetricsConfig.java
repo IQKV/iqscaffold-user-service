@@ -26,7 +26,7 @@ public class MetricsConfig {
    * Customizes the meter registry with common tags and filters.
    */
   @Bean
-  public org.springframework.boot.actuate.autoconfigure.metrics.MeterRegistryCustomizer<MeterRegistry> metricsCommonTags() {
+  public org.springframework.boot.micrometer.metrics.autoconfigure.MeterRegistryCustomizer<MeterRegistry> metricsCommonTags() {
     var metricsProps = observabilityProperties.metrics();
 
     return registry -> {
