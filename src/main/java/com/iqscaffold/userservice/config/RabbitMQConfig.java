@@ -15,7 +15,6 @@ import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.amqp.support.converter.MessageConverter;
-import org.springframework.boot.autoconfigure.amqp.SimpleRabbitListenerContainerFactoryConfigurer;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -226,10 +225,9 @@ public class RabbitMQConfig {
    */
   @Bean
   public SimpleRabbitListenerContainerFactory rabbitListenerContainerFactory(
-      ConnectionFactory connectionFactory,
-      SimpleRabbitListenerContainerFactoryConfigurer configurer) {
+      ConnectionFactory connectionFactory) {
     SimpleRabbitListenerContainerFactory factory = new SimpleRabbitListenerContainerFactory();
-    configurer.configure(factory, connectionFactory);
+    factory.setConnectionFactory(connectionFactory);
     factory.setMessageConverter(messageConverter());
     return factory;
   }

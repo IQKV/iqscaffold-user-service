@@ -20,8 +20,6 @@ public class WebConfig implements WebMvcConfigurer {
     configurer
         // Default to JSON
         .defaultContentType(MediaType.APPLICATION_JSON)
-        // Support path extension negotiation
-        .favorPathExtension(false)
         // Support parameter-based negotiation
         .favorParameter(true)
         .parameterName("format")

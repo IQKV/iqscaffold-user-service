@@ -16,8 +16,6 @@ import io.opentelemetry.sdk.trace.export.BatchSpanProcessor;
 import io.opentelemetry.sdk.trace.samplers.Sampler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.actuate.autoconfigure.observation.ObservationAutoConfiguration;
-import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -30,7 +28,6 @@ import org.springframework.core.env.Environment;
  */
 @Configuration
 @EnableConfigurationProperties(IqScaffoldProperties.class)
-@AutoConfiguration(before = ObservationAutoConfiguration.class)
 public class ObservabilityConfig {
 
   private static final Logger logger = LoggerFactory.getLogger(ObservabilityConfig.class);

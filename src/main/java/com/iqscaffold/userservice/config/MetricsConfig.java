@@ -2,7 +2,6 @@ package com.iqscaffold.userservice.config;
 
 import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.config.MeterFilter;
-import org.springframework.boot.micrometer.metrics.MeterRegistryCustomizer;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -27,7 +26,7 @@ public class MetricsConfig {
    * Customizes the meter registry with common tags and filters.
    */
   @Bean
-  public MeterRegistryCustomizer<MeterRegistry> metricsCommonTags() {
+  public org.springframework.boot.actuate.autoconfigure.metrics.MeterRegistryCustomizer<MeterRegistry> metricsCommonTags() {
     var metricsProps = observabilityProperties.metrics();
 
     return registry -> {
