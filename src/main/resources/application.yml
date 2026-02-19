@@ -455,6 +455,14 @@ iqscaffold:
           category: "api"
           systemAuthority: false
           priority: 10
+        
+        # Tenant Ownership Authority
+        TENANT_OWNER:
+          displayName: "Tenant Owner"
+          description: "Owner of the tenant organization with full administrative access"
+          category: "admin"
+          systemAuthority: false
+          priority: 100
       
       adminAuthorities: ["ADMIN", "SUPER_ADMIN"]
       defaultAuthorities: ["USER"]  # Default authorities for newly registered users

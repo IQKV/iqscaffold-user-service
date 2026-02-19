@@ -4,10 +4,13 @@ import java.util.List;
 
 import com.iqscaffold.userservice.config.PlatformConfigurationProperties;
 import com.iqscaffold.userservice.emailverification.EmailVerificationService;
+import com.iqscaffold.userservice.organization.Organization;
+import com.iqscaffold.userservice.organization.OrganizationRepository;
 import com.iqscaffold.userservice.security.InputSanitizer;
 import com.iqscaffold.userservice.security.SecurityAuditService;
 import com.iqscaffold.userservice.shared.Authority;
 import com.iqscaffold.userservice.shared.AuthorityRepository;
+import com.iqscaffold.userservice.tenancy.TenantContext;
 import com.iqscaffold.userservice.usermanagement.User;
 import com.iqscaffold.userservice.usermanagement.UserRepository;
 import org.slf4j.Logger;
@@ -33,6 +36,7 @@ public class UserRegistrationService {
   private final InputSanitizer inputSanitizer;
   private final EmailVerificationService emailVerificationService;
   private final PlatformConfigurationProperties platformConfig;
+  private final OrganizationRepository organizationRepository;
 
   public UserRegistrationService(final UserRepository userRepository,
                                  final AuthorityRepository authorityRepository,
@@ -40,7 +44,8 @@ public class UserRegistrationService {
                                  final SecurityAuditService securityAuditService,
                                  final InputSanitizer inputSanitizer,
                                  final EmailVerificationService emailVerificationService,
-                                 final PlatformConfigurationProperties platformConfig) {
+                                 final PlatformConfigurationProperties platformConfig,
+                                 final OrganizationRepository organizationRepository) {
     this.userRepository = userRepository;
     this.authorityRepository = authorityRepository;
     this.passwordEncoder = passwordEncoder;
@@ -48,6 +53,7 @@ public class UserRegistrationService {
     this.inputSanitizer = inputSanitizer;
     this.emailVerificationService = emailVerificationService;
     this.platformConfig = platformConfig;
+    this.organizationRepository = organizationRepository;
   }
 
   /**
@@ -114,17 +120,34 @@ public class UserRegistrationService {
     // Ensure emailVerified is false for new users
     user.setEmailVerified(false);
 
-    // Assign configured default authorities
-    var defaultAuthorities = findOrCreateDefaultAuthorities();
-    for (final var authority : defaultAuthorities) {
+    // Check if this is the first user in the tenant
+    var isFirstUser = isFirstUserInTenant(request.tenantId());
+
+    // Assign authorities based on whether this is the first user
+    List<Authority> authorities;
+    if (isFirstUser) {
+      // First user gets TENANT_OWNER role
+      authorities = findOrCreateTenantOwnerAuthorities();
+      logger.info("Assigning TENANT_OWNER role to first user in tenant: {}", request.tenantId());
+    } else {
+      // Subsequent users get default authorities
+      authorities = findOrCreateDefaultAuthorities();
+    }
+
+    for (final var authority : authorities) {
       user.addAuthority(authority);
     }
 
     // Save user
     var savedUser = userRepository.save(user);
 
+    // If this is the first user, create organization and link it
+    if (isFirstUser) {
+      createOrganizationForFirstUser(savedUser, sanitizedUsername);
+    }
+
     // Log successful registration with assigned authorities
-    var authorityNames = defaultAuthorities.stream()
+    var authorityNames = authorities.stream()
         .map(Authority::getName)
         .toList();
     logger.info("User registered successfully: {} with authorities: {}",
@@ -200,6 +223,77 @@ public class UserRegistrationService {
 
     // Provide generic description for authorities not in configuration
     return "Configurable authority: " + authorityName;
+  }
+
+  /**
+   * Check if this is the first user in the tenant.
+   * Executes in tenant context to count existing users.
+   */
+  private boolean isFirstUserInTenant(String tenantId) {
+    return TenantContext.executeInTenantContext(tenantId, () -> {
+      var userCount = userRepository.count();
+      logger.debug("User count in tenant {}: {}", tenantId, userCount);
+      return userCount == 0;
+    });
+  }
+
+  /**
+   * Find or create TENANT_OWNER authority along with default authorities.
+   * First user gets both TENANT_OWNER and USER roles.
+   */
+  private List<Authority> findOrCreateTenantOwnerAuthorities() {
+    var tenantOwnerAuthority = findOrCreateAuthority("TENANT_OWNER");
+    var defaultAuthorities = findOrCreateDefaultAuthorities();
+
+    // Combine TENANT_OWNER with default authorities
+    var authorities = new java.util.ArrayList<Authority>();
+    authorities.add(tenantOwnerAuthority);
+    authorities.addAll(defaultAuthorities);
+
+    logger.debug("Created tenant owner authorities: TENANT_OWNER + {}", 
+        defaultAuthorities.stream().map(Authority::getName).toList());
+
+    return authorities;
+  }
+
+  /**
+   * Create organization for the first user (tenant owner).
+   * Organization is created in PUBLIC schema and linked to the tenant.
+   */
+  private void createOrganizationForFirstUser(User user, String createdBy) {
+    try {
+      // Check if organization already exists for this tenant
+      var existingOrg = organizationRepository.findByTenantId(user.getTenantId());
+      if (existingOrg.isPresent()) {
+        logger.info("Organization already exists for tenant: {}, updating owner", user.getTenantId());
+        var org = existingOrg.get();
+        org.setOwnerUserId(user.getId());
+        organizationRepository.save(org);
+        return;
+      }
+
+      // Create new organization
+      var organizationName = user.getFirstName() + " " + user.getLastName() + "'s Organization";
+      var organization = new Organization(organizationName, user.getTenantId());
+      organization.setEnabled(true);
+      organization.setSubscriptionStatus("trial");
+      organization.setSubscriptionPlan("basic");
+      organization.setMaxUsers(10);
+      organization.setCreatedBy(createdBy);
+      organization.setOwnerUserId(user.getId());
+      organization.setBillingEmail(user.getEmail());
+
+      var savedOrganization = organizationRepository.save(organization);
+
+      logger.info("Created organization '{}' (ID: {}) for first user {} in tenant: {}",
+          savedOrganization.getName(), savedOrganization.getId(), 
+          user.getUsername(), user.getTenantId());
+
+    } catch (final Exception e) {
+      logger.error("Failed to create organization for first user {} in tenant {}: {}",
+          user.getUsername(), user.getTenantId(), e.getMessage(), e);
+      // Don't fail registration if organization creation fails
+    }
   }
 
 
