@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.29.xsd">
+
+    <changeSet id="20251110162400-initialize-all-authorities" author="iqscaffold" context="public">
+        <comment>Initialize all platform authorities from configuration - replaces AuthorityInitializationService</comment>
+
+        <!-- API Authorities -->
+        <insert tableName="authorities" schemaName="public">
+            <column name="name" value="API_ACCESS"/>
+            <column name="description" value="Access to platform APIs and integrations"/>
+        </insert>
+
+        <!-- Billing Authorities (additional to those already created) -->
+        <insert tableName="authorities" schemaName="public">
+            <column name="name" value="BILLING_ACCESS"/>
+            <column name="description" value="Basic access to billing and payment features"/>
+        </insert>
+        <insert tableName="authorities" schemaName="public">
+            <column name="name" value="BILLING_MANAGER"/>
+            <column name="description" value="Manage billing, subscriptions, and invoices"/>
+        </insert>
+
+        <!-- Preconditions to avoid duplicate inserts -->
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(*) FROM public.authorities WHERE name = 'API_ACCESS'
+            </sqlCheck>
+        </preConditions>
+
+        <rollback>
+            <delete tableName="authorities" schemaName="public">
+                <where>name IN ('API_ACCESS', 'BILLING_ACCESS', 'BILLING_MANAGER')</where>
+            </delete>
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>
