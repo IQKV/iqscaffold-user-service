@@ -57,6 +57,9 @@ class UserRegistrationServiceTest {
   @Mock
   private PlatformConfigurationProperties platformConfig;
 
+  @Mock
+  private com.iqscaffold.userservice.organization.OrganizationRepository organizationRepository;
+
   private UserRegistrationService service;
   private SignupRequest signupRequest;
   private Authority userRole;
@@ -70,7 +73,8 @@ class UserRegistrationServiceTest {
         securityAuditService,
         inputSanitizer,
         emailVerificationService,
-        platformConfig
+        platformConfig,
+        organizationRepository
     );
 
     signupRequest = new SignupRequest(
@@ -101,6 +105,9 @@ class UserRegistrationServiceTest {
         )
     );
     lenient().when(platformConfig.authorities()).thenReturn(mockAuthorities);
+    
+    // Mock user count for non-first user scenario (default for existing tests)
+    lenient().when(userRepository.count()).thenReturn(1L);
   }
 
   @Test

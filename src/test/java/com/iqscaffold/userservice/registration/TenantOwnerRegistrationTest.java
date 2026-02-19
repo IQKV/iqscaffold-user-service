@@ -195,7 +195,7 @@ class TenantOwnerRegistrationTest {
 
   @Test
   @DisplayName("Organization should be linked to first user")
-  void organizationShouldBeLinkedToFirstUser() {
+  void organizationShouldBeLinkedToFirstUser() throws Exception {
     // Arrange
     var tenantId = "tenant-002";
     var request = new SignupRequest(
