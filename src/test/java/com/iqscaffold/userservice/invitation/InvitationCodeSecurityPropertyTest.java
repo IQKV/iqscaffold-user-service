@@ -64,12 +64,12 @@ public class InvitationCodeSecurityPropertyTest {
   public void setUp() {
     MockitoAnnotations.openMocks(this);
     
-    // Mock properties configuration
+        // Mock properties configuration with lenient stubbing
     var emailConfig = mock(IqScaffoldProperties.Email.class);
     var senderConfig = mock(IqScaffoldProperties.Email.Sender.class);
-    when(properties.email()).thenReturn(emailConfig);
-    when(emailConfig.sender()).thenReturn(senderConfig);
-    when(senderConfig.authBaseUrl()).thenReturn("https://auth.iqscaffold.com");
+    lenient().when(properties.email()).thenReturn(emailConfig);
+    lenient().when(emailConfig.sender()).thenReturn(senderConfig);
+    lenient().when(senderConfig.authBaseUrl()).thenReturn("https://auth.iqscaffold.com");
 
     service = new InvitationService(
         invitationRepository,
