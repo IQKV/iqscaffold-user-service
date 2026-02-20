@@ -130,8 +130,8 @@ public class InvitationService {
       );
     }
 
-    // Validate authority exists
-    Authority authority = authorityRepository.findByName(request.authority())
+    // Validate authority exists (validation only, result not used for entity creation)
+    authorityRepository.findByName(request.authority())
         .orElseThrow(() -> new IllegalArgumentException("Invalid authority: " + request.authority()));
 
     // Generate invitation code

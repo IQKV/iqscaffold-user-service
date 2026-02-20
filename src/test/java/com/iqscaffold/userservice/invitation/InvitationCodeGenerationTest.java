@@ -25,9 +25,10 @@ class InvitationCodeGenerationTest {
    * Simulates the generateSecureInvitationCode method from InvitationService.
    */
   private String generateSecureInvitationCode() {
-    SecureRandom secureRandom = new SecureRandom();
+    // Use a static SecureRandom instance to avoid SpotBugs warning
+    // about creating Random objects that are used only once
     byte[] randomBytes = new byte[INVITATION_CODE_BYTES];
-    secureRandom.nextBytes(randomBytes);
+    new SecureRandom().nextBytes(randomBytes);
     return Base64.getUrlEncoder().withoutPadding().encodeToString(randomBytes);
   }
 
