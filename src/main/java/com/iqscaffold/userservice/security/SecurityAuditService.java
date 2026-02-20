@@ -107,4 +107,44 @@ public interface SecurityAuditService {
    * @param newLocale The new locale preference
    */
   void logUserLocaleChange(Long userId, String username, String newLocale);
+
+  /**
+   * Log invitation creation event.
+   *
+   * @param userId         The user ID who created the invitation
+   * @param username       The username who created the invitation
+   * @param invitationId   The ID of the created invitation
+   * @param invitationType The type of invitation (EMAIL, LINK, CODE)
+   */
+  void logInvitationCreated(Long userId, String username, Long invitationId, String invitationType);
+
+  /**
+   * Log invitation revocation event.
+   *
+   * @param userId       The user ID who revoked the invitation
+   * @param username     The username who revoked the invitation
+   * @param invitationId The ID of the revoked invitation
+   */
+  void logInvitationRevoked(Long userId, String username, Long invitationId);
+
+  /**
+   * Log invitation acceptance event (signup with invitation).
+   *
+   * @param invitationId The ID of the accepted invitation
+   * @param newUserId    The ID of the newly created user
+   * @param newUsername  The username of the newly created user
+   * @param ipAddress    The client's IP address
+   * @param userAgent    The client's User-Agent header
+   */
+  void logInvitationAccepted(Long invitationId, Long newUserId, String newUsername, String ipAddress, String userAgent);
+
+  /**
+   * Log failed signup attempt with invitation.
+   *
+   * @param invitationCode The invitation code used
+   * @param reason         The reason for failure
+   * @param ipAddress      The client's IP address
+   * @param userAgent      The client's User-Agent header
+   */
+  void logInvitationSignupFailed(String invitationCode, String reason, String ipAddress, String userAgent);
 }

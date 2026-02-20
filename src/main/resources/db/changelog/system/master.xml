@@ -13,5 +13,6 @@
     <include file="db/changelog/system/20251110162600-organizations-public-schema.xml"/>
     <include file="db/changelog/system/20251110162700-add-organization-capabilities.xml"/>
     <include file="db/changelog/system/20251110162800-payment-gateway-abstraction.xml"/>
+    <include file="db/changelog/system/20250202120000-create-organization-invitations-table.xml"/>
 
 </databaseChangeLog>

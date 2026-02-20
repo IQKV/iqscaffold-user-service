@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.29.xsd">
+
+    <changeSet id="20250202120000-000000-create-organization-invitations-table" author="iqscaffold" context="public">
+        <comment>Create organization_invitations table in public schema for invitation-based user onboarding</comment>
+
+        <!-- Create organization_invitations table in public schema -->
+        <createTable tableName="organization_invitations" schemaName="public">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="organization_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="tenant_id" type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="invitation_code" type="VARCHAR(64)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="invitation_type" type="VARCHAR(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="invitee_email" type="VARCHAR(255)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="invited_by_user_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="invited_by_username" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="authority" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status" type="VARCHAR(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="expires_at" type="TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="accepted_at" type="TIMESTAMP">
+                <constraints nullable="true"/>
+            </column>
+            <column name="accepted_by_user_id" type="BIGINT">
+                <constraints nullable="true"/>
+            </column>
+            <column name="max_uses" type="INTEGER">
+                <constraints nullable="true"/>
+            </column>
+            <column name="current_uses" type="INTEGER" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+            <column name="metadata" type="TEXT">
+                <constraints nullable="true"/>
+            </column>
+            <column name="created_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <!-- Add foreign key to organizations table -->
+        <addForeignKeyConstraint
+                baseTableName="organization_invitations"
+                baseColumnNames="organization_id"
+                constraintName="fk_invitations_organization"
+                referencedTableName="organizations"
+                referencedColumnNames="id"
+                baseTableSchemaName="public"
+                referencedTableSchemaName="public"
+                onDelete="CASCADE"
+                onUpdate="CASCADE"/>
+
+        <!-- Add foreign key to tenants table -->
+        <addForeignKeyConstraint
+                baseTableName="organization_invitations"
+                baseColumnNames="tenant_id"
+                constraintName="fk_invitations_tenant"
+                referencedTableName="tenants"
+                referencedColumnNames="tenant_id"
+                baseTableSchemaName="public"
+                referencedTableSchemaName="public"
+                onDelete="CASCADE"
+                onUpdate="CASCADE"/>
+
+        <!-- Add check constraint for invitation_type -->
+        <sql>
+            ALTER TABLE public.organization_invitations
+            ADD CONSTRAINT chk_invitation_type
+            CHECK (invitation_type IN ('EMAIL', 'LINK', 'CODE'));
+        </sql>
+
+        <!-- Add check constraint for status -->
+        <sql>
+            ALTER TABLE public.organization_invitations
+            ADD CONSTRAINT chk_invitation_status
+            CHECK (status IN ('PENDING', 'ACCEPTED', 'EXPIRED', 'REVOKED'));
+        </sql>
+
+        <!-- Add check constraint for max_uses -->
+        <sql>
+            ALTER TABLE public.organization_invitations
+            ADD CONSTRAINT chk_max_uses
+            CHECK (max_uses IS NULL OR max_uses > 0);
+        </sql>
+
+        <!-- Add check constraint for current_uses -->
+        <sql>
+            ALTER TABLE public.organization_invitations
+            ADD CONSTRAINT chk_current_uses
+            CHECK (current_uses >= 0);
+        </sql>
+
+        <!-- Create unique index on invitation_code -->
+        <createIndex indexName="idx_invitations_code_unique" tableName="organization_invitations" schemaName="public" unique="true">
+            <column name="invitation_code"/>
+        </createIndex>
+
+        <!-- Create index on organization_id -->
+        <createIndex indexName="idx_invitations_organization_id" tableName="organization_invitations" schemaName="public">
+            <column name="organization_id"/>
+        </createIndex>
+
+        <!-- Create index on tenant_id -->
+        <createIndex indexName="idx_invitations_tenant_id" tableName="organization_invitations" schemaName="public">
+            <column name="tenant_id"/>
+        </createIndex>
+
+        <!-- Create index on invitee_email -->
+        <createIndex indexName="idx_invitations_invitee_email" tableName="organization_invitations" schemaName="public">
+            <column name="invitee_email"/>
+        </createIndex>
+
+        <!-- Create index on status -->
+        <createIndex indexName="idx_invitations_status" tableName="organization_invitations" schemaName="public">
+            <column name="status"/>
+        </createIndex>
+
+        <!-- Create index on expires_at -->
+        <createIndex indexName="idx_invitations_expires_at" tableName="organization_invitations" schemaName="public">
+            <column name="expires_at"/>
+        </createIndex>
+
+        <!-- Create composite index on status and expires_at for efficient expiration queries -->
+        <createIndex indexName="idx_invitations_status_expires_at" tableName="organization_invitations" schemaName="public">
+            <column name="status"/>
+            <column name="expires_at"/>
+        </createIndex>
+
+        <rollback>
+            <dropTable tableName="organization_invitations" schemaName="public"/>
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>

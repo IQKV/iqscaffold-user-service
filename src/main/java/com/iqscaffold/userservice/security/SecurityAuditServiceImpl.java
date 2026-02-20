@@ -161,6 +161,66 @@ public class SecurityAuditServiceImpl implements SecurityAuditService {
         userId, username, newLocale);
   }
 
+  @Override
+  public void logInvitationCreated(Long userId, String username, Long invitationId, String invitationType) {
+    var details = String.format("Invitation created%n" +
+                                "Created By User ID: %d%n" +
+                                "Created By Username: %s%n" +
+                                "Invitation ID: %d%n" +
+                                "Invitation Type: %s%n" +
+                                "Timestamp: %s%n", userId, username, invitationId, invitationType, Instant.now());
+
+    logSecurityEvent("INVITATION_CREATED", username, details, null, null);
+
+    securityLogger.info("INVITATION_CREATED: userId={}, user={}, invitationId={}, type={}",
+        userId, username, invitationId, invitationType);
+  }
+
+  @Override
+  public void logInvitationRevoked(Long userId, String username, Long invitationId) {
+    var details = String.format("Invitation revoked%n" +
+                                "Revoked By User ID: %d%n" +
+                                "Revoked By Username: %s%n" +
+                                "Invitation ID: %d%n" +
+                                "Timestamp: %s%n", userId, username, invitationId, Instant.now());
+
+    logSecurityEvent("INVITATION_REVOKED", username, details, null, null);
+
+    securityLogger.info("INVITATION_REVOKED: userId={}, user={}, invitationId={}",
+        userId, username, invitationId);
+  }
+
+  @Override
+  public void logInvitationAccepted(Long invitationId, Long newUserId, String newUsername, String ipAddress, String userAgent) {
+    var details = String.format("Invitation accepted - new user signup%n" +
+                                "Invitation ID: %d%n" +
+                                "New User ID: %d%n" +
+                                "New Username: %s%n" +
+                                "IP Address: %s%n" +
+                                "User Agent: %s%n" +
+                                "Timestamp: %s%n", invitationId, newUserId, newUsername, ipAddress, userAgent, Instant.now());
+
+    logSecurityEvent("INVITATION_ACCEPTED", newUsername, details, ipAddress, userAgent);
+
+    securityLogger.info("INVITATION_ACCEPTED: invitationId={}, newUserId={}, newUsername={}, ip={}, userAgent={}",
+        invitationId, newUserId, newUsername, ipAddress, userAgent);
+  }
+
+  @Override
+  public void logInvitationSignupFailed(String invitationCode, String reason, String ipAddress, String userAgent) {
+    var details = String.format("Invitation signup failed%n" +
+                                "Invitation Code: %s%n" +
+                                "Reason: %s%n" +
+                                "IP Address: %s%n" +
+                                "User Agent: %s%n" +
+                                "Timestamp: %s%n", invitationCode, reason, ipAddress, userAgent, Instant.now());
+
+    logSecurityEvent("INVITATION_SIGNUP_FAILED", null, details, ipAddress, userAgent);
+
+    securityLogger.warn("INVITATION_SIGNUP_FAILED: invitationCode={}, reason={}, ip={}, userAgent={}",
+        invitationCode, reason, ipAddress, userAgent);
+  }
+
   /**
    * Generic method to log security events to database and structured logs.
    */
