@@ -193,6 +193,27 @@
             <scope>test</scope>
         </dependency>
 
+        <!-- JUnit QuickCheck for property-based testing -->
+        <dependency>
+            <groupId>com.pholser</groupId>
+            <artifactId>junit-quickcheck-core</artifactId>
+            <version>1.0</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.pholser</groupId>
+            <artifactId>junit-quickcheck-generators</artifactId>
+            <version>1.0</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- JUnit Vintage Engine for running JUnit 4 tests (required for JUnit QuickCheck) -->
+        <dependency>
+            <groupId>org.junit.vintage</groupId>
+            <artifactId>junit-vintage-engine</artifactId>
+            <scope>test</scope>
+        </dependency>
+
         <!-- Embedded Redis for testing -->
         <dependency>
             <groupId>it.ozimov</groupId>

@@ -44,6 +44,7 @@ class InvitationSignupServiceTest {
         null, // jwtService - not needed for preview
         null, // jwtConfiguration - not needed for preview
         null, // emailVerificationService - not needed for preview
+        null, // invitationEmailService - not needed for preview
         null, // auditService - not needed for preview
         null  // platformConfig - not needed for preview
     );

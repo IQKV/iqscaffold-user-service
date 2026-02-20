@@ -49,6 +49,9 @@ class InvitationServiceTest {
   @Mock
   private SecurityAuditService auditService;
 
+  @Mock
+  private InvitationEmailService emailService;
+
   private InvitationService service;
   private UserContext adminUser;
   private Organization organization;
@@ -60,7 +63,8 @@ class InvitationServiceTest {
         invitationRepository,
         organizationRepository,
         authorityRepository,
-        auditService
+        auditService,
+        emailService
     );
 
     adminUser = new UserContext(
