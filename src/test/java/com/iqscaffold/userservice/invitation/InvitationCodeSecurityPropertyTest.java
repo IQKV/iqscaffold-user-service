@@ -5,10 +5,12 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.lenient;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import com.iqscaffold.userservice.organization.Organization;
 import com.iqscaffold.userservice.organization.OrganizationRepository;
+import com.iqscaffold.userservice.config.IqScaffoldProperties;
 import com.iqscaffold.userservice.security.SecurityAuditService;
 import com.iqscaffold.userservice.shared.Authority;
 import com.iqscaffold.userservice.shared.AuthorityRepository;
@@ -50,6 +52,9 @@ public class InvitationCodeSecurityPropertyTest {
   @Mock
   private InvitationEmailService emailService;
 
+  @Mock
+  private IqScaffoldProperties properties;
+
   private InvitationService service;
   private UserContext adminUser;
   private Organization organization;
@@ -59,12 +64,20 @@ public class InvitationCodeSecurityPropertyTest {
   public void setUp() {
     MockitoAnnotations.openMocks(this);
     
+    // Mock properties configuration
+    var emailConfig = mock(IqScaffoldProperties.Email.class);
+    var senderConfig = mock(IqScaffoldProperties.Email.Sender.class);
+    when(properties.email()).thenReturn(emailConfig);
+    when(emailConfig.sender()).thenReturn(senderConfig);
+    when(senderConfig.authBaseUrl()).thenReturn("https://auth.iqscaffold.com");
+
     service = new InvitationService(
         invitationRepository,
         organizationRepository,
         authorityRepository,
         auditService,
-        emailService
+        emailService,
+        properties
     );
 
     adminUser = new UserContext(

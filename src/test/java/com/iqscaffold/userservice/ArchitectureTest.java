@@ -75,7 +75,8 @@ class ArchitectureTest {
             "..security..",
             "..shared..",
             "..tenancy..",
-            "..usermanagement.."
+            "..usermanagement..",
+            "..invitation.."
         );
 
     rule.check(classes);

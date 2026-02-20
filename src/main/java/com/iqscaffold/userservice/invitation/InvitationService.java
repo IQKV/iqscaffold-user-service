@@ -43,19 +43,22 @@ public class InvitationService {
   private final AuthorityRepository authorityRepository;
   private final SecurityAuditService auditService;
   private final InvitationEmailService emailService;
+  private final com.iqscaffold.userservice.config.IqScaffoldProperties properties;
 
   public InvitationService(
       InvitationRepository invitationRepository,
       OrganizationRepository organizationRepository,
       AuthorityRepository authorityRepository,
       SecurityAuditService auditService,
-      InvitationEmailService emailService
+      InvitationEmailService emailService,
+      com.iqscaffold.userservice.config.IqScaffoldProperties properties
   ) {
     this.invitationRepository = invitationRepository;
     this.organizationRepository = organizationRepository;
     this.authorityRepository = authorityRepository;
     this.auditService = auditService;
     this.emailService = emailService;
+    this.properties = properties;
   }
 
   /**
@@ -288,8 +291,8 @@ public class InvitationService {
       throw new IllegalStateException("Access denied to this invitation");
     }
 
-    // Generate full URL
-    String fullUrl = "https://app.iqscaffold.com/join/" + invitation.getInvitationCode();
+    // Generate full URL using auth base URL from configuration
+    String fullUrl = buildInvitationUrl(invitation.getInvitationCode());
 
     // For CODE type, also provide short code
     String shortCode = invitation.getType() == InvitationType.CODE
@@ -302,6 +305,21 @@ public class InvitationService {
         shortCode,
         invitation.getExpiresAt()
     );
+  }
+
+  /**
+   * Build invitation URL for joining organization.
+   * Uses auth base URL from configuration to generate the correct URL.
+   *
+   * @param invitationCode Invitation code
+   * @return Full invitation URL pointing to auth portal
+   */
+  private String buildInvitationUrl(String invitationCode) {
+    var authBaseUrl = properties.email().sender().authBaseUrl();
+    var cleanBaseUrl = authBaseUrl.endsWith("/")
+        ? authBaseUrl.substring(0, authBaseUrl.length() - 1)
+        : authBaseUrl;
+    return cleanBaseUrl + "/join/" + invitationCode;
   }
 
   /**

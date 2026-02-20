@@ -4,10 +4,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.lenient;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import com.iqscaffold.userservice.organization.Organization;
 import com.iqscaffold.userservice.organization.OrganizationRepository;
+import com.iqscaffold.userservice.config.IqScaffoldProperties;
 import com.iqscaffold.userservice.security.SecurityAuditService;
 import com.iqscaffold.userservice.shared.AuthorityRepository;
 import com.iqscaffold.userservice.usermanagement.UserContext;
@@ -53,6 +55,9 @@ public class InvitationValidationPropertyTest {
   @Mock
   private InvitationEmailService emailService;
 
+  @Mock
+  private IqScaffoldProperties properties;
+
   private InvitationService service;
   private UserContext adminUser;
   private Organization organization;
@@ -61,12 +66,20 @@ public class InvitationValidationPropertyTest {
   public void setUp() {
     MockitoAnnotations.openMocks(this);
     
+        // Mock properties configuration with lenient stubbing
+    var emailConfig = mock(IqScaffoldProperties.Email.class);
+    var senderConfig = mock(IqScaffoldProperties.Email.Sender.class);
+    lenient().when(properties.email()).thenReturn(emailConfig);
+    lenient().when(emailConfig.sender()).thenReturn(senderConfig);
+    lenient().when(senderConfig.authBaseUrl()).thenReturn("https://auth.iqscaffold.com");
+
     service = new InvitationService(
         invitationRepository,
         organizationRepository,
         authorityRepository,
         auditService,
-        emailService
+        emailService,
+        properties
     );
 
     adminUser = new UserContext(
@@ -195,7 +208,7 @@ public class InvitationValidationPropertyTest {
    * Property 8: Invitation Link Format
    * 
    * For any invitation, the generated invitation link SHALL match the format
-   * https://app.iqscaffold.com/join/{code} where {code} is the invitation's unique code.
+   * https://auth.iqscaffold.com/join/{code} where {code} is the invitation's unique code.
    * 
    * Validates: Requirements 1.9
    */
@@ -223,9 +236,9 @@ public class InvitationValidationPropertyTest {
     InvitationLinkResponse result = service.getInvitationLink(1L, adminUser);
 
     // Assert
-    String expectedUrl = "https://app.iqscaffold.com/join/" + invitationCode;
+    String expectedUrl = "https://auth.iqscaffold.com/join/" + invitationCode;
     assertThat(result.fullUrl())
-        .as("Invitation link must follow format https://app.iqscaffold.com/join/{code}")
+        .as("Invitation link must follow format https://auth.iqscaffold.com/join/{code}")
         .isEqualTo(expectedUrl);
     assertThat(result.invitationCode()).isEqualTo(invitationCode);
   }

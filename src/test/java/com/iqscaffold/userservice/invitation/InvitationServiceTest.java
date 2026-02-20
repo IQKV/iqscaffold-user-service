@@ -7,11 +7,13 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.lenient;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import com.iqscaffold.userservice.config.IqScaffoldProperties;
 import com.iqscaffold.userservice.organization.Organization;
 import com.iqscaffold.userservice.organization.OrganizationRepository;
 import com.iqscaffold.userservice.security.SecurityAuditService;
@@ -52,6 +54,9 @@ class InvitationServiceTest {
   @Mock
   private InvitationEmailService emailService;
 
+  @Mock
+  private IqScaffoldProperties properties;
+
   private InvitationService service;
   private UserContext adminUser;
   private Organization organization;
@@ -59,12 +64,20 @@ class InvitationServiceTest {
 
   @BeforeEach
   void setUp() {
+    // Mock properties configuration with lenient stubbing
+    var emailConfig = mock(IqScaffoldProperties.Email.class);
+    var senderConfig = mock(IqScaffoldProperties.Email.Sender.class);
+    lenient().when(properties.email()).thenReturn(emailConfig);
+    lenient().when(emailConfig.sender()).thenReturn(senderConfig);
+    lenient().when(senderConfig.authBaseUrl()).thenReturn("https://auth.iqscaffold.com");
+
     service = new InvitationService(
         invitationRepository,
         organizationRepository,
         authorityRepository,
         auditService,
-        emailService
+        emailService,
+        properties
     );
 
     adminUser = new UserContext(
@@ -811,7 +824,7 @@ class InvitationServiceTest {
     // Assert
     assertThat(result).isNotNull();
     assertThat(result.invitationCode()).isEqualTo("test-code-123");
-    assertThat(result.fullUrl()).isEqualTo("https://app.iqscaffold.com/join/test-code-123");
+    assertThat(result.fullUrl()).isEqualTo("https://auth.iqscaffold.com/join/test-code-123");
     assertThat(result.shortCode()).isNull(); // Only for CODE type
   }
 
