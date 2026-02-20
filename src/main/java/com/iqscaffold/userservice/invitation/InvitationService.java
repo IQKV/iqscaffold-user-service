@@ -42,17 +42,20 @@ public class InvitationService {
   private final OrganizationRepository organizationRepository;
   private final AuthorityRepository authorityRepository;
   private final SecurityAuditService auditService;
+  private final InvitationEmailService emailService;
 
   public InvitationService(
       InvitationRepository invitationRepository,
       OrganizationRepository organizationRepository,
       AuthorityRepository authorityRepository,
-      SecurityAuditService auditService
+      SecurityAuditService auditService,
+      InvitationEmailService emailService
   ) {
     this.invitationRepository = invitationRepository;
     this.organizationRepository = organizationRepository;
     this.authorityRepository = authorityRepository;
     this.auditService = auditService;
+    this.emailService = emailService;
   }
 
   /**
@@ -181,7 +184,29 @@ public class InvitationService {
         currentUser.username()
     );
 
-    // TODO: Send email if type is EMAIL (Task 13)
+    // Send email if type is EMAIL
+    if (request.type() == InvitationType.EMAIL) {
+      try {
+        emailService.sendInvitationEmail(
+            request.inviteeEmail(),
+            invitation.getInvitationCode(),
+            organization,
+            currentUser.username(),
+            invitation.getExpiresAt()
+        );
+        logger.info("Invitation email sent to {} for invitation {}",
+            request.inviteeEmail(),
+            invitation.getId()
+        );
+      } catch (Exception e) {
+        // Log error but don't fail invitation creation
+        logger.error("Failed to send invitation email to {} for invitation {}",
+            request.inviteeEmail(),
+            invitation.getId(),
+            e
+        );
+      }
+    }
 
     return OrganizationInvitationDto.fromEntity(invitation, organization.getName());
   }
@@ -264,7 +289,7 @@ public class InvitationService {
     }
 
     // Generate full URL
-    String fullUrl = "https://auth.iqscaffold.com/join/" + invitation.getInvitationCode();
+    String fullUrl = "https://app.iqscaffold.com/join/" + invitation.getInvitationCode();
 
     // For CODE type, also provide short code
     String shortCode = invitation.getType() == InvitationType.CODE
@@ -287,6 +312,18 @@ public class InvitationService {
    * @return Validation result with organization preview
    */
   public InvitationValidationResult validateInvitation(String invitationCode) {
+    return validateInvitation(invitationCode, null);
+  }
+
+  /**
+   * Validate an invitation code with optional email verification.
+   * Used by signup flow to check if invitation is valid and email matches (for EMAIL type).
+   *
+   * @param invitationCode Invitation code to validate
+   * @param email          Optional email to verify (required for EMAIL type invitations)
+   * @return Validation result with organization preview
+   */
+  public InvitationValidationResult validateInvitation(String invitationCode, String email) {
     // Find invitation
     OrganizationInvitation invitation = invitationRepository.findByInvitationCode(invitationCode)
         .orElse(null);
@@ -311,9 +348,16 @@ public class InvitationService {
       return new InvitationValidationResult(false, "Invitation has expired", null);
     }
 
-    // Check usage limit
+    // Check usage limit (for link invitations with max_uses)
     if (invitation.hasReachedMaxUses()) {
       return new InvitationValidationResult(false, "Invitation has reached maximum uses", null);
+    }
+
+    // For email invitations, verify email matches
+    if (email != null && invitation.getType() == InvitationType.EMAIL) {
+      if (!invitation.emailMatches(email)) {
+        return new InvitationValidationResult(false, "Email does not match invitation", null);
+      }
     }
 
     // Get organization preview

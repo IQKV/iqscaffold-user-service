@@ -43,6 +43,7 @@ public class InvitationSignupService {
   private final JwtService jwtService;
   private final JwtConfiguration jwtConfiguration;
   private final EmailVerificationService emailVerificationService;
+  private final InvitationEmailService invitationEmailService;
   private final SecurityAuditService auditService;
   private final PlatformConfigurationProperties platformConfig;
 
@@ -57,6 +58,7 @@ public class InvitationSignupService {
       JwtService jwtService,
       JwtConfiguration jwtConfiguration,
       EmailVerificationService emailVerificationService,
+      InvitationEmailService invitationEmailService,
       SecurityAuditService auditService,
       PlatformConfigurationProperties platformConfig
   ) {
@@ -70,6 +72,7 @@ public class InvitationSignupService {
     this.jwtService = jwtService;
     this.jwtConfiguration = jwtConfiguration;
     this.emailVerificationService = emailVerificationService;
+    this.invitationEmailService = invitationEmailService;
     this.auditService = auditService;
     this.platformConfig = platformConfig;
   }
@@ -199,7 +202,37 @@ public class InvitationSignupService {
           organization.getName()
       );
 
-      // Step 17: Return response
+      // Step 18: Send invitation accepted notification to admin
+      try {
+        // Get the admin user who created the invitation
+        User adminUser = userRepository.findById(invitation.getInvitedByUserId())
+            .orElse(null);
+        
+        if (adminUser != null) {
+          invitationEmailService.sendInvitationAcceptedNotification(
+              adminUser,
+              user.getUsername(),
+              user.getEmail(),
+              organization.getName()
+          );
+          logger.info("Invitation accepted notification sent to admin {} for new user {}",
+              adminUser.getUsername(),
+              user.getUsername()
+          );
+        } else {
+          logger.warn("Could not find admin user {} to send invitation accepted notification",
+              invitation.getInvitedByUserId()
+          );
+        }
+      } catch (Exception e) {
+        // Log error but don't fail signup
+        logger.error("Failed to send invitation accepted notification for user {}",
+            user.getUsername(),
+            e
+        );
+      }
+
+      // Step 19: Return response
       List<String> authorityNames = authorities.stream()
           .map(Authority::getName)
           .toList();

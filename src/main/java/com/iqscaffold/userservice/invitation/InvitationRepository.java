@@ -97,6 +97,15 @@ public interface InvitationRepository extends JpaRepository<OrganizationInvitati
   List<OrganizationInvitation> findByStatus(InvitationStatus status);
 
   /**
+   * Find invitations by status and expiration time before a given date.
+   * Used for finding expired invitations.
+   */
+  List<OrganizationInvitation> findByStatusAndExpiresAtBefore(
+      InvitationStatus status,
+      LocalDateTime expiresAt
+  );
+
+  /**
    * Find invitations by type.
    */
   List<OrganizationInvitation> findByType(InvitationType type);
