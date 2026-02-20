@@ -21,14 +21,15 @@ class InvitationCodeGenerationTest {
 
   private static final int INVITATION_CODE_BYTES = 32;
 
+  // Static SecureRandom instance to avoid SpotBugs DMI_RANDOM_USED_ONLY_ONCE warning
+  private static final SecureRandom SECURE_RANDOM = new SecureRandom();
+
   /**
    * Simulates the generateSecureInvitationCode method from InvitationService.
    */
   private String generateSecureInvitationCode() {
-    // Use a static SecureRandom instance to avoid SpotBugs warning
-    // about creating Random objects that are used only once
     byte[] randomBytes = new byte[INVITATION_CODE_BYTES];
-    new SecureRandom().nextBytes(randomBytes);
+    SECURE_RANDOM.nextBytes(randomBytes);
     return Base64.getUrlEncoder().withoutPadding().encodeToString(randomBytes);
   }
 

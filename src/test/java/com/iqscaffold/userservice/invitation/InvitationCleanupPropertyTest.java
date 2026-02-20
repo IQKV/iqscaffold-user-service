@@ -177,11 +177,7 @@ public class InvitationCleanupPropertyTest {
   public void cleanupTaskOnlyAffectsPendingInvitations(
       @InRange(minInt = 1, maxInt = 720) int hoursExpired
   ) {
-    // Arrange: Create invitations with non-PENDING status (not stored, just for test documentation)
-    LocalDateTime now = LocalDateTime.now();
-    LocalDateTime expirationTime = now.minusHours(hoursExpired);
-    
-    // Verify that accepted and revoked invitations would not be affected
+    // Arrange: Verify that accepted and revoked invitations would not be affected
     // The repository query filters by PENDING status, so these would be excluded
     assertThat(InvitationStatus.ACCEPTED).isNotEqualTo(InvitationStatus.PENDING);
     assertThat(InvitationStatus.REVOKED).isNotEqualTo(InvitationStatus.PENDING);
