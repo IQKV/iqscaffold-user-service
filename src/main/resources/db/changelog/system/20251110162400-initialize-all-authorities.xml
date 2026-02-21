@@ -6,14 +6,14 @@
                         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.29.xsd">
 
     <changeSet id="20251110162400-initialize-all-authorities" author="iqscaffold" context="public">
-        <comment>Initialize all platform authorities from configuration - replaces AuthorityInitializationService</comment>
-
         <!-- Preconditions to avoid duplicate inserts -->
         <preConditions onFail="MARK_RAN">
             <sqlCheck expectedResult="0">
                 SELECT COUNT(*) FROM public.authorities WHERE name = 'API_ACCESS'
             </sqlCheck>
         </preConditions>
+
+        <comment>Initialize all platform authorities from configuration - replaces AuthorityInitializationService</comment>
 
         <!-- API Authorities -->
         <insert tableName="authorities" schemaName="public">
