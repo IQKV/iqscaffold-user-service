@@ -8,6 +8,13 @@
     <changeSet id="20251110162400-initialize-all-authorities" author="iqscaffold" context="public">
         <comment>Initialize all platform authorities from configuration - replaces AuthorityInitializationService</comment>
 
+        <!-- Preconditions to avoid duplicate inserts -->
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(*) FROM public.authorities WHERE name = 'API_ACCESS'
+            </sqlCheck>
+        </preConditions>
+
         <!-- API Authorities -->
         <insert tableName="authorities" schemaName="public">
             <column name="name" value="API_ACCESS"/>
@@ -23,13 +30,6 @@
             <column name="name" value="BILLING_MANAGER"/>
             <column name="description" value="Manage billing, subscriptions, and invoices"/>
         </insert>
-
-        <!-- Preconditions to avoid duplicate inserts -->
-        <preConditions onFail="MARK_RAN">
-            <sqlCheck expectedResult="0">
-                SELECT COUNT(*) FROM public.authorities WHERE name = 'API_ACCESS'
-            </sqlCheck>
-        </preConditions>
 
         <rollback>
             <delete tableName="authorities" schemaName="public">
