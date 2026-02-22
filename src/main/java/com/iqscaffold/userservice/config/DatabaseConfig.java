@@ -16,7 +16,8 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
         "com.iqscaffold.userservice.organization",
         "com.iqscaffold.userservice.emailverification",
         "com.iqscaffold.userservice.security",
-        "com.iqscaffold.userservice.shared"
+        "com.iqscaffold.userservice.shared",
+        "com.iqscaffold.userservice.invitation"
     },
     entityManagerFactoryRef = "entityManagerFactory",
     transactionManagerRef = "transactionManager"
