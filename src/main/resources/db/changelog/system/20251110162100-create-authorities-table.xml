@@ -30,28 +30,75 @@
             <column name="description" value="Platform administrator with full system access across all tenants"/>
         </insert>
         <insert tableName="authorities" schemaName="public">
-            <column name="name" value="TENANT_ADMIN"/>
-            <column name="description" value="Tenant administrator with full control within tenant scope"/>
+            <column name="name" value="ADMIN"/>
+            <column name="description" value="Tenant administrator with user management and configuration access (no billing)"/>
         </insert>
+
+        <insert tableName="authorities" schemaName="public">
+            <column name="name" value="USER"/>
+            <column name="description" value="Standard user with basic application access"/>
+        </insert>
+
+        <!-- API Authorities -->
+        <insert tableName="authorities" schemaName="public">
+            <column name="name" value="API_ACCESS"/>
+            <column name="description" value="Access to platform APIs and integrations"/>
+        </insert>
+
         <insert tableName="authorities" schemaName="public">
             <column name="name" value="TENANT_OWNER"/>
             <column name="description" value="Organization owner with full billing and administrative access (cannot be removed, only transferred)"/>
+        </insert>
+        <insert tableName="authorities" schemaName="public">
+            <column name="name" value="TENANT_ADMIN"/>
+            <column name="description" value="Tenant administrator with full control within tenant scope"/>
+        </insert>
+
+        <insert tableName="authorities" schemaName="public">
+            <column name="name" value="BILLING_ACCESS"/>
+            <column name="description" value="Basic access to billing and payment features"/>
         </insert>
         <insert tableName="authorities" schemaName="public">
             <column name="name" value="BILLING_ADMIN"/>
             <column name="description" value="Manages billing, subscriptions, invoices, and payment processing"/>
         </insert>
         <insert tableName="authorities" schemaName="public">
+            <column name="name" value="BILLING_MANAGER"/>
+            <column name="description" value="Manage billing, subscriptions, and invoices"/>
+        </insert>
+        <insert tableName="authorities" schemaName="public">
             <column name="name" value="FINANCE_VIEWER"/>
             <column name="description" value="Read-only access to financial data, invoices, and reports"/>
         </insert>
+
+        <!-- CRM General Access Authority -->
         <insert tableName="authorities" schemaName="public">
-            <column name="name" value="ADMIN"/>
-            <column name="description" value="Tenant administrator with user management and configuration access (no billing)"/>
+            <column name="name" value="CRM_ACCESS"/>
+            <column name="description" value="General CRM access - allows basic read/write operations across CRM modules"/>
         </insert>
+
+        <!-- CRM Administrative Authority -->
         <insert tableName="authorities" schemaName="public">
-            <column name="name" value="USER"/>
-            <column name="description" value="Standard user with basic application access"/>
+            <column name="name" value="CRM_ADMIN"/>
+            <column name="description" value="CRM administrator with full control over CRM configuration and data management"/>
+        </insert>
+
+        <!-- Lead Management Authority -->
+        <insert tableName="authorities" schemaName="public">
+            <column name="name" value="CRM_LEAD_MANAGER"/>
+            <column name="description" value="Lead management authority - create, update, delete leads and manage lead lifecycle"/>
+        </insert>
+
+        <!-- Contact Management Authority -->
+        <insert tableName="authorities" schemaName="public">
+            <column name="name" value="CRM_CONTACT_MANAGER"/>
+            <column name="description" value="Contact management authority - create, update, delete contacts and companies"/>
+        </insert>
+
+        <!-- Pipeline Management Authority -->
+        <insert tableName="authorities" schemaName="public">
+            <column name="name" value="CRM_PIPELINE_MANAGER"/>
+            <column name="description" value="Pipeline management authority - create, update, delete pipeline stages and manage sales processes"/>
         </insert>
 
         <!-- Create indexes for authorities table -->
