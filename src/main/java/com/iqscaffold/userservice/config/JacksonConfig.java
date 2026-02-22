@@ -7,7 +7,6 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
-import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 
 /**
  * Jackson configuration for JSON serialization/deserialization.
@@ -34,13 +33,12 @@ public class JacksonConfig {
    *   <li><strong>Indented Output</strong> - Pretty-printed JSON for readability</li>
    * </ul>
    * 
-   * @param builder Jackson2ObjectMapperBuilder for configuration
    * @return Configured ObjectMapper instance
    */
   @Bean
   @Primary
-  public ObjectMapper objectMapper(Jackson2ObjectMapperBuilder builder) {
-    ObjectMapper mapper = builder.build();
+  public ObjectMapper objectMapper() {
+    ObjectMapper mapper = new ObjectMapper();
     
     // Disable default typing to prevent Java type information in JSON
     // This ensures ProblemDetail responses don't include ["org.springframework.http.ProblemDetail", ...]
