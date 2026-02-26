@@ -22,7 +22,7 @@ RUN mvn clean package -pl iqscaffold-user-service -DskipTests -B && \
     # Extract JAR layers for better Docker layer caching
     mkdir -p target/dependency && \
     cd iqscaffold-user-service/target && \
-    java -Djarmode=layertools -jar iqscaffold-user-service-*.jar extract --destination ../target/dependency
+    java -Djarmode=tools -jar iqscaffold-user-service-*.jar extract --layers --destination ../target/dependency
 
 # Production runtime stage with security hardening
 FROM eclipse-temurin:21-jre-alpine
