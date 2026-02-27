@@ -5,7 +5,7 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.29.xsd">
 
-    <changeSet id="20250202120000-000000-create-organization-invitations-table" author="iqscaffold" context="public">
+    <changeSet id="20250202120000-000000-create-organization-invitations-table" author="iqscaffold">
         <comment>Create organization_invitations table in public schema for invitation-based user onboarding</comment>
 
         <!-- Create organization_invitations table in public schema -->

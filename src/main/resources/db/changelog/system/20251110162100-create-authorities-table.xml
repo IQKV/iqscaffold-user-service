@@ -5,7 +5,7 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.29.xsd">
 
-    <changeSet id="20251110162100-create-authorities-table" author="iqscaffold" context="public">
+    <changeSet id="20251110162100-create-authorities-table" author="iqscaffold">
         <comment>Create authorities table in public schema - system-wide roles and permissions</comment>
 
         <!-- Create authorities table in public schema -->
