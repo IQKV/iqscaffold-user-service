@@ -53,6 +53,16 @@ iqscaffold:
   object-storage:
     bucket-name: ${IQSCAFFOLD_OBJECTSTORAGE_BUCKET_NAME:user-avatars-local}
 
+  bootstrap:
+    default-tenant:
+      enabled: true
+      tenant-id: local
+      name: Local Development Tenant
+      description: Local development tenant for testing
+      max-users: 50
+      storage-quota-gb: 10
+      api-rate-limit: 10000
+
   observability:
     metrics:
       prefix: iqscaffold_user_local

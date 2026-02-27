@@ -589,6 +589,17 @@ iqscaffold:
       prefix: tenant_
       default: public
 
+  # Bootstrap Configuration
+  bootstrap:
+    default-tenant:
+      enabled: true
+      tenant-id: default
+      name: Default Organization
+      description: Default tenant created automatically on startup
+      max-users: 100
+      storage-quota-gb: 50
+      api-rate-limit: 1000
+
   # Liquibase Configuration
   liquibase:
     # Changelog file paths
