@@ -53,14 +53,18 @@ class DefaultTenantBootstrapTest {
     when(tenantRepository.count()).thenReturn(0L);
     
     TenantResponse mockResponse = new TenantResponse(
+        1L,
         "test-tenant",
         "Test Tenant",
         "Test Description",
+        null,
         null,
         100,
         50,
         1000,
         null,
+        null,
+        "system",
         null,
         null,
         null,
@@ -115,14 +119,18 @@ class DefaultTenantBootstrapTest {
     when(tenantRepository.count()).thenReturn(0L);
     
     TenantResponse mockResponse = new TenantResponse(
+        1L,
         "custom-id",
         "Custom Name",
         "Test Description",
+        null,
         null,
         200,
         50,
         1000,
         null,
+        null,
+        "system",
         null,
         null,
         null,
