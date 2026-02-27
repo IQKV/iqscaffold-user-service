@@ -11,6 +11,12 @@ services:
       file: compose.base.yaml
       service: redis-user
 
+  # RabbitMQ for User Service
+  rabbitmq-user:
+    extends:
+      file: compose.base.yaml
+      service: rabbitmq-user
+
   # MinIO Object Storage for User Service
   minio-user:
     extends:
@@ -39,6 +45,8 @@ volumes:
     name: iqscaffold_user_postgres_data_dev
   redis_user_data:
     name: iqscaffold_user_redis_data_dev
+  rabbitmq_user_data:
+    name: iqscaffold_user_rabbitmq_data_dev
   minio_user_data:
     name: iqscaffold_user_minio_data_dev
   auth_logs:

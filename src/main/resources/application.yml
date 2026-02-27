@@ -603,5 +603,5 @@ iqscaffold:
   # Liquibase Configuration
   liquibase:
     # Changelog file paths
-    system-change-log: classpath:db/changelog/system/master.xml
-    tenant-change-log: classpath:db/changelog/tenant/master.xml
+    systemChangeLog: classpath:db/changelog/system/master.xml
+    tenantChangeLog: classpath:db/changelog/tenant/master.xml

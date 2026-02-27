@@ -63,6 +63,30 @@ services:
       --maxmemory 256mb
       --maxmemory-policy allkeys-lru
 
+  # RabbitMQ for User Service - Local Development
+  rabbitmq-user:
+    image: rabbitmq:3.13-management-alpine
+    container_name: iqscaffold-user-rabbitmq-dev
+    environment:
+      RABBITMQ_DEFAULT_USER: iqscaffold
+      RABBITMQ_DEFAULT_PASS: iqscaffold_password
+      RABBITMQ_DEFAULT_VHOST: /
+      RABBITMQ_SERVER_ADDITIONAL_ERL_ARGS: -rabbit log_levels [{connection,error},{default,info}] disk_free_limit 2147483648
+    ports:
+      - "5672:5672" # AMQP port
+      - "15672:15672" # Management UI
+    volumes:
+      - rabbitmq_user_data:/var/lib/rabbitmq
+    networks:
+      - user-service-network
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
+    restart: unless-stopped
+
   # MinIO Object Storage for User Service - Local Development
   minio-user:
     image: minio/minio:RELEASE.2024-01-16T16-07-38Z
@@ -130,6 +154,13 @@ services:
       IQSCAFFOLD_CACHE_REDIS_DATABASE: 0
       IQSCAFFOLD_CACHE_REDIS_PASSWORD: ""
 
+      # RabbitMQ Configuration
+      IQSCAFFOLD_MESSAGING_RABBITMQ_HOST: rabbitmq-user
+      IQSCAFFOLD_MESSAGING_RABBITMQ_PORT: 5672
+      IQSCAFFOLD_MESSAGING_RABBITMQ_USERNAME: iqscaffold
+      IQSCAFFOLD_MESSAGING_RABBITMQ_PASSWORD: iqscaffold_password
+      IQSCAFFOLD_MESSAGING_RABBITMQ_VHOST: /
+
       # S3/MinIO Configuration
       IQSCAFFOLD_OBJECTSTORAGE_ENDPOINT: http://minio-user:9000
       IQSCAFFOLD_OBJECTSTORAGE_ACCESS_KEY: minioadmin
@@ -180,6 +211,8 @@ services:
         condition: service_healthy
       redis-user:
         condition: service_healthy
+      rabbitmq-user:
+        condition: service_healthy
       minio-user:
         condition: service_healthy
     networks:
@@ -217,6 +250,9 @@ volumes:
     driver: local
   redis_user_data:
     name: iqscaffold_user_redis_data_dev
+    driver: local
+  rabbitmq_user_data:
+    name: iqscaffold_user_rabbitmq_data_dev
     driver: local
   minio_user_data:
     name: iqscaffold_user_minio_data_dev
