@@ -4,7 +4,7 @@ This directory contains demo data migrations for development and testing purpose
 
 ## Demo Tenant
 
-- **Tenant ID**: `demo-tenant`
+- **Tenant ID**: `default`
 - **Organization**: Demo Tech Solutions
 - **Industry**: Technology
 - **Subscription**: Enterprise plan with 100 user limit

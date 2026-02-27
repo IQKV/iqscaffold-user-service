@@ -56,7 +56,7 @@ iqscaffold:
   bootstrap:
     default-tenant:
       enabled: true
-      tenant-id: local
+      tenant-id: default
       name: Local Development Tenant
       description: Local development tenant for testing
       max-users: 50

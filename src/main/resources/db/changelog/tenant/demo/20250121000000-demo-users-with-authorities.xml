@@ -10,7 +10,7 @@
 
         <!-- Demo Tenant for testing purposes -->
         <insert tableName="tenants" schemaName="public">
-            <column name="tenant_id" value="demo-tenant"/>
+            <column name="tenant_id" value="default"/>
             <column name="name" value="Demo Organization"/>
             <column name="description" value="Demo tenant for testing user authorities and access levels"/>
             <column name="status" value="ACTIVE"/>
@@ -30,7 +30,7 @@
             <column name="address" value="123 Demo Street, Suite 100"/>
             <column name="city" value="San Francisco"/>
             <column name="country" value="United States"/>
-            <column name="tenant_id" value="demo-tenant"/>
+            <column name="tenant_id" value="default"/>
             <column name="billing_email" value="billing@demo.iqscaffold.com"/>
             <column name="subscription_status" value="active"/>
             <column name="subscription_plan" value="enterprise"/>
@@ -49,7 +49,7 @@
             <column name="enabled" valueBoolean="true"/>
             <column name="email_verified" valueBoolean="true"/>
             <column name="preferred_locale" value="en"/>
-            <column name="tenant_id" value="demo-tenant"/>
+            <column name="tenant_id" value="default"/>
         </insert>
 
         <!-- 2. TENANT_OWNER User - Organization owner with full billing and administrative access -->
@@ -63,7 +63,7 @@
             <column name="enabled" valueBoolean="true"/>
             <column name="email_verified" valueBoolean="true"/>
             <column name="preferred_locale" value="en"/>
-            <column name="tenant_id" value="demo-tenant"/>
+            <column name="tenant_id" value="default"/>
         </insert>
 
         <!-- 3. TENANT_ADMIN User - Tenant administrator with full control within tenant scope -->
@@ -77,7 +77,7 @@
             <column name="enabled" valueBoolean="true"/>
             <column name="email_verified" valueBoolean="true"/>
             <column name="preferred_locale" value="en"/>
-            <column name="tenant_id" value="demo-tenant"/>
+            <column name="tenant_id" value="default"/>
         </insert>
 
         <!-- 4. BILLING_ADMIN User - Manages billing, subscriptions, invoices, and payment processing -->
@@ -91,7 +91,7 @@
             <column name="enabled" valueBoolean="true"/>
             <column name="email_verified" valueBoolean="true"/>
             <column name="preferred_locale" value="en"/>
-            <column name="tenant_id" value="demo-tenant"/>
+            <column name="tenant_id" value="default"/>
         </insert>
 
         <!-- 5. FINANCE_VIEWER User - Read-only access to financial data, invoices, and reports -->
@@ -105,7 +105,7 @@
             <column name="enabled" valueBoolean="true"/>
             <column name="email_verified" valueBoolean="true"/>
             <column name="preferred_locale" value="en"/>
-            <column name="tenant_id" value="demo-tenant"/>
+            <column name="tenant_id" value="default"/>
         </insert>
         <!-- 6. ADMIN User - Tenant administrator with user management and configuration access (no billing) -->
         <!-- Password: RegularAdmin123! (BCrypt hashed) -->
@@ -118,7 +118,7 @@
             <column name="enabled" valueBoolean="true"/>
             <column name="email_verified" valueBoolean="true"/>
             <column name="preferred_locale" value="en"/>
-            <column name="tenant_id" value="demo-tenant"/>
+            <column name="tenant_id" value="default"/>
         </insert>
 
         <!-- 7. USER - Standard user with basic application access -->
@@ -132,7 +132,7 @@
             <column name="enabled" valueBoolean="true"/>
             <column name="email_verified" valueBoolean="true"/>
             <column name="preferred_locale" value="en"/>
-            <column name="tenant_id" value="demo-tenant"/>
+            <column name="tenant_id" value="default"/>
         </insert>
 
         <!-- Assign authorities to users via user_authorities junction table -->
@@ -196,7 +196,7 @@
             <column name="notification_push" valueBoolean="true"/>
             <column name="two_factor_enabled" valueBoolean="true"/>
             <column name="two_factor_method" value="TOTP"/>
-            <column name="tenant_id" value="demo-tenant"/>
+            <column name="tenant_id" value="default"/>
         </insert>
 
         <!-- 2. Tenant Owner preferences - Business owner focused on growth and billing -->
@@ -215,7 +215,7 @@
             <column name="notification_push" valueBoolean="true"/>
             <column name="two_factor_enabled" valueBoolean="true"/>
             <column name="two_factor_method" value="SMS"/>
-            <column name="tenant_id" value="demo-tenant"/>
+            <column name="tenant_id" value="default"/>
         </insert>
 
         <!-- 3. Tenant Admin preferences - Technical administrator with operational focus -->
@@ -234,7 +234,7 @@
             <column name="notification_push" valueBoolean="true"/>
             <column name="two_factor_enabled" valueBoolean="true"/>
             <column name="two_factor_method" value="TOTP"/>
-            <column name="tenant_id" value="demo-tenant"/>
+            <column name="tenant_id" value="default"/>
         </insert>
 
         <!-- 4. Billing Admin preferences - Finance-focused with detailed reporting needs -->
@@ -253,7 +253,7 @@
             <column name="notification_push" valueBoolean="false"/>
             <column name="two_factor_enabled" valueBoolean="true"/>
             <column name="two_factor_method" value="EMAIL"/>
-            <column name="tenant_id" value="demo-tenant"/>
+            <column name="tenant_id" value="default"/>
         </insert>
         <!-- 5. Finance Viewer preferences - Read-only financial analyst -->
         <insert tableName="user_preferences">
@@ -271,7 +271,7 @@
             <column name="notification_push" valueBoolean="false"/>
             <column name="two_factor_enabled" valueBoolean="false"/>
             <column name="two_factor_method" value=""/>
-            <column name="tenant_id" value="demo-tenant"/>
+            <column name="tenant_id" value="default"/>
         </insert>
 
         <!-- 6. Manager preferences - Department manager with user oversight -->
@@ -290,7 +290,7 @@
             <column name="notification_push" valueBoolean="true"/>
             <column name="two_factor_enabled" valueBoolean="false"/>
             <column name="two_factor_method" value=""/>
-            <column name="tenant_id" value="demo-tenant"/>
+            <column name="tenant_id" value="default"/>
         </insert>
 
         <!-- 7. Standard User preferences - End user with basic application access -->
@@ -309,39 +309,39 @@
             <column name="notification_push" valueBoolean="true"/>
             <column name="two_factor_enabled" valueBoolean="false"/>
             <column name="two_factor_method" value=""/>
-            <column name="tenant_id" value="demo-tenant"/>
+            <column name="tenant_id" value="default"/>
         </insert>
 
         <!-- Update organization with owner reference -->
         <update tableName="organizations" schemaName="public">
-            <column name="owner_user_id" valueComputed="(SELECT id FROM users WHERE username = 'owner' AND tenant_id = 'demo-tenant')"/>
-            <where>tenant_id = 'demo-tenant'</where>
+            <column name="owner_user_id" valueComputed="(SELECT id FROM users WHERE username = 'owner' AND tenant_id = 'default')"/>
+            <where>tenant_id = 'default'</where>
         </update>
 
         <rollback>
             <!-- Remove user preferences -->
             <delete tableName="user_preferences">
-                <where>tenant_id = 'demo-tenant'</where>
+                <where>tenant_id = 'default'</where>
             </delete>
             
             <!-- Remove user authorities -->
             <delete tableName="user_authorities">
-                <where>user_id IN (SELECT id FROM users WHERE tenant_id = 'demo-tenant')</where>
+                <where>user_id IN (SELECT id FROM users WHERE tenant_id = 'default')</where>
             </delete>
             
             <!-- Remove users -->
             <delete tableName="users">
-                <where>tenant_id = 'demo-tenant'</where>
+                <where>tenant_id = 'default'</where>
             </delete>
             
             <!-- Remove organization -->
             <delete tableName="organizations" schemaName="public">
-                <where>tenant_id = 'demo-tenant'</where>
+                <where>tenant_id = 'default'</where>
             </delete>
             
             <!-- Remove tenant -->
             <delete tableName="tenants" schemaName="public">
-                <where>tenant_id = 'demo-tenant'</where>
+                <where>tenant_id = 'default'</where>
             </delete>
         </rollback>
     </changeSet>
