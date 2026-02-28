@@ -8,6 +8,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -16,12 +18,17 @@ import org.springframework.transaction.annotation.Transactional;
  * <p>This service implements enterprise-grade security audit logging with structured event tracking,
  * comprehensive context capture, and integration with both application logging and persistent audit storage.
  *
+ * <p><strong>Transaction Management:</strong> This service uses REQUIRES_NEW propagation to ensure
+ * audit logs are persisted even when the parent transaction fails. This is critical for security
+ * auditing where failed authentication attempts must be logged. The READ_COMMITTED isolation level
+ * ensures that audit logs are immediately visible to other transactions for security monitoring.
+ *
  * @see SecurityAuditService
  * @see UserAuditLog
  * @see UserAuditLogRepository
  */
 @Service
-@Transactional
+@Transactional(propagation = Propagation.REQUIRES_NEW, isolation = Isolation.READ_COMMITTED)
 public class SecurityAuditServiceImpl implements SecurityAuditService {
 
   private static final Logger logger = LoggerFactory.getLogger(SecurityAuditServiceImpl.class);
@@ -225,6 +232,10 @@ public class SecurityAuditServiceImpl implements SecurityAuditService {
    * Generic method to log security events to database and structured logs.
    */
   private void logSecurityEvent(String action, String username, String details, String ipAddress, String userAgent) {
+    // Capture tenant context before entering try-catch to ensure it's available
+    // even if the parent transaction is rolled back
+    var currentTenant = TenantContext.getCurrentTenantIdOrDefault();
+    
     try {
       // Set correlation ID for tracing
       var correlationId = MDC.get(UserServiceConstants.MDC.CORRELATION_ID);
@@ -232,15 +243,13 @@ public class SecurityAuditServiceImpl implements SecurityAuditService {
         MDC.put(UserServiceConstants.MDC.CORRELATION_ID, correlationId);
       }
 
-      // Create audit log entry
-      var auditLog = new UserAuditLog(action, "default");
+      // Create audit log entry with correct tenant ID from the start
+      // This is critical for schema-based multi-tenancy where the tenant ID
+      // determines which database schema to use
+      var auditLog = new UserAuditLog(action, currentTenant);
       auditLog.setDetails(details);
       auditLog.setIpAddress(ipAddress);
       auditLog.setUserAgent(userAgent);
-
-      // Set tenant context if available
-      var currentTenant = TenantContext.getCurrentTenantIdOrDefault();
-      auditLog.setTenantId(currentTenant);
 
       // Try to find user ID if username is provided
       if (username != null) {
@@ -250,6 +259,8 @@ public class SecurityAuditServiceImpl implements SecurityAuditService {
       }
 
       // Save to database
+      // With REQUIRES_NEW propagation, this executes in a separate transaction
+      // that can succeed even if the parent transaction is rolled back
       auditLogRepository.save(auditLog);
 
     } catch (final Exception e) {
