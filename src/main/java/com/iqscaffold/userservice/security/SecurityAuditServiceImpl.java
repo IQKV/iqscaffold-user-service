@@ -18,17 +18,15 @@ import org.springframework.transaction.annotation.Transactional;
  * <p>This service implements enterprise-grade security audit logging with structured event tracking,
  * comprehensive context capture, and integration with both application logging and persistent audit storage.
  *
- * <p><strong>Transaction Management:</strong> This service uses REQUIRES_NEW propagation to ensure
- * audit logs are persisted even when the parent transaction fails. This is critical for security
- * auditing where failed authentication attempts must be logged. The READ_COMMITTED isolation level
- * ensures that audit logs are immediately visible to other transactions for security monitoring.
+ * <p><strong>Transaction Management:</strong> This service does NOT use class-level @Transactional.
+ * Instead, individual methods that need transactions use method-level annotations. This prevents
+ * issues where exceptions caught internally would mark the entire transaction for rollback.
  *
  * @see SecurityAuditService
  * @see UserAuditLog
  * @see UserAuditLogRepository
  */
 @Service
-@Transactional(propagation = Propagation.REQUIRES_NEW, isolation = Isolation.READ_COMMITTED)
 public class SecurityAuditServiceImpl implements SecurityAuditService {
 
   private static final Logger logger = LoggerFactory.getLogger(SecurityAuditServiceImpl.class);
@@ -231,6 +229,13 @@ public class SecurityAuditServiceImpl implements SecurityAuditService {
   /**
    * Generic method to log security events to database and structured logs.
    */
+  /**
+   * Log a security event to the database in a separate transaction.
+   * This method uses REQUIRES_NEW propagation to ensure audit logs are saved
+   * even when the parent transaction fails. The try-catch ensures that audit
+   * logging failures don't break the main application flow.
+   */
+  @Transactional(propagation = Propagation.REQUIRES_NEW, isolation = Isolation.READ_COMMITTED)
   private void logSecurityEvent(String action, String username, String details, String ipAddress, String userAgent) {
     // Capture tenant context before entering try-catch to ensure it's available
     // even if the parent transaction is rolled back
@@ -265,6 +270,7 @@ public class SecurityAuditServiceImpl implements SecurityAuditService {
 
     } catch (final Exception e) {
       // Don't let audit logging failures break the main flow
+      // Log the error but don't rethrow - this prevents marking the transaction for rollback
       logger.error("Failed to save security audit log: {}", e.getMessage(), e);
     }
   }
