@@ -129,7 +129,8 @@ public class SecurityConfig {
             // Infrastructure Endpoints
             .requestMatchers(
                 "/actuator/health/**",      // Health checks
-                "/actuator/info"            // Service info
+                "/actuator/info",           // Service info
+                "/actuator/prometheus"      // Prometheus metrics
             ).permitAll()
             
             // API Documentation Endpoints
