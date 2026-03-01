@@ -63,6 +63,11 @@ iqscaffold:
       storage-quota-gb: 10
       api-rate-limit: 10000
 
+  # Enable manual tenant provisioning endpoints for development
+  tenancy:
+    manual-provisioning:
+      enabled: true
+
   observability:
     metrics:
       prefix: iqscaffold_user_local

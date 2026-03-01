@@ -47,7 +47,8 @@ public class TenantLiquibaseRunner {
   }
 
   public void runTenantChangelog(String schema) throws Exception {
-    logger.info("Running tenant changelog for schema '{}' with contexts: {}", schema, contexts);
+    logger.info("Running tenant changelog for schema '{}' with contexts: '{}'", schema, contexts);
+    logger.debug("Tenant changelog file: {}", tenantChangeLog);
     
     var liquibase = new SpringLiquibase();
     liquibase.setDataSource(dataSource);
@@ -56,9 +57,18 @@ public class TenantLiquibaseRunner {
     liquibase.setChangeLog(tenantChangeLog);
     
     if (StringUtils.hasText(contexts)) {
+      logger.info("Applying Liquibase contexts: {}", contexts);
       liquibase.setContexts(contexts);
+    } else {
+      logger.info("No Liquibase contexts specified - running all changesets");
     }
     
-    liquibase.afterPropertiesSet();
+    try {
+      liquibase.afterPropertiesSet();
+      logger.info("Successfully completed tenant changelog for schema: {}", schema);
+    } catch (Exception e) {
+      logger.error("Failed to run tenant changelog for schema: {}", schema, e);
+      throw e;
+    }
   }
 }

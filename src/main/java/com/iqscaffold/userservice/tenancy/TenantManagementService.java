@@ -268,10 +268,19 @@ public class TenantManagementService {
     // Save tenant
     var savedTenant = tenantRepository.save(tenant);
 
-    // Provision tenant schema (placeholder for future implementation)
-    provisionTenantSchema(savedTenant.getTenantId());
+    logger.info("Successfully created tenant entity: {} with ID: {}", savedTenant.getName(), savedTenant.getTenantId());
 
-    logger.info("Successfully created tenant: {} with ID: {}", savedTenant.getName(), savedTenant.getTenantId());
+    // Provision tenant schema - this must happen after tenant is saved
+    // If this fails, we should still have the tenant record but mark it as failed
+    try {
+      provisionTenantSchema(savedTenant.getTenantId());
+      logger.info("Successfully provisioned schema for tenant: {}", savedTenant.getTenantId());
+    } catch (Exception e) {
+      logger.error("Failed to provision schema for tenant: {}. Tenant record exists but schema is not ready.", 
+          savedTenant.getTenantId(), e);
+      // Re-throw to ensure the caller knows provisioning failed
+      throw e;
+    }
 
     return mapToTenantResponse(savedTenant);
   }
@@ -706,17 +715,35 @@ public class TenantManagementService {
 
   private void provisionTenantSchema(String tenantId) {
     var schema = schemaNameResolver.toSchema(tenantId);
-    jdbcTemplate.execute("CREATE SCHEMA IF NOT EXISTS " + schema);
+    logger.info("Starting schema provisioning for tenant: {} (schema: {})", tenantId, schema);
+    
     try {
+      logger.debug("Creating schema: {}", schema);
+      jdbcTemplate.execute("CREATE SCHEMA IF NOT EXISTS " + schema);
+      logger.info("Schema created successfully: {}", schema);
+    } catch (Exception e) {
+      logger.error("Failed to create schema: {}", schema, e);
+      throw new TenantManagementException.SchemaProvisioningException(
+          "Failed to create schema: " + schema,
+          schema,
+          e
+      );
+    }
+    
+    try {
+      logger.info("Running Liquibase migrations for schema: {}", schema);
       liquibaseRunner.runTenantChangelog(schema);
+      logger.info("Liquibase migrations completed successfully for schema: {}", schema);
     } catch (final Exception e) {
+      logger.error("Failed to apply tenant changelog for schema: {}", schema, e);
       throw new TenantManagementException.SchemaProvisioningException(
           "Failed to apply tenant changelog for schema: " + schema,
           schema,
           e
       );
     }
-    logger.info("Provisioned schema {} for tenant: {}", schema, tenantId);
+    
+    logger.info("Successfully provisioned schema {} for tenant: {}", schema, tenantId);
   }
 
   private void cleanupTenantSchema(String tenantId) {
