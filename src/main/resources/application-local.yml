@@ -68,6 +68,10 @@ iqscaffold:
     manual-provisioning:
       enabled: true
 
+  # Enable demo data in local environment
+  liquibase:
+    contexts: "demo"  # Run changesets with context="demo"
+
   observability:
     metrics:
       prefix: iqscaffold_user_local

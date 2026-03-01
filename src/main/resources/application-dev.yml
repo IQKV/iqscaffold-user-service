@@ -66,6 +66,10 @@ iqscaffold:
     access-key: ${IQSCAFFOLD_OBJECTSTORAGE_ACCESS_KEY:iqscaffold}
     secret-key: ${IQSCAFFOLD_OBJECTSTORAGE_SECRET_KEY:iqscaffold_password}
 
+  # Enable demo data in dev environment
+  liquibase:
+    contexts: "demo"
+
   observability:
     metrics:
       prefix: iqscaffold_user_dev
