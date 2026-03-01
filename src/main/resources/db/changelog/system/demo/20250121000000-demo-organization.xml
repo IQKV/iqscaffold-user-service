@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.29.xsd">
+
+    <changeSet id="20250121000000-demo-organization" author="iqscaffold" context="demo">
+        <comment>Create demo organization for testing and development</comment>
+        
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="1">SELECT COUNT(*) FROM public.tenants WHERE tenant_id = 'default'</sqlCheck>
+            <sqlCheck expectedResult="0">SELECT COUNT(*) FROM public.organizations WHERE tenant_id = 'default'</sqlCheck>
+        </preConditions>
+
+        <!-- Demo Organization linked to default tenant -->
+        <insert tableName="organizations" schemaName="public">
+            <column name="name" value="Demo Tech Solutions"/>
+            <column name="description" value="Demo organization showcasing multi-tenant SaaS capabilities with user management"/>
+            <column name="industry" value="Technology"/>
+            <column name="website" value="https://demo.iqscaffold.com"/>
+            <column name="phone" value="+1-555-0123"/>
+            <column name="address" value="123 Demo Street, Suite 100"/>
+            <column name="city" value="San Francisco"/>
+            <column name="country" value="United States"/>
+            <column name="tenant_id" value="default"/>
+            <column name="billing_email" value="billing@demo.iqscaffold.com"/>
+            <column name="subscription_status" value="active"/>
+            <column name="subscription_plan" value="enterprise"/>
+            <column name="max_users" value="100"/>
+            <column name="created_by" value="system"/>
+        </insert>
+
+        <rollback>
+            <!-- Remove demo organization -->
+            <delete tableName="organizations" schemaName="public">
+                <where>tenant_id = 'default' AND name = 'Demo Tech Solutions'</where>
+            </delete>
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>

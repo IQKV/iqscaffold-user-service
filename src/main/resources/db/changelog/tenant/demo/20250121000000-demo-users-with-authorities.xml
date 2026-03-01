@@ -7,36 +7,10 @@
 
     <changeSet id="20250121000000-demo-users-with-authorities" author="iqscaffold" context="demo">
         <comment>Create demo users with different authority levels for testing and development</comment>
-
-        <!-- Demo Tenant for testing purposes -->
-        <insert tableName="tenants" schemaName="public">
-            <column name="tenant_id" value="default"/>
-            <column name="name" value="Demo Organization"/>
-            <column name="description" value="Demo tenant for testing user authorities and access levels"/>
-            <column name="status" value="ACTIVE"/>
-            <column name="max_users" value="100"/>
-            <column name="storage_quota_gb" value="50"/>
-            <column name="api_rate_limit_per_minute" value="1000"/>
-            <column name="created_by" value="system"/>
-        </insert>
-
-        <!-- Demo Organization linked to tenant -->
-        <insert tableName="organizations" schemaName="public">
-            <column name="name" value="Demo Tech Solutions"/>
-            <column name="description" value="Demo organization showcasing multi-tenant SaaS capabilities with user management"/>
-            <column name="industry" value="Technology"/>
-            <column name="website" value="https://demo.iqscaffold.com"/>
-            <column name="phone" value="+1-555-0123"/>
-            <column name="address" value="123 Demo Street, Suite 100"/>
-            <column name="city" value="San Francisco"/>
-            <column name="country" value="United States"/>
-            <column name="tenant_id" value="default"/>
-            <column name="billing_email" value="billing@demo.iqscaffold.com"/>
-            <column name="subscription_status" value="active"/>
-            <column name="subscription_plan" value="enterprise"/>
-            <column name="max_users" value="100"/>
-            <column name="created_by" value="system"/>
-        </insert>
+        
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="1">SELECT COUNT(*) FROM public.tenants WHERE tenant_id = 'default'</sqlCheck>
+        </preConditions>
 
         <!-- 1. SUPER_ADMIN User - Platform Administrator with full system access across all tenants -->
         <!-- Password: SuperAdmin123! (BCrypt hashed) -->
@@ -312,12 +286,6 @@
             <column name="tenant_id" value="default"/>
         </insert>
 
-        <!-- Update organization with owner reference -->
-        <update tableName="organizations" schemaName="public">
-            <column name="owner_user_id" valueComputed="(SELECT id FROM users WHERE username = 'owner' AND tenant_id = 'default')"/>
-            <where>tenant_id = 'default'</where>
-        </update>
-
         <rollback>
             <!-- Remove user preferences -->
             <delete tableName="user_preferences">
@@ -331,16 +299,6 @@
             
             <!-- Remove users -->
             <delete tableName="users">
-                <where>tenant_id = 'default'</where>
-            </delete>
-            
-            <!-- Remove organization -->
-            <delete tableName="organizations" schemaName="public">
-                <where>tenant_id = 'default'</where>
-            </delete>
-            
-            <!-- Remove tenant -->
-            <delete tableName="tenants" schemaName="public">
                 <where>tenant_id = 'default'</where>
             </delete>
         </rollback>
