@@ -605,3 +605,5 @@ iqscaffold:
     # Changelog file paths
     systemChangeLog: classpath:db/changelog/system/master.xml
     tenantChangeLog: classpath:db/changelog/tenant/master.xml
+    # Liquibase contexts (empty = run all changesets, "demo" = include demo data, "!demo" = exclude demo data)
+    contexts: ""
