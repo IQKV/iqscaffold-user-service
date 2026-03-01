@@ -6,12 +6,8 @@
                         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.29.xsd">
 
     <changeSet id="20250121000000-demo-organization" author="iqscaffold" context="demo">
-        <comment>Create demo organization for testing and development</comment>
         
-        <preConditions onFail="MARK_RAN">
-            <sqlCheck expectedResult="1">SELECT COUNT(*) FROM public.tenants WHERE tenant_id = 'default'</sqlCheck>
-            <sqlCheck expectedResult="0">SELECT COUNT(*) FROM public.organizations WHERE tenant_id = 'default'</sqlCheck>
-        </preConditions>
+        <comment>Create demo organization for testing and development</comment>
 
         <!-- Demo Organization linked to default tenant -->
         <insert tableName="organizations" schemaName="public">
