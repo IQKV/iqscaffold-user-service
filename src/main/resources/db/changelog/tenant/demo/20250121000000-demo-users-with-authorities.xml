@@ -7,10 +7,6 @@
 
     <changeSet id="20250121000000-demo-users-with-authorities" author="iqscaffold" context="demo">
         <comment>Create demo users with different authority levels for testing and development</comment>
-        
-        <preConditions onFail="MARK_RAN">
-            <sqlCheck expectedResult="1">SELECT COUNT(*) FROM public.tenants WHERE tenant_id = 'default'</sqlCheck>
-        </preConditions>
 
         <!-- 1. SUPER_ADMIN User - Platform Administrator with full system access across all tenants -->
         <!-- Password: SuperAdmin123! (BCrypt hashed) -->
