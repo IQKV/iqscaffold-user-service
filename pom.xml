@@ -320,6 +320,9 @@
                         <exclude>**/*Runner.class</exclude>
                         <exclude>**/*DependencyConfigurer.class</exclude>
 
+                        <!-- Bootstrap components -->
+                        <exclude>**/*Bootstrap.class</exclude>
+
                         <!-- Loggers -->
                         <exclude>**/*Logger.class</exclude>
 
