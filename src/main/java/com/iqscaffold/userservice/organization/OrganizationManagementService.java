@@ -72,7 +72,8 @@ public class OrganizationManagementService {
       organizations = new org.springframework.data.domain.PageImpl<>(orgList, pageable, 1);
     }
 
-    logAuditEvent("LIST_ORGANIZATIONS", "Listed " + organizations.getNumberOfElements() + " organizations", currentUser);
+    // Log audit event asynchronously to avoid write operations in read-only transaction
+    logAuditEventAsync("LIST_ORGANIZATIONS", "Listed " + organizations.getNumberOfElements() + " organizations", currentUser);
 
     return organizations.map(this::convertToDto);
   }
@@ -87,7 +88,8 @@ public class OrganizationManagementService {
 
     var organization = findOrganizationByIdWithTenantCheck(organizationId, currentUser);
 
-    logAuditEvent("GET_ORGANIZATION", "Retrieved organization: " + organization.getName(), currentUser);
+    // Log audit event asynchronously to avoid write operations in read-only transaction
+    logAuditEventAsync("GET_ORGANIZATION", "Retrieved organization: " + organization.getName(), currentUser);
 
     return convertToDto(organization);
   }
@@ -367,7 +369,13 @@ public class OrganizationManagementService {
     );
   }
 
-  private void logAuditEvent(String action, String details, UserContext currentUser) {
+  /**
+   * Log audit event for organization management operations in a new transaction.
+   * This method uses REQUIRES_NEW propagation to ensure audit logging doesn't fail
+   * when called from read-only methods.
+   */
+  @Transactional(propagation = org.springframework.transaction.annotation.Propagation.REQUIRES_NEW)
+  public void logAuditEvent(String action, String details, UserContext currentUser) {
     try {
       var auditLog = new UserAuditLog(
           currentUser.userId(),
@@ -385,6 +393,22 @@ public class OrganizationManagementService {
     } catch (final Exception e) {
       logger.error("Failed to log audit event: {}", e.getMessage(), e);
     }
+  }
+
+  /**
+   * Asynchronously log audit event to avoid blocking the main transaction.
+   * This is used for read-only operations where we don't want audit logging
+   * to interfere with the transaction.
+   */
+  private void logAuditEventAsync(String action, String details, UserContext currentUser) {
+    // Use CompletableFuture to run audit logging asynchronously
+    java.util.concurrent.CompletableFuture.runAsync(() -> {
+      try {
+        logAuditEvent(action, details, currentUser);
+      } catch (final Exception e) {
+        logger.error("Failed to log audit event asynchronously: {}", e.getMessage(), e);
+      }
+    });
   }
 
   public static class OrganizationManagementException extends RuntimeException {

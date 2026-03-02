@@ -47,7 +47,8 @@ public class UserPreferenceService {
             .orElseGet(() -> createDefaultPreference(userId, tenantId))
     );
 
-    logAuditEvent("GET_USER_PREFERENCE", "Retrieved preferences", currentUser);
+    // Log audit event asynchronously to avoid write operations in read-only transaction
+    logAuditEventAsync("GET_USER_PREFERENCE", "Retrieved preferences", currentUser);
 
     return convertToDto(preference);
   }
@@ -195,7 +196,13 @@ public class UserPreferenceService {
     );
   }
 
-  private void logAuditEvent(String action, String details, UserContext currentUser) {
+  /**
+   * Log audit event in a new transaction to avoid conflicts with read-only transactions.
+   * This method uses REQUIRES_NEW propagation to ensure audit logging doesn't fail
+   * when called from read-only methods.
+   */
+  @Transactional(propagation = org.springframework.transaction.annotation.Propagation.REQUIRES_NEW)
+  public void logAuditEvent(String action, String details, UserContext currentUser) {
     try {
       var auditLog = new UserAuditLog(
           currentUser.userId(),
@@ -216,6 +223,22 @@ public class UserPreferenceService {
     } catch (final Exception e) {
       logger.error("Failed to log audit event: {}", e.getMessage(), e);
     }
+  }
+
+  /**
+   * Asynchronously log audit event to avoid blocking the main transaction.
+   * This is used for read-only operations where we don't want audit logging
+   * to interfere with the transaction.
+   */
+  private void logAuditEventAsync(String action, String details, UserContext currentUser) {
+    // Use CompletableFuture to run audit logging asynchronously
+    java.util.concurrent.CompletableFuture.runAsync(() -> {
+      try {
+        logAuditEvent(action, details, currentUser);
+      } catch (final Exception e) {
+        logger.error("Failed to log audit event asynchronously: {}", e.getMessage(), e);
+      }
+    });
   }
 
   public static class UserPreferenceException extends RuntimeException {
