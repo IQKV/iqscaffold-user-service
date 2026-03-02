@@ -35,8 +35,9 @@ public class UserPreferenceService {
   }
 
   @Transactional(readOnly = true)
-  @Cacheable(value = "userPreferences", key = "#currentUser.userId() + '_' + #currentUser.tenantId()",
-             condition = "#currentUser != null && #currentUser.tenantId() != null")
+  // Temporarily disabled caching to fix ClassCastException issue
+  // @Cacheable(value = "userPreferences", key = "#currentUser.userId() + '_' + #currentUser.tenantId()",
+  //            condition = "#currentUser != null && #currentUser.tenantId() != null")
   public UserPreferenceDto getMyPreferences(UserContext currentUser) {
     var tenantId = currentUser.tenantId();
     var userId = currentUser.userId();
