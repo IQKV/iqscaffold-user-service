@@ -53,10 +53,15 @@ public class RedisConfig extends AbstractHttpSessionApplicationInitializer {
     objectMapper.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
     // Prevent serialization of Hibernate lazy-loaded collections
     objectMapper.configure(com.fasterxml.jackson.databind.SerializationFeature.FAIL_ON_SELF_REFERENCES, false);
+    
+    // Configure polymorphic type handling with proper validator
+    var ptv = objectMapper.getPolymorphicTypeValidator();
     objectMapper.activateDefaultTyping(
-        objectMapper.getPolymorphicTypeValidator(),
-        ObjectMapper.DefaultTyping.NON_FINAL
+        ptv,
+        ObjectMapper.DefaultTyping.NON_FINAL,
+        com.fasterxml.jackson.annotation.JsonTypeInfo.As.PROPERTY
     );
+    
     return objectMapper;
   }
 
@@ -133,6 +138,8 @@ public class RedisConfig extends AbstractHttpSessionApplicationInitializer {
         .cacheDefaults(cacheConfiguration)
         // Configure specific cache configurations
         .withCacheConfiguration("users",
+            cacheConfiguration.entryTtl(Duration.ofMinutes(15)))
+        .withCacheConfiguration("userPreferences",
             cacheConfiguration.entryTtl(Duration.ofMinutes(15)))
         .withCacheConfiguration("authorities",
             cacheConfiguration.entryTtl(Duration.ofHours(1)))
