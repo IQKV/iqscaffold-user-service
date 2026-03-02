@@ -178,8 +178,9 @@ public class SecurityConfig {
         // Rate Limiting Filter (before authentication)
         .addFilterBefore(rateLimitingFilter, UsernamePasswordAuthenticationFilter.class)
         
-        // JWT Authentication Filter (after OAuth2 resource server to extract UserContext)
-        .addFilterAfter(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+        // JWT Authentication Filter (after BearerTokenAuthenticationFilter to extract UserContext)
+        // BearerTokenAuthenticationFilter is added by oauth2ResourceServer() configuration
+        .addFilterAfter(jwtAuthenticationFilter, org.springframework.security.oauth2.server.resource.web.authentication.BearerTokenAuthenticationFilter.class)
         
         // Security Headers
         .headers(headers -> headers
