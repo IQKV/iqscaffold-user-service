@@ -52,10 +52,15 @@ public class SecurityConfig {
 
   private final JwtDecoder jwtDecoder;
   private final RateLimitingFilter rateLimitingFilter;
+  private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
-  public SecurityConfig(final JwtDecoder jwtDecoder, final RateLimitingFilter rateLimitingFilter) {
+  public SecurityConfig(
+      final JwtDecoder jwtDecoder,
+      final RateLimitingFilter rateLimitingFilter,
+      final JwtAuthenticationFilter jwtAuthenticationFilter) {
     this.jwtDecoder = jwtDecoder;
     this.rateLimitingFilter = rateLimitingFilter;
+    this.jwtAuthenticationFilter = jwtAuthenticationFilter;
   }
 
   /**
@@ -172,6 +177,9 @@ public class SecurityConfig {
         
         // Rate Limiting Filter (before authentication)
         .addFilterBefore(rateLimitingFilter, UsernamePasswordAuthenticationFilter.class)
+        
+        // JWT Authentication Filter (after OAuth2 resource server to extract UserContext)
+        .addFilterAfter(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
         
         // Security Headers
         .headers(headers -> headers
