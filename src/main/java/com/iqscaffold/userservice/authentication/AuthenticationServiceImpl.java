@@ -106,6 +106,13 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                                          timeUntilUnlock.toMinutes() + " minutes");
       }
 
+      // Get current tenant context (set by TenantExtractionFilter from X-Tenant-ID header)
+      String currentTenantId = com.iqscaffold.userservice.tenancy.TenantContext.getCurrentTenantId();
+      if (currentTenantId == null || currentTenantId.trim().isEmpty()) {
+        logger.error("No tenant context available during authentication for user: {}", sanitizedUsername);
+        throw new AuthenticationException("Tenant context required for authentication");
+      }
+
       // Find user by username or email using var
       var userOptional = userRepository.findByUsernameOrEmail(
           sanitizedUsername,
@@ -121,6 +128,19 @@ public class AuthenticationServiceImpl implements AuthenticationService {
       }
 
       var user = userOptional.get();
+
+      // Validate that user's tenant matches current tenant context
+      if (user.getTenantId() == null) {
+        logger.error("User {} has null tenant_id in database", user.getUsername());
+        throw new AuthenticationException("User tenant configuration error");
+      }
+      if (!user.getTenantId().equals(currentTenantId)) {
+        logger.warn("Tenant mismatch for user {}: user.tenantId={}, context.tenantId={}", 
+            user.getUsername(), user.getTenantId(), currentTenantId);
+        securityAuditService.logFailedAuthentication(
+            user.getUsername(), "Tenant mismatch", ipAddress, userAgent);
+        throw new AuthenticationException("Invalid username or password");
+      }
 
       // Verify password
       if (!passwordEncoder.matches(request.password(), user.getPasswordHash())) {
