@@ -17,21 +17,22 @@ import org.springframework.stereotype.Component;
  * Bootstrap component that ensures the default tenant schema has migrations applied.
  * 
  * <p>This component handles the case where the default tenant schema is created externally
- * (e.g., by Helm init scripts) but migrations haven't been run yet. It checks
- * the default tenant schema and applies migrations if the schema exists but is empty.
+ * (e.g., by Helm init scripts) or already exists. It checks the default tenant schema 
+ * and applies all pending migrations on application startup.
  * 
  * <p>This is particularly useful in Kubernetes deployments where:
  * <ul>
  *   <li>Helm charts create empty tenant_default schema</li>
  *   <li>The application needs to populate the schema with tables</li>
  *   <li>The DefaultTenantBootstrap skips creation because tenant record exists</li>
+ *   <li>New migrations need to be applied to existing tenant schemas</li>
  * </ul>
  * 
  * <p>Execution order:
  * <ol>
  *   <li>SystemLiquibaseInitializer runs system migrations</li>
  *   <li>DefaultTenantBootstrap creates tenant record (if needed)</li>
- *   <li>TenantSchemaMigrationBootstrap runs tenant migrations (this class)</li>
+ *   <li>DefaultTenantSchemaBootstrap runs tenant migrations (this class)</li>
  * </ol>
  * 
  * <p>Configuration:
@@ -47,9 +48,9 @@ import org.springframework.stereotype.Component;
     havingValue = "true",
     matchIfMissing = true
 )
-public class TenantSchemaMigrationBootstrap implements ApplicationRunner {
+public class DefaultTenantSchemaBootstrap implements ApplicationRunner {
 
-  private static final Logger logger = LoggerFactory.getLogger(TenantSchemaMigrationBootstrap.class);
+  private static final Logger logger = LoggerFactory.getLogger(DefaultTenantSchemaBootstrap.class);
 
   private final TenantRepository tenantRepository;
   private final TenantLiquibaseRunner liquibaseRunner;
@@ -59,7 +60,7 @@ public class TenantSchemaMigrationBootstrap implements ApplicationRunner {
   @Value("${iqscaffold.bootstrap.tenant-schema-migration.tenant-id:default}")
   private String defaultTenantId;
 
-  public TenantSchemaMigrationBootstrap(
+  public DefaultTenantSchemaBootstrap(
       TenantRepository tenantRepository,
       TenantLiquibaseRunner liquibaseRunner,
       SchemaNameResolver schemaNameResolver,
@@ -107,15 +108,9 @@ public class TenantSchemaMigrationBootstrap implements ApplicationRunner {
       return;
     }
 
-    // Schema exists, check if it has been migrated
-    boolean hasMigrations = checkSchemaHasMigrations(schema);
-    
-    if (!hasMigrations) {
-      logger.info("Schema {} exists but has no migrations for tenant: {}. Running migrations...", schema, tenantId);
-      runMigrations(schema, tenantId);
-    } else {
-      logger.debug("Schema {} already has migrations for tenant: {}. Skipping.", schema, tenantId);
-    }
+    // Schema exists, always run migrations to ensure all changesets are applied
+    logger.info("Running migrations for schema: {} (tenant: {})", schema, tenantId);
+    runMigrations(schema, tenantId);
   }
 
   private boolean checkSchemaExists(String schema) {
@@ -129,27 +124,6 @@ public class TenantSchemaMigrationBootstrap implements ApplicationRunner {
     }
   }
 
-  private boolean checkSchemaHasMigrations(String schema) {
-    try {
-      // Check if databasechangelog table exists in the schema
-      String sql = "SELECT EXISTS(SELECT 1 FROM information_schema.tables " +
-                   "WHERE table_schema = ? AND table_name = 'databasechangelog')";
-      Boolean tableExists = jdbcTemplate.queryForObject(sql, Boolean.class, schema);
-      
-      if (!Boolean.TRUE.equals(tableExists)) {
-        return false;
-      }
-
-      // Check if there are any changesets in the changelog
-      String countSql = String.format("SELECT COUNT(*) FROM %s.databasechangelog", schema);
-      Integer count = jdbcTemplate.queryForObject(countSql, Integer.class);
-      
-      return count != null && count > 0;
-    } catch (Exception e) {
-      logger.debug("Schema {} does not have migrations yet: {}", schema, e.getMessage());
-      return false;
-    }
-  }
 
   private void createSchemaAndMigrate(String schema, String tenantId) {
     try {
