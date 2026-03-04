@@ -56,17 +56,17 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/v1/users/features")
 @Tag(name = "Feature Access Management", description = "Unified management of composable feature access")
-public class FeatureAccessRestRespurce {
+public class FeatureAccessRestResource {
 
-  private static final Logger logger = LoggerFactory.getLogger(FeatureAccessController.class);
+  private static final Logger logger = LoggerFactory.getLogger(FeatureAccessRestResource.class);
 
   private final ConfigurableFeatureService configurableFeatureService;
   private final MicroserviceAccessService microserviceAccessService;
   private final UserRepository userRepository;
 
-  public FeatureAccessController(final ConfigurableFeatureService configurableFeatureService,
-                                 final MicroserviceAccessService microserviceAccessService,
-                                 final UserRepository userRepository) {
+  public FeatureAccessRestResource(final ConfigurableFeatureService configurableFeatureService,
+                                   final MicroserviceAccessService microserviceAccessService,
+                                   final UserRepository userRepository) {
     this.configurableFeatureService = configurableFeatureService;
     this.microserviceAccessService = microserviceAccessService;
     this.userRepository = userRepository;

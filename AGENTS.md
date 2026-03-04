@@ -438,7 +438,7 @@ public class UserService {
 @RequestMapping("/api/v1/users")
 @RequiredArgsConstructor
 @Tag(name = "User Management")
-public class UserRestRespurce {
+public class UserRestResource {
 
   private final UserService userService;
 
@@ -814,7 +814,7 @@ jobs:
 @RestController
 @RequestMapping("/api/v1/users")
 @Tag(name = "User Management", description = "User operations")
-public class UserRestRespurce {
+public class UserRestResource {
 
   @GetMapping("/{id}")
   @Operation(summary = "Get user by ID", description = "Retrieves a user by their unique identifier")
@@ -934,7 +934,7 @@ public class MyService {
 
 // 3. Add controller endpoint
 @RestController
-public class MyRestRespurce {
+public class MyRestResource {
 
   @PostMapping
   @Operation(summary = "Create resource")
