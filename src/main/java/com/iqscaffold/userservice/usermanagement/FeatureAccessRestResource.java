@@ -56,7 +56,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/v1/users/features")
 @Tag(name = "Feature Access Management", description = "Unified management of composable feature access")
-public class FeatureAccessController {
+public class FeatureAccessRestRespurce {
 
   private static final Logger logger = LoggerFactory.getLogger(FeatureAccessController.class);
 
