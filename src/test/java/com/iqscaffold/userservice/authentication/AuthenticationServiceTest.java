@@ -124,6 +124,12 @@ class AuthenticationServiceTest {
     loginRequest = new LoginRequest("testuser", "password123", false);
   }
 
+  @org.junit.jupiter.api.AfterEach
+  void tearDown() {
+    // Clean up tenant context after each test
+    com.iqscaffold.userservice.tenancy.TenantContext.clear();
+  }
+
   @Nested
   @DisplayName("Authentication Tests")
   class AuthenticationTests {
@@ -132,6 +138,7 @@ class AuthenticationServiceTest {
     @DisplayName("Should authenticate user successfully with all security checks")
     void shouldAuthenticateUserSuccessfully() {
       // Arrange
+      com.iqscaffold.userservice.tenancy.TenantContext.setCurrentTenantId("tenant-123");
       when(inputSanitizer.sanitizeInput(anyString())).thenAnswer(i -> i.getArgument(0));
       when(inputSanitizer.isInputSafe(anyString())).thenReturn(true);
       when(inputSanitizer.containsSqlInjection(anyString())).thenReturn(false);
@@ -171,6 +178,7 @@ class AuthenticationServiceTest {
     @DisplayName("Should authenticate with remember me option and extended session")
     void shouldAuthenticateWithRememberMe() {
       // Arrange
+      com.iqscaffold.userservice.tenancy.TenantContext.setCurrentTenantId("tenant-123");
       var rememberMeRequest = new LoginRequest("testuser", "password123", true);
       when(inputSanitizer.sanitizeInput(anyString())).thenAnswer(i -> i.getArgument(0));
       when(inputSanitizer.isInputSafe(anyString())).thenReturn(true);
@@ -256,6 +264,7 @@ class AuthenticationServiceTest {
     @DisplayName("Should throw exception for non-existent user and prevent user enumeration")
     void shouldThrowExceptionForNonExistentUser() {
       // Arrange
+      com.iqscaffold.userservice.tenancy.TenantContext.setCurrentTenantId("tenant-123");
       when(inputSanitizer.sanitizeInput(anyString())).thenAnswer(i -> i.getArgument(0));
       when(inputSanitizer.isInputSafe(anyString())).thenReturn(true);
       when(inputSanitizer.containsSqlInjection(anyString())).thenReturn(false);
@@ -277,6 +286,7 @@ class AuthenticationServiceTest {
     @DisplayName("Should throw exception for invalid password and record failed attempt")
     void shouldThrowExceptionForInvalidPassword() {
       // Arrange
+      com.iqscaffold.userservice.tenancy.TenantContext.setCurrentTenantId("tenant-123");
       when(inputSanitizer.sanitizeInput(anyString())).thenAnswer(i -> i.getArgument(0));
       when(inputSanitizer.isInputSafe(anyString())).thenReturn(true);
       when(inputSanitizer.containsSqlInjection(anyString())).thenReturn(false);
@@ -300,6 +310,7 @@ class AuthenticationServiceTest {
     @DisplayName("Should lock account after too many failed attempts and log security event")
     void shouldLockAccountAfterTooManyFailedAttempts() {
       // Arrange
+      com.iqscaffold.userservice.tenancy.TenantContext.setCurrentTenantId("tenant-123");
       when(inputSanitizer.sanitizeInput(anyString())).thenAnswer(i -> i.getArgument(0));
       when(inputSanitizer.isInputSafe(anyString())).thenReturn(true);
       when(inputSanitizer.containsSqlInjection(anyString())).thenReturn(false);
@@ -324,6 +335,7 @@ class AuthenticationServiceTest {
     @DisplayName("Should throw exception for disabled account after password validation")
     void shouldThrowExceptionForDisabledAccount() {
       // Arrange
+      com.iqscaffold.userservice.tenancy.TenantContext.setCurrentTenantId("tenant-123");
       testUser.setEnabled(false);
       when(inputSanitizer.sanitizeInput(anyString())).thenAnswer(i -> i.getArgument(0));
       when(inputSanitizer.isInputSafe(anyString())).thenReturn(true);
@@ -346,6 +358,7 @@ class AuthenticationServiceTest {
     @DisplayName("Should throw exception for unverified email with specific exception type")
     void shouldThrowExceptionForUnverifiedEmail() {
       // Arrange
+      com.iqscaffold.userservice.tenancy.TenantContext.setCurrentTenantId("tenant-123");
       testUser.setEmailVerified(false);
       when(inputSanitizer.sanitizeInput(anyString())).thenAnswer(i -> i.getArgument(0));
       when(inputSanitizer.isInputSafe(anyString())).thenReturn(true);
