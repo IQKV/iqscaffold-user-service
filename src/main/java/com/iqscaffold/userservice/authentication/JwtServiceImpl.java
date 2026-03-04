@@ -114,11 +114,19 @@ public class JwtServiceImpl implements JwtService {
     }
   }
 
+  /**
+   * Extract user context from JWT claims with fallback support for different claim formats.
+   */
   @Override
   public UserContext extractUserContext(Jwt jwt) {
     var claims = jwt.getClaims();
 
+    // Try multiple sources for user ID (backwards compatibility)
     var userId = extractLong(claims.get(JwtClaimNames.SUBJECT));
+    if (userId == null) {
+      userId = extractLong(claims.get(JwtClaimNames.USER_ID));
+    }
+    
     var username = extractString(claims.get(JwtClaimNames.USERNAME));
     var email = extractString(claims.get(JwtClaimNames.EMAIL));
     var authorities = extractStringSet(claims.get(JwtClaimNames.AUTHORITIES));
@@ -236,6 +244,7 @@ public class JwtServiceImpl implements JwtService {
         .expiresAt(expiresAt)
         .id(generateJti())
         .claim(JwtClaimNames.TYPE, type)
+        .claim(JwtClaimNames.USER_ID, userContext.userId()) // Add explicit userId claim for frontend compatibility
         .claim(JwtClaimNames.USERNAME, userContext.username())
         .claim(JwtClaimNames.EMAIL, userContext.email())
         .claim(JwtClaimNames.AUTHORITIES, userContext.authorities())
@@ -322,6 +331,7 @@ public class JwtServiceImpl implements JwtService {
         JwtClaimNames.EXPIRATION,
         JwtClaimNames.JWT_ID,
         JwtClaimNames.TYPE,
+        JwtClaimNames.USER_ID,
         JwtClaimNames.USERNAME,
         JwtClaimNames.EMAIL,
         JwtClaimNames.AUTHORITIES,

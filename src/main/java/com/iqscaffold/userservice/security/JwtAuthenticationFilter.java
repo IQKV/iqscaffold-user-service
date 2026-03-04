@@ -136,13 +136,18 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
   }
 
   /**
-   * Extract user context from JWT claims.
+   * Extract user context from JWT claims with fallback support for different claim formats.
    *
    * @param jwt the JWT token
    * @return the user context
    */
   private UserContext extractUserContext(Jwt jwt) {
+    // Try multiple sources for user ID (backwards compatibility)
     Long userId = extractLong(jwt.getClaim(JwtClaimNames.SUBJECT));
+    if (userId == null) {
+      userId = extractLong(jwt.getClaim(JwtClaimNames.USER_ID));
+    }
+    
     String username = jwt.getClaim(JwtClaimNames.USERNAME);
     String email = jwt.getClaim(JwtClaimNames.EMAIL);
     Set<String> authorities = extractAuthorities(jwt.getClaim(JwtClaimNames.AUTHORITIES));

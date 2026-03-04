@@ -14,6 +14,11 @@ public final class JwtClaimNames {
   public static final String SUBJECT = "sub";
 
   /**
+   * Explicit user ID claim for frontend compatibility.
+   */
+  public static final String USER_ID = "userId";
+
+  /**
    * Username claim.
    */
   public static final String USERNAME = "username";
