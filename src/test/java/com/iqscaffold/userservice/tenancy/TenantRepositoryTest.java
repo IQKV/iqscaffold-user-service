@@ -128,7 +128,7 @@ class TenantRepositoryTest {
   static class TestConfig {
     @Bean
     com.iqscaffold.userservice.tenancy.SchemaNameResolver schemaNameResolver() {
-      return new com.iqscaffold.userservice.tenancy.SchemaNameResolver("tenant_");
+      return new com.iqscaffold.userservice.tenancy.SchemaNameResolver("tenant_", "default");
     }
 
     @Bean
