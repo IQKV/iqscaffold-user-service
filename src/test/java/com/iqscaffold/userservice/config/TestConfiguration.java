@@ -88,6 +88,6 @@ public class TestConfiguration {
   @Bean
   @Primary
   public SchemaNameResolver testSchemaNameResolver() {
-    return new SchemaNameResolver("tenant_");
+    return new SchemaNameResolver("tenant_", "default");
   }
 }

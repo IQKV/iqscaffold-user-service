@@ -142,7 +142,7 @@ class VerificationTokenRepositoryTest {
   static class MultiTenantTestConfig {
     @Bean
     SchemaNameResolver schemaNameResolver() {
-      return new SchemaNameResolver("tenant_");
+      return new SchemaNameResolver("tenant_", "default");
     }
 
     @Bean
