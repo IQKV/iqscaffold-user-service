@@ -346,6 +346,9 @@
                         <exclude>**/usermanagement/FeatureAccessController.class</exclude>
                         <exclude>**/usermanagement/FeatureAccessController$*.class</exclude>
 
+                        <!-- REST Resource inner classes (DTOs/Records) -->
+                        <exclude>**/usermanagement/FeatureAccessRestResource$*.class</exclude>
+
                         <!-- File storage service requiring MinIO client mocking -->
                         <exclude>**/shared/MinioFileStorageService.class</exclude>
 
