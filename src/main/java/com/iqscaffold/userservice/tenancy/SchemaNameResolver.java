@@ -25,7 +25,15 @@ public class SchemaNameResolver {
   public String toSchema(String tenantId) {
     if (tenantId == null || tenantId.isBlank()) {
       // Use default tenant instead of public schema
+      // Special case: if default tenant is "PUBLIC", return it as-is without prefix
+      if ("PUBLIC".equalsIgnoreCase(defaultTenantId)) {
+        return "PUBLIC";
+      }
       return cache.computeIfAbsent(defaultTenantId, this::normalize);
+    }
+    // Special case: if tenant is explicitly "PUBLIC", return it as-is
+    if ("PUBLIC".equalsIgnoreCase(tenantId)) {
+      return "PUBLIC";
     }
     return cache.computeIfAbsent(tenantId, this::normalize);
   }
