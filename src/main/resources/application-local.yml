@@ -1,5 +1,15 @@
 # Local Development Environment Configuration
 # This configuration is optimized for development with debug logging and relaxed security
+#
+# Logging Configuration (via environment variables):
+# LOG_LEVEL_ROOT=INFO
+# LOG_LEVEL_APP=DEBUG
+# LOG_LEVEL_SPRING=DEBUG
+# LOG_LEVEL_SECURITY=DEBUG
+# LOG_LEVEL_SQL=DEBUG
+# LOG_LEVEL_HIKARI=DEBUG
+# LOG_LEVEL_MESSAGING=DEBUG
+# LOG_FORMAT=TEXT
 
 spring:
   jpa:
@@ -81,17 +91,6 @@ iqscaffold:
       level: DEBUG
       enable-sql-logging: true
       enable-performance-logging: true
-
-logging:
-  level:
-    com.iqscaffold: DEBUG
-    org.springframework.security: DEBUG
-    org.springframework.web: DEBUG
-    org.hibernate.SQL: DEBUG
-    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
-    com.zaxxer.hikari: DEBUG
-    org.springframework.amqp: DEBUG
-    org.springframework.rabbit: DEBUG
 
 management:
   endpoints:

@@ -1,6 +1,16 @@
 # Production Environment Configuration
 # This configuration is optimized for production with minimal logging and maximum security
 # All sensitive values MUST be provided via environment variables or Kubernetes secrets
+#
+# Logging Configuration (via environment variables):
+# LOG_LEVEL_ROOT=WARN
+# LOG_LEVEL_APP=INFO
+# LOG_LEVEL_SPRING=ERROR
+# LOG_LEVEL_SECURITY=WARN
+# LOG_LEVEL_SQL=ERROR
+# LOG_LEVEL_HIKARI=ERROR
+# LOG_LEVEL_MESSAGING=ERROR
+# LOG_FORMAT=JSON
 
 server:
   shutdown: graceful
@@ -147,17 +157,6 @@ iqscaffold:
 
   liquibase:
     contexts: "!demo"
-
-logging:
-  level:
-    root: WARN
-    com.iqscaffold: INFO
-    com.iqscaffold.userservice.security: INFO
-    org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver: ERROR
-    org.hibernate.SQL: ERROR
-    org.hibernate.type.descriptor.sql.BasicBinder: ERROR
-  pattern:
-    console: '{"timestamp":"%d{yyyy-MM-dd HH:mm:ss.SSS}","level":"%level","thread":"%thread","logger":"%logger{36}","correlationId":"%X{correlationId:-}","traceId":"%X{traceId:-}","spanId":"%X{spanId:-}","tenantId":"%X{tenantId:-}","message":"%msg"}%n'
 
 management:
   endpoints:

@@ -1,5 +1,15 @@
 # Staging Environment Configuration
 # This configuration is optimized for staging with moderate logging and security
+#
+# Logging Configuration (via environment variables):
+# LOG_LEVEL_ROOT=INFO
+# LOG_LEVEL_APP=INFO
+# LOG_LEVEL_SPRING=WARN
+# LOG_LEVEL_SECURITY=WARN
+# LOG_LEVEL_SQL=WARN
+# LOG_LEVEL_HIKARI=WARN
+# LOG_LEVEL_MESSAGING=WARN
+# LOG_FORMAT=JSON
 
 spring:
   datasource:
@@ -77,14 +87,6 @@ iqscaffold:
         environment: staging
     logging:
       format: json
-
-logging:
-  level:
-    com.iqscaffold: INFO
-    org.springframework.security: WARN
-    org.springframework.web: WARN
-    org.hibernate.SQL: WARN
-    com.zaxxer.hikari: WARN
 
 management:
   tracing:

@@ -1,6 +1,16 @@
 # Development Environment Configuration (Kubernetes)
 # This configuration is for development deployment in Kubernetes cluster
 # Uses infrastructure services from iqscaffold-infra Helm chart
+#
+# Logging Configuration (via environment variables):
+# LOG_LEVEL_ROOT=INFO
+# LOG_LEVEL_APP=DEBUG
+# LOG_LEVEL_SPRING=DEBUG
+# LOG_LEVEL_SECURITY=DEBUG
+# LOG_LEVEL_SQL=DEBUG
+# LOG_LEVEL_HIKARI=DEBUG
+# LOG_LEVEL_MESSAGING=DEBUG
+# LOG_FORMAT=TEXT
 
 spring:
   jpa:
@@ -79,9 +89,3 @@ iqscaffold:
       level: DEBUG
       enable-sql-logging: true
       enable-performance-logging: true
-
-logging:
-  level:
-    com.iqscaffold: DEBUG
-    org.hibernate.SQL: DEBUG
-    org.hibernate.type.descriptor.sql.BasicBinder: TRACE

@@ -1,278 +1,94 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
-    <springProfile name="local">
-        <!-- Local Development Configuration - Human Readable -->
-        <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
-            <encoder>
-                <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level [%X{correlationId:-}] [%X{traceId:-}] [%X{spanId:-}] [%X{tenantId:-}] %logger{36} - %msg%n</pattern>
-            </encoder>
-        </appender>
-
-        <logger name="com.iqscaffold" level="DEBUG"/>
-        <logger name="org.springframework.security" level="DEBUG"/>
-        <logger name="org.springframework.web" level="DEBUG"/>
-        <logger name="org.hibernate.SQL" level="DEBUG"/>
-        <logger name="org.hibernate.type.descriptor.sql.BasicBinder" level="TRACE"/>
-        <logger name="liquibase" level="INFO"/>
-        <logger name="com.zaxxer.hikari" level="DEBUG"/>
-
-        <root level="INFO">
-            <appender-ref ref="CONSOLE"/>
-        </root>
-    </springProfile>
-
-    <springProfile name="dev">
-        <!-- Development Environment (Kubernetes) - Human Readable with FULL Debug Info -->
-        <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
-            <encoder>
-                <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level [%X{correlationId:-}] [%X{traceId:-}] [%X{spanId:-}] [%X{tenantId:-}] %logger{36} - %msg%n</pattern>
-            </encoder>
-        </appender>
-
-        <!-- Application Loggers - TRACE level for maximum visibility -->
-        <logger name="com.iqscaffold" level="TRACE"/>
-        <logger name="com.iqscaffold.userservice" level="TRACE"/>
-        <logger name="com.iqscaffold.userservice.security" level="TRACE"/>
-        <logger name="com.iqscaffold.userservice.rest" level="TRACE"/>
-        <logger name="com.iqscaffold.userservice.service" level="TRACE"/>
-        <logger name="com.iqscaffold.userservice.exception" level="TRACE"/>
-        
-        <!-- Spring Security - TRACE level to see all security decisions -->
-        <logger name="org.springframework.security" level="TRACE"/>
-        <logger name="org.springframework.security.web" level="TRACE"/>
-        <logger name="org.springframework.security.web.FilterChainProxy" level="TRACE"/>
-        <logger name="org.springframework.security.web.access" level="TRACE"/>
-        <logger name="org.springframework.security.authentication" level="TRACE"/>
-        <logger name="org.springframework.security.oauth2" level="TRACE"/>
-        
-        <!-- Spring Web - DEBUG level to see request/response details -->
-        <logger name="org.springframework.web" level="DEBUG"/>
-        <logger name="org.springframework.web.servlet" level="DEBUG"/>
-        <logger name="org.springframework.web.servlet.mvc" level="DEBUG"/>
-        <logger name="org.springframework.web.servlet.DispatcherServlet" level="DEBUG"/>
-        <logger name="org.springframework.http" level="DEBUG"/>
-        <logger name="org.springframework.http.converter" level="DEBUG"/>
-        
-        <!-- Database - DEBUG level for SQL queries -->
-        <logger name="org.hibernate.SQL" level="DEBUG"/>
-        <logger name="org.hibernate.type.descriptor.sql.BasicBinder" level="TRACE"/>
-        <logger name="org.hibernate.engine.jdbc" level="DEBUG"/>
-        <logger name="org.springframework.jdbc" level="DEBUG"/>
-        <logger name="org.springframework.transaction" level="DEBUG"/>
-        
-        <!-- Connection Pool - DEBUG level -->
-        <logger name="com.zaxxer.hikari" level="DEBUG"/>
-        <logger name="com.zaxxer.hikari.HikariConfig" level="DEBUG"/>
-        <logger name="com.zaxxer.hikari.pool" level="DEBUG"/>
-        
-        <!-- Liquibase - INFO level (too verbose at DEBUG) -->
-        <logger name="liquibase" level="INFO"/>
-        
-        <!-- Redis - DEBUG level -->
-        <logger name="org.springframework.data.redis" level="DEBUG"/>
-        
-        <!-- RabbitMQ - DEBUG level -->
-        <logger name="org.springframework.amqp" level="DEBUG"/>
-        
-        <!-- Jackson JSON - DEBUG level to see serialization/deserialization -->
-        <logger name="com.fasterxml.jackson" level="DEBUG"/>
-        
-        <!-- Validation - DEBUG level -->
-        <logger name="org.springframework.validation" level="DEBUG"/>
-        <logger name="org.hibernate.validator" level="DEBUG"/>
-
-        <root level="DEBUG">
-            <appender-ref ref="CONSOLE"/>
-        </root>
-    </springProfile>
-
-    <springProfile name="staging">
-        <!-- Staging Configuration - JSON Format -->
-        <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
-            <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
-                <providers>
-                    <timestamp/>
-                    <version/>
-                    <logLevel/>
-                    <message/>
-                    <mdc/>
-                    <arguments/>
-                    <stackTrace/>
+    <!-- Environment variable defaults - can be overridden at deployment time -->
+    <property name="LOG_LEVEL_ROOT" value="${LOG_LEVEL_ROOT:-INFO}"/>
+    <property name="LOG_LEVEL_APP" value="${LOG_LEVEL_APP:-INFO}"/>
+    <property name="LOG_LEVEL_SPRING" value="${LOG_LEVEL_SPRING:-WARN}"/>
+    <property name="LOG_LEVEL_SECURITY" value="${LOG_LEVEL_SECURITY:-WARN}"/>
+    <property name="LOG_LEVEL_SQL" value="${LOG_LEVEL_SQL:-WARN}"/>
+    <property name="LOG_LEVEL_HIKARI" value="${LOG_LEVEL_HIKARI:-WARN}"/>
+    <property name="LOG_LEVEL_MESSAGING" value="${LOG_LEVEL_MESSAGING:-WARN}"/>
+    <property name="LOG_FORMAT" value="${LOG_FORMAT:-TEXT}"/>
+    <property name="SERVICE_NAME" value="${spring.application.name:-iqscaffold-user-service}"/>
+    <property name="ENVIRONMENT" value="${SPRING_PROFILES_ACTIVE:-unknown}"/>
+    
+    <!-- Console Appender - Text Format (for local/dev) -->
+    <appender name="CONSOLE_TEXT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level [%X{correlationId:-}] [%X{traceId:-}] [%X{spanId:-}] [%X{tenantId:-}] %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+    
+    <!-- Console Appender - JSON Format (for staging/production) -->
+    <appender name="CONSOLE_JSON" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
+            <providers>
+                <timestamp/>
+                <version/>
+                <logLevel/>
+                <message/>
+                <mdc/>
+                <arguments/>
+                <stackTrace/>
+                <pattern>
                     <pattern>
-                        <pattern>
-                            {
-                            "service": "iqscaffold-user-service",
-                            "environment": "staging",
-                            "thread": "%thread"
-                            }
-                        </pattern>
+                        {
+                        "service": "${SERVICE_NAME}",
+                        "environment": "${ENVIRONMENT}",
+                        "thread": "%thread"
+                        }
                     </pattern>
-                </providers>
-            </encoder>
-        </appender>
-
-        <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-            <file>logs/iqscaffold-user-service.log</file>
-            <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-                <fileNamePattern>logs/iqscaffold-user-service.%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>
-                <maxFileSize>100MB</maxFileSize>
-                <maxHistory>30</maxHistory>
-                <totalSizeCap>3GB</totalSizeCap>
-            </rollingPolicy>
-            <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
-                <providers>
-                    <timestamp/>
-                    <version/>
-                    <logLevel/>
-                    <message/>
-                    <mdc/>
-                    <arguments/>
-                    <stackTrace/>
-                    <pattern>
-                        <pattern>
-                            {
-                            "service": "iqscaffold-user-service",
-                            "environment": "staging",
-                            "thread": "%thread"
-                            }
-                        </pattern>
-                    </pattern>
-                </providers>
-            </encoder>
-        </appender>
-
-        <logger name="com.iqscaffold" level="INFO"/>
-        <logger name="org.springframework.security" level="WARN"/>
-        <logger name="org.springframework.web" level="WARN"/>
-        <logger name="org.hibernate.SQL" level="WARN"/>
-        <logger name="liquibase" level="INFO"/>
-        <logger name="com.zaxxer.hikari" level="WARN"/>
-
-        <root level="INFO">
-            <appender-ref ref="CONSOLE"/>
-            <appender-ref ref="FILE"/>
-        </root>
-    </springProfile>
-
-    <springProfile name="production">
-        <!-- Production Configuration - JSON Format with Minimal Logging -->
-        <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
-            <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
-                <providers>
-                    <timestamp/>
-                    <version/>
-                    <logLevel/>
-                    <message/>
-                    <mdc/>
-                    <arguments/>
-                    <stackTrace/>
-                    <pattern>
-                        <pattern>
-                            {
-                            "service": "iqscaffold-user-service",
-                            "environment": "production",
-                            "thread": "%thread"
-                            }
-                        </pattern>
-                    </pattern>
-                </providers>
-            </encoder>
-        </appender>
-
-        <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-            <file>logs/iqscaffold-user-service.log</file>
-            <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-                <fileNamePattern>logs/iqscaffold-user-service.%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>
-                <maxFileSize>500MB</maxFileSize>
-                <maxHistory>90</maxHistory>
-                <totalSizeCap>10GB</totalSizeCap>
-            </rollingPolicy>
-            <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
-                <providers>
-                    <timestamp/>
-                    <version/>
-                    <logLevel/>
-                    <message/>
-                    <mdc/>
-                    <arguments/>
-                    <stackTrace/>
-                    <pattern>
-                        <pattern>
-                            {
-                            "service": "iqscaffold-user-service",
-                            "environment": "production",
-                            "thread": "%thread"
-                            }
-                        </pattern>
-                    </pattern>
-                </providers>
-            </encoder>
-        </appender>
-
-        <!-- Security Events Appender -->
-        <appender name="SECURITY" class="ch.qos.logback.core.rolling.RollingFileAppender">
-            <file>logs/iqscaffold-user-security.log</file>
-            <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-                <fileNamePattern>logs/iqscaffold-user-security.%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>
-                <maxFileSize>100MB</maxFileSize>
-                <maxHistory>365</maxHistory>
-                <totalSizeCap>5GB</totalSizeCap>
-            </rollingPolicy>
-            <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
-                <providers>
-                    <timestamp/>
-                    <version/>
-                    <logLevel/>
-                    <message/>
-                    <mdc/>
-                    <arguments/>
-                    <stackTrace/>
-                    <pattern>
-                        <pattern>
-                            {
-                            "service": "iqscaffold-user-service",
-                            "environment": "production",
-                            "type": "security",
-                            "thread": "%thread"
-                            }
-                        </pattern>
-                    </pattern>
-                </providers>
-            </encoder>
-        </appender>
-
-        <logger name="com.iqscaffold" level="WARN"/>
-        <logger name="org.springframework.security" level="ERROR"/>
-        <logger name="org.springframework.web" level="ERROR"/>
-        <logger name="org.hibernate.SQL" level="ERROR"/>
-        <logger name="liquibase" level="WARN"/>
-        <logger name="com.zaxxer.hikari" level="ERROR"/>
-
-        <!-- Security logger for audit events -->
-        <logger name="com.iqscaffold.userservice.security" level="INFO" additivity="false">
-            <appender-ref ref="SECURITY"/>
-        </logger>
-
-        <root level="WARN">
-            <appender-ref ref="CONSOLE"/>
-            <appender-ref ref="FILE"/>
-        </root>
-    </springProfile>
-
-    <!-- Async appenders for better performance -->
-    <springProfile name="staging,production">
-        <appender name="ASYNC_CONSOLE" class="ch.qos.logback.classic.AsyncAppender">
-            <appender-ref ref="CONSOLE"/>
-            <queueSize>1024</queueSize>
-            <discardingThreshold>0</discardingThreshold>
-            <includeCallerData>false</includeCallerData>
-        </appender>
-
-        <appender name="ASYNC_FILE" class="ch.qos.logback.classic.AsyncAppender">
-            <appender-ref ref="FILE"/>
-            <queueSize>1024</queueSize>
-            <discardingThreshold>0</discardingThreshold>
-            <includeCallerData>false</includeCallerData>
-        </appender>
-    </springProfile>
+                </pattern>
+            </providers>
+        </encoder>
+    </appender>
+    
+    <!-- Async wrapper for console appender (better performance) -->
+    <appender name="ASYNC_CONSOLE_TEXT" class="ch.qos.logback.classic.AsyncAppender">
+        <appender-ref ref="CONSOLE_TEXT"/>
+        <queueSize>512</queueSize>
+        <discardingThreshold>0</discardingThreshold>
+        <includeCallerData>false</includeCallerData>
+    </appender>
+    
+    <appender name="ASYNC_CONSOLE_JSON" class="ch.qos.logback.classic.AsyncAppender">
+        <appender-ref ref="CONSOLE_JSON"/>
+        <queueSize>512</queueSize>
+        <discardingThreshold>0</discardingThreshold>
+        <includeCallerData>false</includeCallerData>
+    </appender>
+    
+    <!-- Conditional appender selection based on LOG_FORMAT -->
+    <if condition='property("LOG_FORMAT").equals("JSON")'>
+        <then>
+            <appender name="CONSOLE" class="ch.qos.logback.classic.AsyncAppender">
+                <appender-ref ref="CONSOLE_JSON"/>
+                <queueSize>512</queueSize>
+                <discardingThreshold>0</discardingThreshold>
+            </appender>
+        </then>
+        <else>
+            <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+                <encoder>
+                    <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level [%X{correlationId:-}] [%X{traceId:-}] [%X{spanId:-}] [%X{tenantId:-}] %logger{36} - %msg%n</pattern>
+                </encoder>
+            </appender>
+        </else>
+    </if>
+    
+    <!-- Application Loggers - controlled by environment variables -->
+    <logger name="com.iqscaffold" level="${LOG_LEVEL_APP}"/>
+    <logger name="org.springframework.security" level="${LOG_LEVEL_SECURITY}"/>
+    <logger name="org.springframework.web" level="${LOG_LEVEL_SPRING}"/>
+    <logger name="org.springframework.amqp" level="${LOG_LEVEL_MESSAGING}"/>
+    <logger name="org.springframework.rabbit" level="${LOG_LEVEL_MESSAGING}"/>
+    <logger name="org.springframework.data.redis" level="${LOG_LEVEL_SPRING}"/>
+    <logger name="org.hibernate.SQL" level="${LOG_LEVEL_SQL}"/>
+    <logger name="org.hibernate.type.descriptor.sql.BasicBinder" level="${LOG_LEVEL_SQL}"/>
+    <logger name="com.zaxxer.hikari" level="${LOG_LEVEL_HIKARI}"/>
+    <logger name="liquibase" level="INFO"/>
+    
+    <root level="${LOG_LEVEL_ROOT}">
+        <appender-ref ref="CONSOLE"/>
+    </root>
 </configuration>
