@@ -8,18 +8,17 @@
     <property name="LOG_LEVEL_SQL" value="${LOG_LEVEL_SQL:-WARN}"/>
     <property name="LOG_LEVEL_HIKARI" value="${LOG_LEVEL_HIKARI:-WARN}"/>
     <property name="LOG_LEVEL_MESSAGING" value="${LOG_LEVEL_MESSAGING:-WARN}"/>
-    <property name="LOG_FORMAT" value="${LOG_FORMAT:-TEXT}"/>
     <property name="SERVICE_NAME" value="${spring.application.name:-iqscaffold-user-service}"/>
     <property name="ENVIRONMENT" value="${SPRING_PROFILES_ACTIVE:-unknown}"/>
     
-    <!-- Console Appender - Text Format (for local/dev) -->
-    <appender name="CONSOLE_TEXT" class="ch.qos.logback.core.ConsoleAppender">
+    <!-- Console Appender - Text Format (default) -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
             <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level [%X{correlationId:-}] [%X{traceId:-}] [%X{spanId:-}] [%X{tenantId:-}] %logger{36} - %msg%n</pattern>
         </encoder>
     </appender>
     
-    <!-- Console Appender - JSON Format (for staging/production) -->
+    <!-- Console Appender - JSON Format -->
     <appender name="CONSOLE_JSON" class="ch.qos.logback.core.ConsoleAppender">
         <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
             <providers>
@@ -43,38 +42,13 @@
         </encoder>
     </appender>
     
-    <!-- Async wrapper for console appender (better performance) -->
-    <appender name="ASYNC_CONSOLE_TEXT" class="ch.qos.logback.classic.AsyncAppender">
-        <appender-ref ref="CONSOLE_TEXT"/>
-        <queueSize>512</queueSize>
-        <discardingThreshold>0</discardingThreshold>
-        <includeCallerData>false</includeCallerData>
-    </appender>
-    
+    <!-- Async wrapper for JSON appender -->
     <appender name="ASYNC_CONSOLE_JSON" class="ch.qos.logback.classic.AsyncAppender">
         <appender-ref ref="CONSOLE_JSON"/>
         <queueSize>512</queueSize>
         <discardingThreshold>0</discardingThreshold>
         <includeCallerData>false</includeCallerData>
     </appender>
-    
-    <!-- Conditional appender selection based on LOG_FORMAT -->
-    <if condition='property("LOG_FORMAT").equals("JSON")'>
-        <then>
-            <appender name="CONSOLE" class="ch.qos.logback.classic.AsyncAppender">
-                <appender-ref ref="CONSOLE_JSON"/>
-                <queueSize>512</queueSize>
-                <discardingThreshold>0</discardingThreshold>
-            </appender>
-        </then>
-        <else>
-            <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
-                <encoder>
-                    <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level [%X{correlationId:-}] [%X{traceId:-}] [%X{spanId:-}] [%X{tenantId:-}] %logger{36} - %msg%n</pattern>
-                </encoder>
-            </appender>
-        </else>
-    </if>
     
     <!-- Application Loggers - controlled by environment variables -->
     <logger name="com.iqscaffold" level="${LOG_LEVEL_APP}"/>
@@ -88,7 +62,15 @@
     <logger name="com.zaxxer.hikari" level="${LOG_LEVEL_HIKARI}"/>
     <logger name="liquibase" level="INFO"/>
     
+    <!-- Default: Text format for local/dev -->
     <root level="${LOG_LEVEL_ROOT}">
         <appender-ref ref="CONSOLE"/>
     </root>
+    
+    <!-- Override for staging/production: Use JSON format -->
+    <springProfile name="staging,production">
+        <root level="${LOG_LEVEL_ROOT}">
+            <appender-ref ref="ASYNC_CONSOLE_JSON"/>
+        </root>
+    </springProfile>
 </configuration>
