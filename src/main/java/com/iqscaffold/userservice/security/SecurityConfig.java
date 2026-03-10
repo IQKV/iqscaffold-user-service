@@ -111,6 +111,7 @@ public class SecurityConfig {
             .requestMatchers(
                 "/api/v1/auth/signup",      // User registration
                 "/api/v1/auth/login",       // User login
+                "/api/v1/auth/refresh",     // Token refresh (uses refresh token in body, not Bearer)
                 "/api/v1/auth/validate",    // Token validation (for gateway/services)
                 "/api/v1/auth/health"       // Auth service health check
             ).permitAll()
@@ -153,7 +154,6 @@ public class SecurityConfig {
             
             // Token Management Endpoints (requires valid JWT)
             .requestMatchers(
-                "/api/v1/auth/refresh",      // Refresh access token
                 "/api/v1/auth/logout",       // Logout current session
                 "/api/v1/auth/logout-all"    // Logout all sessions
             ).authenticated()

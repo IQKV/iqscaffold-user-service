@@ -249,7 +249,6 @@ public class AuthenticationRestResource {
       @ApiResponse(responseCode = "401", description = "Invalid or expired refresh token", ref = "#/components/responses/Unauthorized")
   })
   @PostMapping("/refresh")
-  @SecurityRequirement(name = "bearerAuth")
   public ResponseEntity<TokenResponse> refreshToken(
       @io.swagger.v3.oas.annotations.parameters.RequestBody(
           description = "Refresh token request",
