@@ -202,10 +202,10 @@ var stats = tenantRepository
 - Public tenant signup without authentication
 - Automated tenant ID generation from organization name
 - Complete environment provisioning:
-  - Tenant creation with database schema
-  - Organization setup with default configuration
-  - Admin user creation with TENANT_ADMIN authority
-  - Email verification workflow initiation
+    - Tenant creation with database schema
+    - Organization setup with default configuration
+    - Admin user creation with TENANT_ADMIN authority
+    - Email verification workflow initiation
 - Input validation and sanitization (XSS/SQL injection prevention)
 - IP-based rate limiting (3 signups per hour)
 - Security audit logging for all signup attempts
@@ -300,14 +300,14 @@ var stats = tenantRepository
 
 ```json
 {
-  "organizationName": "ACME Corporation",
-  "adminUsername": "john.doe",
-  "adminEmail": "john.doe@acme.com",
-  "adminPassword": "SecurePassword123!",
-  "adminFirstName": "John",
-  "adminLastName": "Doe",
-  "tenantId": "acme-corp",
-  "domain": "acme.example.com"
+    "organizationName": "ACME Corporation",
+    "adminUsername": "john.doe",
+    "adminEmail": "john.doe@acme.com",
+    "adminPassword": "SecurePassword123!",
+    "adminFirstName": "John",
+    "adminLastName": "Doe",
+    "tenantId": "acme-corp",
+    "domain": "acme.example.com"
 }
 ```
 
@@ -315,18 +315,18 @@ var stats = tenantRepository
 
 ```json
 {
-  "tenantId": "acme-corp-a1b2",
-  "organizationName": "ACME Corporation",
-  "organizationId": 1,
-  "adminUserId": 1,
-  "adminUsername": "john.doe",
-  "adminEmail": "john.doe@acme.com",
-  "adminFirstName": "John",
-  "adminLastName": "Doe",
-  "emailVerificationRequired": true,
-  "createdAt": "2026-01-11T11:00:00Z",
-  "message": "Tenant provisioned successfully! Your organization 'ACME Corporation' is ready to use.",
-  "nextSteps": "1. Check your email (john.doe@acme.com) for a verification link\n2. Click the verification link to activate your account\n3. Log in with your username (john.doe) and password\n4. Start inviting team members to your organization"
+    "tenantId": "acme-corp-a1b2",
+    "organizationName": "ACME Corporation",
+    "organizationId": 1,
+    "adminUserId": 1,
+    "adminUsername": "john.doe",
+    "adminEmail": "john.doe@acme.com",
+    "adminFirstName": "John",
+    "adminLastName": "Doe",
+    "emailVerificationRequired": true,
+    "createdAt": "2026-01-11T11:00:00Z",
+    "message": "Tenant provisioned successfully! Your organization 'ACME Corporation' is ready to use.",
+    "nextSteps": "1. Check your email (john.doe@acme.com) for a verification link\n2. Click the verification link to activate your account\n3. Log in with your username (john.doe) and password\n4. Start inviting team members to your organization"
 }
 ```
 
@@ -506,11 +506,11 @@ Other microservices validate JWT tokens using the JWK Set endpoint:
 
 ```yaml
 spring:
-  security:
-    oauth2:
-      resourceserver:
-        jwt:
-          jwk-set-uri: http://iqscaffold-user-service:8080/api/v1/auth/.well-known/jwks.json
+    security:
+        oauth2:
+            resourceserver:
+                jwt:
+                    jwk-set-uri: http://iqscaffold-user-service:8080/api/v1/auth/.well-known/jwks.json
 ```
 
 Extract user context from JWT claims:
@@ -539,21 +539,21 @@ Access tokens carry comprehensive user context:
 
 ```json
 {
-  "sub": "1",
-  "userId": 1,
-  "username": "john.doe",
-  "email": "john.doe@example.com",
-  "authorities": ["USER", "ADMIN"],
-  "permissions": ["READ_PROFILE", "WRITE_PROFILE"],
-  "firstName": "John",
-  "lastName": "Doe",
-  "tenantId": "tenant-123",
-  "organizationId": 456,
-  "type": "access",
-  "jti": "unique-token-id",
-  "iss": "iqscaffold-user-service",
-  "iat": 1634567890,
-  "exp": 1634568790
+    "sub": "1",
+    "userId": 1,
+    "username": "john.doe",
+    "email": "john.doe@example.com",
+    "authorities": ["USER", "ADMIN"],
+    "permissions": ["READ_PROFILE", "WRITE_PROFILE"],
+    "firstName": "John",
+    "lastName": "Doe",
+    "tenantId": "tenant-123",
+    "organizationId": 456,
+    "type": "access",
+    "jti": "unique-token-id",
+    "iss": "iqscaffold-user-service",
+    "iat": 1634567890,
+    "exp": 1634568790
 }
 ```
 

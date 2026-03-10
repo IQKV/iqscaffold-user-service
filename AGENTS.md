@@ -81,18 +81,18 @@ project-root/
 
 ```yaml
 summaries:
-  max_length: "2-3 sentences"
-  focus: "What was done, not how it was done"
-  avoid: "Bullet point lists, detailed recaps, obvious statements"
+    max_length: "2-3 sentences"
+    focus: "What was done, not how it was done"
+    avoid: "Bullet point lists, detailed recaps, obvious statements"
 
 explanations:
-  when_detailed: "Complex technical concepts, architecture decisions, security implications"
-  when_brief: "Simple changes, routine operations, status updates"
+    when_detailed: "Complex technical concepts, architecture decisions, security implications"
+    when_brief: "Simple changes, routine operations, status updates"
 
 verification:
-  format: "Minimal wording - state outcome only"
-  example: "Tests pass. Coverage at 65%."
-  avoid: "Lengthy descriptions of what was verified"
+    format: "Minimal wording - state outcome only"
+    example: "Tests pass. Coverage at 65%."
+    avoid: "Lengthy descriptions of what was verified"
 ```
 
 #### Prohibited Outputs
@@ -319,13 +319,13 @@ AI agents should automatically generate and present commit messages after:
 
 ```yaml
 after_completing_changes:
-  1. analyze_changes: "Review all modified files and understand the scope"
-  2. identify_type: "Determine the appropriate commit type"
-  3. determine_scope: "Identify the affected component"
-  4. craft_subject: "Write concise subject line (6-220 chars)"
-  5. add_body_if_needed: "Include body for complex changes"
-  6. present_to_user: "Show the generated commit message for review"
-  7. wait_for_approval: "User can accept, modify, or reject"
+    1. analyze_changes: "Review all modified files and understand the scope"
+    2. identify_type: "Determine the appropriate commit type"
+    3. determine_scope: "Identify the affected component"
+    4. craft_subject: "Write concise subject line (6-220 chars)"
+    5. add_body_if_needed: "Include body for complex changes"
+    6. present_to_user: "Show the generated commit message for review"
+    7. wait_for_approval: "User can accept, modify, or reject"
 ```
 
 **Example Presentation:**
@@ -392,21 +392,21 @@ import org.springframework.web.bind.annotation.RestController;
 
 ```yaml
 import_formatting:
-  - "Separate each group with a blank line"
-  - "Sort imports alphabetically within each group"
-  - "No wildcard imports (import java.util.*) - use explicit imports"
-  - "No unused imports"
-  - "Package and import statements must not be line-wrapped"
+    - "Separate each group with a blank line"
+    - "Sort imports alphabetically within each group"
+    - "No wildcard imports (import java.util.*) - use explicit imports"
+    - "No unused imports"
+    - "Package and import statements must not be line-wrapped"
 
 checkstyle_modules:
-  AvoidStarImport:
-    description: "Prohibits wildcard imports (import java.util.*)"
-    enforcement: "Build fails on star imports"
-    rationale: "Explicit imports improve code clarity and prevent naming conflicts"
+    AvoidStarImport:
+        description: "Prohibits wildcard imports (import java.util.*)"
+        enforcement: "Build fails on star imports"
+        rationale: "Explicit imports improve code clarity and prevent naming conflicts"
 
-  UnusedImports:
-    description: "Detects and removes unused import statements"
-    enforcement: "Build fails on unused imports"
+    UnusedImports:
+        description: "Detects and removes unused import statements"
+        enforcement: "Build fails on unused imports"
 ```
 
 **Service Layer Pattern:**
@@ -534,31 +534,31 @@ class ArchitectureTest {
 
 ```yaml
 maven_commands:
-  development_phase:
-    recommended: "mvn clean verify -Dcheckstyle.skip=true"
-    reason: "Focus on functionality and tests without style blocking"
+    development_phase:
+        recommended: "mvn clean verify -Dcheckstyle.skip=true"
+        reason: "Focus on functionality and tests without style blocking"
 
-  testing_phase:
-    recommended: "mvn test -Dcheckstyle.skip=true"
-    reason: "Rapid test iteration without style checks"
+    testing_phase:
+        recommended: "mvn test -Dcheckstyle.skip=true"
+        reason: "Rapid test iteration without style checks"
 
-  style_check_phase:
-    explicit: "mvn checkstyle:check"
-    when: "Before committing or when explicitly requested"
+    style_check_phase:
+        explicit: "mvn checkstyle:check"
+        when: "Before committing or when explicitly requested"
 
 workflow:
-  1. develop: "Implement features with -Dcheckstyle.skip=true"
-  2. test: "Run tests with -Dcheckstyle.skip=true"
-  3. verify: "Ensure functionality works correctly"
-  4. style: "Run mvn checkstyle:check separately"
-  5. fix_style: "Address Checkstyle violations in focused pass"
-  6. commit: "CI/CD enforces Checkstyle automatically"
+    1. develop: "Implement features with -Dcheckstyle.skip=true"
+    2. test: "Run tests with -Dcheckstyle.skip=true"
+    3. verify: "Ensure functionality works correctly"
+    4. style: "Run mvn checkstyle:check separately"
+    5. fix_style: "Address Checkstyle violations in focused pass"
+    6. commit: "CI/CD enforces Checkstyle automatically"
 
 rationale:
-  - "Checkstyle violations should not block functional development"
-  - "Style issues are better addressed in dedicated cleanup phase"
-  - "CI/CD pipeline enforces style checks before merge"
-  - "Faster iteration cycle for AI-assisted development"
+    - "Checkstyle violations should not block functional development"
+    - "Style issues are better addressed in dedicated cleanup phase"
+    - "CI/CD pipeline enforces style checks before merge"
+    - "Faster iteration cycle for AI-assisted development"
 ```
 
 **Example Commands:**
@@ -658,25 +658,25 @@ Brief description of changes and motivation.
 
 ```yaml
 review_checklist:
-  code_quality:
-    - Modern Java features used appropriately
-    - Proper exception handling
-    - No code duplication
+    code_quality:
+        - Modern Java features used appropriately
+        - Proper exception handling
+        - No code duplication
 
-  security:
-    - Input validation with @Valid
-    - No SQL injection vulnerabilities
-    - No sensitive data exposure
+    security:
+        - Input validation with @Valid
+        - No SQL injection vulnerabilities
+        - No sensitive data exposure
 
-  testing:
-    - AAA pattern in unit tests
-    - Edge cases covered
-    - Integration tests for critical paths
+    testing:
+        - AAA pattern in unit tests
+        - Edge cases covered
+        - Integration tests for critical paths
 
-  documentation:
-    - OpenAPI annotations on endpoints
-    - Complex logic documented
-    - README updated if needed
+    documentation:
+        - OpenAPI annotations on endpoints
+        - Complex logic documented
+        - README updated if needed
 ```
 
 ## 🔒 Security Guidelines
@@ -735,19 +735,19 @@ void shouldDenyAccessToAdminEndpoint() throws Exception {
 
 ```yaml
 test_coverage:
-  minimum_threshold: ">= 60%"
-  target: ">= 80%"
+    minimum_threshold: ">= 60%"
+    target: ">= 80%"
 
 code_style:
-  tool: "Checkstyle"
-  enforcement: "Maven build fails on violations"
+    tool: "Checkstyle"
+    enforcement: "Maven build fails on violations"
 
 architecture:
-  tool: "ArchUnit"
-  rules:
-    - "Services only accessed by controllers"
-    - "No cyclic dependencies"
-    - "Proper package structure"
+    tool: "ArchUnit"
+    rules:
+        - "Services only accessed by controllers"
+        - "No cyclic dependencies"
+        - "Proper package structure"
 ```
 
 ### Quality Gates
@@ -778,32 +778,32 @@ mvn test -Dtest=*ArchitectureTest
 name: CI/CD Pipeline
 
 on:
-  push:
-    branches: [main, develop]
-  pull_request:
-    branches: [main, develop]
+    push:
+        branches: [main, develop]
+    pull_request:
+        branches: [main, develop]
 
 jobs:
-  build-and-test:
-    runs-on: ubuntu-latest
+    build-and-test:
+        runs-on: ubuntu-latest
 
-    steps:
-      - uses: actions/checkout@v4
+        steps:
+            - uses: actions/checkout@v4
 
-      - name: Set up JDK 21
-        uses: actions/setup-java@v4
-        with:
-          java-version: "21"
-          distribution: "temurin"
-          cache: "maven"
+            - name: Set up JDK 21
+              uses: actions/setup-java@v4
+              with:
+                  java-version: "21"
+                  distribution: "temurin"
+                  cache: "maven"
 
-      - name: Build and Test
-        run: mvn clean verify
+            - name: Build and Test
+              run: mvn clean verify
 
-      - name: Upload Coverage
-        uses: codecov/codecov-action@v3
-        with:
-          files: target/site/jacoco/jacoco.xml
+            - name: Upload Coverage
+              uses: codecov/codecov-action@v3
+              with:
+                  files: target/site/jacoco/jacoco.xml
 ```
 
 ## 📚 Documentation Standards
@@ -848,26 +848,26 @@ public class UserRestResource {
 
 ```yaml
 before_making_changes:
-  1. analyze: "Understand the request and identify required changes"
-  2. explain: "Describe what changes will be made and why"
-  3. assess_impact: "Evaluate impact, effort, and risk"
-  4. present_options: "Offer alternatives if applicable"
-  5. wait_for_approval: "STOP and wait for explicit user confirmation"
-  6. apply_changes: "Only after user approves"
-  7. verify: "Confirm changes work as expected"
+    1. analyze: "Understand the request and identify required changes"
+    2. explain: "Describe what changes will be made and why"
+    3. assess_impact: "Evaluate impact, effort, and risk"
+    4. present_options: "Offer alternatives if applicable"
+    5. wait_for_approval: "STOP and wait for explicit user confirmation"
+    6. apply_changes: "Only after user approves"
+    7. verify: "Confirm changes work as expected"
 
 exceptions:
-  - read_only_operations: "Reading files, searching, analyzing"
-  - information_requests: "Answering questions, explaining concepts"
-  - recommendations: "Suggesting approaches without implementing"
+    - read_only_operations: "Reading files, searching, analyzing"
+    - information_requests: "Answering questions, explaining concepts"
+    - recommendations: "Suggesting approaches without implementing"
 
 never_auto_apply:
-  - code_changes: "Any modification to source files"
-  - configuration_changes: "application.yml, pom.xml, etc."
-  - dependency_updates: "Adding or updating dependencies"
-  - refactoring: "Code restructuring"
-  - deletions: "Removing files or code"
-  - security_changes: "Authentication, authorization, secrets"
+    - code_changes: "Any modification to source files"
+    - configuration_changes: "application.yml, pom.xml, etc."
+    - dependency_updates: "Adding or updating dependencies"
+    - refactoring: "Code restructuring"
+    - deletions: "Removing files or code"
+    - security_changes: "Authentication, authorization, secrets"
 ```
 
 ### When to Intervene
@@ -897,22 +897,22 @@ never_auto_apply:
 
 ```yaml
 impact_assessment:
-  critical: "Service unavailable, data loss risk"
-  high: "Major feature broken, workaround exists"
-  medium: "Minor feature affected"
-  low: "Internal improvement, no user impact"
+    critical: "Service unavailable, data loss risk"
+    high: "Major feature broken, workaround exists"
+    medium: "Minor feature affected"
+    low: "Internal improvement, no user impact"
 
 effort_estimation:
-  small: "< 1 day"
-  medium: "1-3 days"
-  large: "1-2 weeks"
-  xlarge: "> 2 weeks"
+    small: "< 1 day"
+    medium: "1-3 days"
+    large: "1-2 weeks"
+    xlarge: "> 2 weeks"
 
 risk_evaluation:
-  low: "Well-understood change, easy rollback"
-  medium: "New pattern, tested rollback"
-  high: "Complex change, difficult rollback"
-  critical: "Breaking change, irreversible"
+    low: "Well-understood change, easy rollback"
+    medium: "New pattern, tested rollback"
+    high: "Complex change, difficult rollback"
+    critical: "Breaking change, irreversible"
 ```
 
 ### Common Patterns and Solutions

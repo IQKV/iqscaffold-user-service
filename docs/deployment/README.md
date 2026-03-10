@@ -211,51 +211,51 @@ Production deployments include:
 
 1. **Database Connection Failures**
 
-   ```bash
-   kubectl logs deployment/iqscaffold-user-service -n iqscaffold-dev-env
-   ```
+    ```bash
+    kubectl logs deployment/iqscaffold-user-service -n iqscaffold-dev-env
+    ```
 
 2. **Redis Connection Issues**
 
-   ```bash
-   # Check Redis connectivity
-   kubectl exec -it deployment/iqscaffold-user-service -n iqscaffold-dev-env -- \
-     redis-cli -h iqscaffold-infra-redis-master.iqscaffold-dev-env.svc.cluster.local ping
-   ```
+    ```bash
+    # Check Redis connectivity
+    kubectl exec -it deployment/iqscaffold-user-service -n iqscaffold-dev-env -- \
+      redis-cli -h iqscaffold-infra-redis-master.iqscaffold-dev-env.svc.cluster.local ping
+    ```
 
 3. **S3/MinIO Storage Issues**
 
-   ```bash
-   # Check S3 configuration
-   kubectl describe configmap iqscaffold-user-service-config -n iqscaffold-dev-env | grep S3
-   ```
+    ```bash
+    # Check S3 configuration
+    kubectl describe configmap iqscaffold-user-service-config -n iqscaffold-dev-env | grep S3
+    ```
 
 4. **Email/SMTP Configuration**
 
-   ```bash
-   # Check SMTP settings
-   kubectl get secret iqscaffold-user-service-secrets -n iqscaffold-dev-env -o yaml
-   ```
+    ```bash
+    # Check SMTP settings
+    kubectl get secret iqscaffold-user-service-secrets -n iqscaffold-dev-env -o yaml
+    ```
 
 5. **OAuth2 Configuration Issues**
 
-   ```bash
-   # Verify OAuth2 secrets are set
-   kubectl get secret iqscaffold-user-service-secrets -n iqscaffold-dev-env -o jsonpath='{.data.google-client-id}' | base64 -d
-   ```
+    ```bash
+    # Verify OAuth2 secrets are set
+    kubectl get secret iqscaffold-user-service-secrets -n iqscaffold-dev-env -o jsonpath='{.data.google-client-id}' | base64 -d
+    ```
 
 6. **Check Configuration**
 
-   ```bash
-   kubectl describe configmap iqscaffold-user-service-config -n iqscaffold-dev-env
-   kubectl describe secret iqscaffold-user-service-secrets -n iqscaffold-dev-env
-   ```
+    ```bash
+    kubectl describe configmap iqscaffold-user-service-config -n iqscaffold-dev-env
+    kubectl describe secret iqscaffold-user-service-secrets -n iqscaffold-dev-env
+    ```
 
 7. **Test Health Endpoints**
-   ```bash
-   kubectl port-forward deployment/iqscaffold-user-service 8081:8081 -n iqscaffold-dev-env
-   curl http://localhost:8081/actuator/health
-   ```
+    ```bash
+    kubectl port-forward deployment/iqscaffold-user-service 8081:8081 -n iqscaffold-dev-env
+    curl http://localhost:8081/actuator/health
+    ```
 
 #### Missing Secrets Diagnosis
 
