@@ -14,10 +14,10 @@ The IQ Scaffold User Service is deployed using Helm charts and automated CI/CD p
 
 | Environment | Namespace                   | Purpose                      |
 | ----------- | --------------------------- | ---------------------------- |
-| Dev         | `iqscaffold-dev-env`        | Development and WIP branches |
-| Test        | `iqscaffold-test-env`       | Feature branch testing       |
-| Staging     | `iqscaffold-staging-env`    | Pre-production validation    |
-| Production  | `iqscaffold-production-env` | Live production environment  |
+| Dev         | `iqkvdev-dev-env`        | Development and WIP branches |
+| Test        | `iqkvdev-test-env`       | Feature branch testing       |
+| Staging     | `iqkvdev-staging-env`    | Pre-production validation    |
+| Production  | `iqkvdev-production-env` | Live production environment  |
 
 ### Automated Deployment (CI/CD)
 
@@ -100,7 +100,7 @@ helm upgrade --install --atomic --wait --timeout 5m iqscaffold-user-service ./ \
   --set config.oauth2.google.clientSecret=${GOOGLE_OAUTH2_CLIENT_SECRET} \
   --set config.email.smtp.username=${SMTP_USERNAME} \
   --set config.email.smtp.password=${SMTP_PASSWORD} \
-  --namespace iqscaffold-dev-env
+  --namespace iqkvdev-dev-env
 
 # Production (Tagged releases)
 helm upgrade --install --atomic --wait --timeout 5m iqscaffold-user-service ./ \
@@ -117,7 +117,7 @@ helm upgrade --install --atomic --wait --timeout 5m iqscaffold-user-service ./ \
   --set config.oauth2.google.clientSecret=${GOOGLE_OAUTH2_CLIENT_SECRET} \
   --set config.email.smtp.username=${SMTP_USERNAME} \
   --set config.email.smtp.password=${SMTP_PASSWORD} \
-  --namespace iqscaffold-production-env
+  --namespace iqkvdev-production-env
 ```
 
 </details>
@@ -144,7 +144,7 @@ helm upgrade --install user-service ./ \
   --set config.oauth2.google.clientSecret="your-google-client-secret" \
   --set config.email.smtp.username="your-smtp-username" \
   --set config.email.smtp.password="your-smtp-password" \
-  --namespace iqscaffold-dev-env \
+  --namespace iqkvdev-dev-env \
   --create-namespace
 ```
 
@@ -212,48 +212,48 @@ Production deployments include:
 1. **Database Connection Failures**
 
     ```bash
-    kubectl logs deployment/iqscaffold-user-service -n iqscaffold-dev-env
+    kubectl logs deployment/iqscaffold-user-service -n iqkvdev-dev-env
     ```
 
 2. **Redis Connection Issues**
 
     ```bash
     # Check Redis connectivity
-    kubectl exec -it deployment/iqscaffold-user-service -n iqscaffold-dev-env -- \
-      redis-cli -h iqscaffold-infra-redis-master.iqscaffold-dev-env.svc.cluster.local ping
+    kubectl exec -it deployment/iqscaffold-user-service -n iqkvdev-dev-env -- \
+      redis-cli -h iqkvdev-infra-redis-master.iqkvdev-dev-env.svc.cluster.local ping
     ```
 
 3. **S3/MinIO Storage Issues**
 
     ```bash
     # Check S3 configuration
-    kubectl describe configmap iqscaffold-user-service-config -n iqscaffold-dev-env | grep S3
+    kubectl describe configmap iqscaffold-user-service-config -n iqkvdev-dev-env | grep S3
     ```
 
 4. **Email/SMTP Configuration**
 
     ```bash
     # Check SMTP settings
-    kubectl get secret iqscaffold-user-service-secrets -n iqscaffold-dev-env -o yaml
+    kubectl get secret iqscaffold-user-service-secrets -n iqkvdev-dev-env -o yaml
     ```
 
 5. **OAuth2 Configuration Issues**
 
     ```bash
     # Verify OAuth2 secrets are set
-    kubectl get secret iqscaffold-user-service-secrets -n iqscaffold-dev-env -o jsonpath='{.data.google-client-id}' | base64 -d
+    kubectl get secret iqscaffold-user-service-secrets -n iqkvdev-dev-env -o jsonpath='{.data.google-client-id}' | base64 -d
     ```
 
 6. **Check Configuration**
 
     ```bash
-    kubectl describe configmap iqscaffold-user-service-config -n iqscaffold-dev-env
-    kubectl describe secret iqscaffold-user-service-secrets -n iqscaffold-dev-env
+    kubectl describe configmap iqscaffold-user-service-config -n iqkvdev-dev-env
+    kubectl describe secret iqscaffold-user-service-secrets -n iqkvdev-dev-env
     ```
 
 7. **Test Health Endpoints**
     ```bash
-    kubectl port-forward deployment/iqscaffold-user-service 8081:8081 -n iqscaffold-dev-env
+    kubectl port-forward deployment/iqscaffold-user-service 8081:8081 -n iqkvdev-dev-env
     curl http://localhost:8081/actuator/health
     ```
 
@@ -263,10 +263,10 @@ If deployments fail due to missing secrets, check:
 
 ```bash
 # List all secrets in namespace
-kubectl get secrets -n iqscaffold-dev-env
+kubectl get secrets -n iqkvdev-dev-env
 
 # Check specific secret content
-kubectl get secret iqscaffold-user-service-secrets -n iqscaffold-dev-env -o yaml
+kubectl get secret iqscaffold-user-service-secrets -n iqkvdev-dev-env -o yaml
 
 # Verify Drone CI secrets are configured
 drone secret ls --repository IQKV/iqscaffold-user-service
@@ -276,10 +276,10 @@ drone secret ls --repository IQKV/iqscaffold-user-service
 
 ```bash
 # Rollback to previous version
-helm rollback iqscaffold-user-service -n iqscaffold-production-env
+helm rollback iqscaffold-user-service -n iqkvdev-production-env
 
 # Or uninstall completely
-helm uninstall iqscaffold-user-service -n iqscaffold-production-env
+helm uninstall iqscaffold-user-service -n iqkvdev-production-env
 ```
 
 ### Security
