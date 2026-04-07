@@ -31,8 +31,8 @@ The service uses Drone CI/CD pipeline with 10 stages:
 1. **VerifyCode** - Code quality, tests, static analysis
 2. **PublishArtifacts** - Maven artifacts to Nexus
 3. **PublishDockerImage** - Container images to registry
-4. **DeployWorkInProgressOnDev** - WIP branch auto-deployment
-5. **RollbackWorkInProgressOnDev** - WIP rollback
+4. **DeployWorkInProgressToTestEnv** - WIP branch auto-deployment
+5. **RollbackWorkInProgressFromTestEnv** - WIP rollback
 6. **PromoteFeatureDeployment** - Feature branch promotion
 7. **RollbackFeatureDeployment** - Feature rollback
 8. **PromoteDeployment** - Release promotion
@@ -88,7 +88,7 @@ The pipeline uses these Helm commands for deployment:
 # Development (WIP branches)
 helm upgrade --install --atomic --wait --timeout 5m iqscaffold-user-service ./ \
   --values ./values.yaml \
-  --values ./values-dev.yaml \
+  --values ./values-test.yaml \
   --set image.tag=wip \
   --set infraServices.postgresql.password=${INFRA_POSTGRESQL_PASSWORD} \
   --set infraServices.redis.password=${INFRA_REDIS_PASSWORD} \
@@ -212,14 +212,14 @@ Production deployments include:
 1. **Database Connection Failures**
 
     ```bash
-    kubectl logs deployment/iqscaffold-user-service -n iqkvdev-dev-env
+    kubectl logs deployment/iqscaffold-user-service -n iqkvdev-test-env
     ```
 
 2. **Redis Connection Issues**
 
     ```bash
     # Check Redis connectivity
-    kubectl exec -it deployment/iqscaffold-user-service -n iqkvdev-dev-env -- \
+    kubectl exec -it deployment/iqscaffold-user-service -n iqkvdev-test-env -- \
       redis-cli -h iqkvdev-infra-redis-master.iqkvdev-dev-env.svc.cluster.local ping
     ```
 
@@ -227,33 +227,33 @@ Production deployments include:
 
     ```bash
     # Check S3 configuration
-    kubectl describe configmap iqscaffold-user-service-config -n iqkvdev-dev-env | grep S3
+    kubectl describe configmap iqscaffold-user-service-config -n iqkvdev-test-env | grep S3
     ```
 
 4. **Email/SMTP Configuration**
 
     ```bash
     # Check SMTP settings
-    kubectl get secret iqscaffold-user-service-secrets -n iqkvdev-dev-env -o yaml
+    kubectl get secret iqscaffold-user-service-secrets -n iqkvdev-test-env -o yaml
     ```
 
 5. **OAuth2 Configuration Issues**
 
     ```bash
     # Verify OAuth2 secrets are set
-    kubectl get secret iqscaffold-user-service-secrets -n iqkvdev-dev-env -o jsonpath='{.data.google-client-id}' | base64 -d
+    kubectl get secret iqscaffold-user-service-secrets -n iqkvdev-test-env -o jsonpath='{.data.google-client-id}' | base64 -d
     ```
 
 6. **Check Configuration**
 
     ```bash
-    kubectl describe configmap iqscaffold-user-service-config -n iqkvdev-dev-env
-    kubectl describe secret iqscaffold-user-service-secrets -n iqkvdev-dev-env
+    kubectl describe configmap iqscaffold-user-service-config -n iqkvdev-test-env
+    kubectl describe secret iqscaffold-user-service-secrets -n iqkvdev-test-env
     ```
 
 7. **Test Health Endpoints**
     ```bash
-    kubectl port-forward deployment/iqscaffold-user-service 8081:8081 -n iqkvdev-dev-env
+    kubectl port-forward deployment/iqscaffold-user-service 8081:8081 -n iqkvdev-test-env
     curl http://localhost:8081/actuator/health
     ```
 
@@ -263,10 +263,10 @@ If deployments fail due to missing secrets, check:
 
 ```bash
 # List all secrets in namespace
-kubectl get secrets -n iqkvdev-dev-env
+kubectl get secrets -n iqkvdev-test-env
 
 # Check specific secret content
-kubectl get secret iqscaffold-user-service-secrets -n iqkvdev-dev-env -o yaml
+kubectl get secret iqscaffold-user-service-secrets -n iqkvdev-test-env -o yaml
 
 # Verify Drone CI secrets are configured
 drone secret ls --repository IQKV/iqscaffold-user-service
