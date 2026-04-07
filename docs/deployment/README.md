@@ -14,7 +14,7 @@ The IQ Scaffold User Service is deployed using Helm charts and automated CI/CD p
 
 | Environment | Namespace                | Purpose                      |
 | ----------- | ------------------------ | ---------------------------- |
-| Dev         | `iqkvdev-dev-env`        | Development and WIP branches |
+| Dev         | `iqkvdev-test-env`        | Development and WIP branches |
 | Test        | `iqkvdev-test-env`       | Feature branch testing       |
 | Staging     | `iqkvdev-staging-env`    | Pre-production validation    |
 | Production  | `iqkvdev-production-env` | Live production environment  |
@@ -100,7 +100,7 @@ helm upgrade --install --atomic --wait --timeout 5m iqscaffold-user-service ./ \
   --set config.oauth2.google.clientSecret=${GOOGLE_OAUTH2_CLIENT_SECRET} \
   --set config.email.smtp.username=${SMTP_USERNAME} \
   --set config.email.smtp.password=${SMTP_PASSWORD} \
-  --namespace iqkvdev-dev-env
+  --namespace iqkvdev-test-env
 
 # Production (Tagged releases)
 helm upgrade --install --atomic --wait --timeout 5m iqscaffold-user-service ./ \
@@ -144,7 +144,7 @@ helm upgrade --install user-service ./ \
   --set config.oauth2.google.clientSecret="your-google-client-secret" \
   --set config.email.smtp.username="your-smtp-username" \
   --set config.email.smtp.password="your-smtp-password" \
-  --namespace iqkvdev-dev-env \
+  --namespace iqkvdev-test-env \
   --create-namespace
 ```
 
@@ -220,7 +220,7 @@ Production deployments include:
     ```bash
     # Check Redis connectivity
     kubectl exec -it deployment/iqscaffold-user-service -n iqkvdev-test-env -- \
-      redis-cli -h iqkvdev-infra-redis-master.iqkvdev-dev-env.svc.cluster.local ping
+      redis-cli -h iqkvdev-infra-redis-master.iqkvdev-test-env.svc.cluster.local ping
     ```
 
 3. **S3/MinIO Storage Issues**
