@@ -12,11 +12,11 @@ The IQ Scaffold User Service is deployed using Helm charts and automated CI/CD p
 
 ### Environments
 
-| Environment | Namespace                | Purpose                      |
-| ----------- | ------------------------ | ---------------------------- |
-| Test        | `iqkvdev-sit-env`       | Feature branch testing       |
-| Staging     | `iqkvdev-uat-env`    | Pre-production validation    |
-| Production  | `iqkvdev-prd-env` | Live production environment  |
+| Environment | Namespace         | Purpose                     |
+| ----------- | ----------------- | --------------------------- |
+| Test        | `iqkvdev-sit-env` | Feature branch testing      |
+| Staging     | `iqkvdev-uat-env` | Pre-production validation   |
+| Production  | `iqkvdev-prd-env` | Live production environment |
 
 ### Automated Deployment (CI/CD)
 
