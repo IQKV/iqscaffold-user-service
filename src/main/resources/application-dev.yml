@@ -1,6 +1,6 @@
 # Development Environment Configuration (Kubernetes)
 # This configuration is for development deployment in Kubernetes cluster
-# Uses infrastructure services from iqkvdev-infra Helm chart
+# Uses infrastructure services from iqkv-infra Helm chart
 #
 # Logging Configuration (via environment variables):
 # LOG_LEVEL_ROOT=INFO
@@ -18,20 +18,20 @@ spring:
 
 iqscaffold:
   database:
-    url: ${IQSCAFFOLD_DATABASE_URL:jdbc:postgresql://iqkvdev-infra-postgresql.iqkvdev-sit-env.svc.cluster.local:5432/iqscaffold_user}
+    url: ${IQSCAFFOLD_DATABASE_URL:jdbc:postgresql://iqkv-infra-postgresql.iqkv-sit-env.svc.cluster.local:5432/iqscaffold_user}
     username: ${IQSCAFFOLD_DATABASE_USERNAME:svc_user_dev_dba}
     password: ${IQSCAFFOLD_DATABASE_PASSWORD:iqscaffold_dev_password}
 
   cache:
     redis:
-      host: ${IQSCAFFOLD_CACHE_REDIS_HOST:iqkvdev-infra-redis-master.iqkvdev-sit-env.svc.cluster.local}
+      host: ${IQSCAFFOLD_CACHE_REDIS_HOST:iqkv-infra-redis-master.iqkv-sit-env.svc.cluster.local}
       password: ${IQSCAFFOLD_CACHE_REDIS_PASSWORD:iqscaffold_dev_password}
       key-prefix: "iqscaffold:auth:dev"
       enable-statistics: true
 
   messaging:
     rabbitmq:
-      host: ${IQSCAFFOLD_MESSAGING_RABBITMQ_HOST:iqkvdev-infra-rabbitmq.iqkvdev-sit-env.svc.cluster.local}
+      host: ${IQSCAFFOLD_MESSAGING_RABBITMQ_HOST:iqkv-infra-rabbitmq.iqkv-sit-env.svc.cluster.local}
       username: ${IQSCAFFOLD_MESSAGING_RABBITMQ_USERNAME:svc_infra_sit_rmq}
       password: ${IQSCAFFOLD_MESSAGING_RABBITMQ_PASSWORD:iqscaffold_dev_password}
 
@@ -54,7 +54,7 @@ iqscaffold:
 
   email:
     smtp:
-      host: ${SMTP_HOST:iqkvdev-infra-mailhog.iqkvdev-sit-env.svc.cluster.local}
+      host: ${SMTP_HOST:iqkv-infra-mailhog.iqkv-sit-env.svc.cluster.local}
       port: ${SMTP_PORT:1025}
       auth: false
       starttls: false
@@ -72,7 +72,7 @@ iqscaffold:
       registration-confirmed-subject: "[DEV] Welcome to IQ Scaffold - Email Verified!"
 
   object-storage:
-    endpoint: ${IQSCAFFOLD_OBJECTSTORAGE_ENDPOINT:http://iqkvdev-infra-minio.iqkvdev-sit-env.svc.cluster.local:9000}
+    endpoint: ${IQSCAFFOLD_OBJECTSTORAGE_ENDPOINT:http://iqkv-infra-minio.iqkv-sit-env.svc.cluster.local:9000}
     access-key: ${IQSCAFFOLD_OBJECTSTORAGE_ACCESS_KEY:iqscaffold}
     secret-key: ${IQSCAFFOLD_OBJECTSTORAGE_SECRET_KEY:iqscaffold_password}
 
