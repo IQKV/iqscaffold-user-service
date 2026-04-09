@@ -219,7 +219,7 @@ Production deployments include:
     ```bash
     # Check Redis connectivity
     kubectl exec -it deployment/iqscaffold-user-service -n iqkv-sit-env -- \
-      redis-cli -h iqkv-infra-redis-master.iqkv-sit-env.svc.cluster.local ping
+      redis-cli -h foundation-infra-redis-master.iqkv-sit-env.svc.cluster.local ping
     ```
 
 3. **S3/MinIO Storage Issues**
