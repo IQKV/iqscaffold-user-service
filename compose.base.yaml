@@ -6,7 +6,7 @@ services:
     environment:
       POSTGRES_DB: iqscaffold_user_local
       POSTGRES_USER: iqscaffold_user
-      POSTGRES_PASSWORD: iqscaffold_password
+      POSTGRES_PASSWORD: iqkv_password
       POSTGRES_INITDB_ARGS: "--encoding=UTF8 --lc-collate=C --lc-ctype=C"
       PGDATA: /var/lib/postgresql/data/pgdata
     ports:
@@ -69,7 +69,7 @@ services:
     container_name: iqscaffold-user-rabbitmq-dev
     environment:
       RABBITMQ_DEFAULT_USER: iqscaffold
-      RABBITMQ_DEFAULT_PASS: iqscaffold_password
+      RABBITMQ_DEFAULT_PASS: iqkv_password
       RABBITMQ_DEFAULT_VHOST: /
       RABBITMQ_SERVER_ADDITIONAL_ERL_ARGS: -rabbit log_levels [{connection,error},{default,info}] disk_free_limit 2147483648
     ports:
@@ -146,7 +146,7 @@ services:
       # Database Configuration
       IQSCAFFOLD_DATABASE_URL: jdbc:postgresql://postgres-user:5432/iqscaffold_user_local
       IQSCAFFOLD_DATABASE_USERNAME: iqscaffold_user
-      IQSCAFFOLD_DATABASE_PASSWORD: iqscaffold_password
+      IQSCAFFOLD_DATABASE_PASSWORD: iqkv_password
 
       # Redis Configuration
       IQSCAFFOLD_CACHE_REDIS_HOST: redis-user
@@ -158,7 +158,7 @@ services:
       IQSCAFFOLD_MESSAGING_RABBITMQ_HOST: rabbitmq-user
       IQSCAFFOLD_MESSAGING_RABBITMQ_PORT: 5672
       IQSCAFFOLD_MESSAGING_RABBITMQ_USERNAME: iqscaffold
-      IQSCAFFOLD_MESSAGING_RABBITMQ_PASSWORD: iqscaffold_password
+      IQSCAFFOLD_MESSAGING_RABBITMQ_PASSWORD: iqkv_password
       IQSCAFFOLD_MESSAGING_RABBITMQ_VHOST: /
 
       # S3/MinIO Configuration

@@ -20,12 +20,12 @@ iqscaffold:
   database:
     url: ${IQSCAFFOLD_DATABASE_URL:jdbc:postgresql://foundation-infra-postgresql.iqkv-sit-env.svc.cluster.local:5432/iqscaffold_user}
     username: ${IQSCAFFOLD_DATABASE_USERNAME:svc_user_sit_dba}
-    password: ${IQSCAFFOLD_DATABASE_PASSWORD:iqscaffold_password}
+    password: ${IQSCAFFOLD_DATABASE_PASSWORD:iqkv_password}
 
   cache:
     redis:
       host: ${IQSCAFFOLD_CACHE_REDIS_HOST:foundation-infra-redis-master.iqkv-sit-env.svc.cluster.local}
-      password: ${IQSCAFFOLD_CACHE_REDIS_PASSWORD:iqscaffold_password}
+      password: ${IQSCAFFOLD_CACHE_REDIS_PASSWORD:iqkv_password}
       key-prefix: "iqscaffold:auth:dev"
       enable-statistics: true
 
@@ -33,7 +33,7 @@ iqscaffold:
     rabbitmq:
       host: ${IQSCAFFOLD_MESSAGING_RABBITMQ_HOST:foundation-infra-rabbitmq.iqkv-sit-env.svc.cluster.local}
       username: ${IQSCAFFOLD_MESSAGING_RABBITMQ_USERNAME:svc_infra_sit_rmq}
-      password: ${IQSCAFFOLD_MESSAGING_RABBITMQ_PASSWORD:iqscaffold_password}
+      password: ${IQSCAFFOLD_MESSAGING_RABBITMQ_PASSWORD:iqkv_password}
 
   auth:
     jwt:
@@ -74,7 +74,7 @@ iqscaffold:
   object-storage:
     endpoint: ${IQSCAFFOLD_OBJECTSTORAGE_ENDPOINT:http://foundation-infra-minio.iqkv-sit-env.svc.cluster.local:9000}
     access-key: ${IQSCAFFOLD_OBJECTSTORAGE_ACCESS_KEY:iqscaffold}
-    secret-key: ${IQSCAFFOLD_OBJECTSTORAGE_SECRET_KEY:iqscaffold_password}
+    secret-key: ${IQSCAFFOLD_OBJECTSTORAGE_SECRET_KEY:iqkv_password}
 
   # Enable demo data in dev environment
   liquibase:
