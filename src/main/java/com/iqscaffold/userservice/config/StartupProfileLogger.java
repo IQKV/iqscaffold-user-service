@@ -28,7 +28,7 @@ public class StartupProfileLogger {
     var defaultProfiles = environment.getDefaultProfiles();
 
     logger.info("=".repeat(80));
-    logger.info("IQ  Key Value User Service - Application Started");
+    logger.info("IQ Key Value User Service - Application Started");
     logger.info("=".repeat(80));
 
     if (activeProfiles.length > 0) {

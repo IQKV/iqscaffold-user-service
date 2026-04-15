@@ -27,7 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
  * and multi-tenant isolation. All operations are restricted to users with administrative privileges
  * and include comprehensive security validations.
  *
- * @author IQ  Key Value Team
+ * @author IQ Key Value Team
  * @version 1.0
  * @see UserManagementService
  * @see UserDto

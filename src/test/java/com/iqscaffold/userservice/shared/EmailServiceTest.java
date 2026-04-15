@@ -73,7 +73,7 @@ class EmailServiceTest {
 
     senderConfig = new IqScaffoldProperties.Email.Sender(
         "noreply@iqscaffold.com",
-        "IQ  Key Value",
+        "IQ Key Value",
         "https://app.iqscaffold.com",
         "https://auth.iqscaffold.com"
     );
@@ -134,7 +134,7 @@ class EmailServiceTest {
     // Arrange
     var senderConfigWithSlash = new IqScaffoldProperties.Email.Sender(
         "noreply@iqscaffold.com",
-        "IQ  Key Value",
+        "IQ Key Value",
         "https://app.iqscaffold.com/",
         "https://auth.iqscaffold.com/"
     );

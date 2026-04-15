@@ -63,7 +63,7 @@ public class PublicTenantRestResource {
                   summary = "Map of tenant IDs to organization names",
                   value = """
                       {
-                        "default": "IQ  Key Value Platform",
+                        "default": "IQ Key Value Platform",
                         "acme": "Acme Corporation",
                         "techcorp": "Tech Corp Inc",
                         "startup": "Startup Ventures"

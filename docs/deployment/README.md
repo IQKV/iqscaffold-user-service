@@ -2,7 +2,7 @@
 
 ### Overview
 
-The IQ  Key Value User Service is deployed using Helm charts and automated CI/CD pipelines. The service provides JWT-based authentication, multi-tenancy, and user management capabilities.
+The IQ Key Value User Service is deployed using Helm charts and automated CI/CD pipelines. The service provides JWT-based authentication, multi-tenancy, and user management capabilities.
 
 ### Prerequisites
 

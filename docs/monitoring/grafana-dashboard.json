@@ -15,7 +15,7 @@
             }
         ]
     },
-    "description": "IQ  Key Value User Service - Comprehensive Spring Boot monitoring dashboard",
+    "description": "IQ Key Value User Service - Comprehensive Spring Boot monitoring dashboard",
     "editable": true,
     "fiscalYearStartMonth": 0,
     "graphTooltip": 1,
@@ -1735,7 +1735,7 @@
     },
     "timepicker": {},
     "timezone": "",
-    "title": "IQ  Key Value User Service - Spring Boot Metrics",
+    "title": "IQ Key Value User Service - Spring Boot Metrics",
     "uid": "iqscaffold-user-service",
     "version": 1,
     "weekStart": ""

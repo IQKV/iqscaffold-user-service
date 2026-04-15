@@ -69,7 +69,7 @@ public class InvitationEmailService {
       // Set email properties
       helper.setFrom(senderConfig.fromEmail(), senderConfig.fromName());
       helper.setTo(inviteeEmail);
-      helper.setSubject("You're invited to join " + organization.getName() + " on IQ  Key Value");
+      helper.setSubject("You're invited to join " + organization.getName() + " on IQ Key Value");
 
       // Build invitation URL
       var invitationUrl = buildInvitationUrl(invitationCode);
@@ -147,7 +147,7 @@ public class InvitationEmailService {
       // Set email properties
       helper.setFrom(senderConfig.fromEmail(), senderConfig.fromName());
       helper.setTo(adminUser.getEmail());
-      helper.setSubject("New member joined " + organizationName + " - IQ  Key Value");
+      helper.setSubject("New member joined " + organizationName + " - IQ Key Value");
 
       // Create template context
       var context = new Context();

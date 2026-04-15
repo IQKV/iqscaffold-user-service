@@ -30,7 +30,7 @@ import org.springframework.validation.annotation.Validated;
  *   <li>Allowed MIME types restrict upload content</li>
  * </ul>
  *
- * @author IQ  Key Value
+ * @author IQ Key Value
  */
 @ConfigurationProperties(prefix = "iqscaffold.object-storage")
 @Validated

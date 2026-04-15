@@ -181,7 +181,7 @@ services:
       SMTP_USERNAME: ""
       SMTP_PASSWORD: ""
       EMAIL_FROM_EMAIL: noreply@iqscaffold.site
-      EMAIL_FROM_NAME: IQ  Key Value Platform
+      EMAIL_FROM_NAME: IQ Key Value Platform
       APP_BASE_URL: http://localhost:3000
       AUTH_BASE_URL: http://localhost:3001
 

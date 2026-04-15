@@ -8,9 +8,9 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 /**
- * Main Spring Boot application class for IQ  Key Value User Service.
+ * Main Spring Boot application class for IQ Key Value User Service.
  * <p>
- * This service provides centralized authentication, authorization, and user management for the IQ  Key Value microservices platform using JWT tokens and Spring Security.
+ * This service provides centralized authentication, authorization, and user management for the IQ Key Value microservices platform using JWT tokens and Spring Security.
  */
 @SpringBootApplication
 @EnableJpaAuditing

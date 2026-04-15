@@ -14,7 +14,7 @@
     <artifactId>iqscaffold-user-service</artifactId>
     <packaging>jar</packaging>
 
-    <name>IQ  Key Value User Service</name>
+    <name>IQ Key Value User Service</name>
     <description>Centralized authentication and user management service</description>
     <properties>
         <spring-boot.run.jvmArguments>-Duser.timezone=UTC</spring-boot.run.jvmArguments>

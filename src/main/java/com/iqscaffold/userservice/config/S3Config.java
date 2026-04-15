@@ -29,7 +29,7 @@ import org.springframework.context.annotation.Configuration;
  *   <li>Client is configured as singleton bean</li>
  * </ul>
  *
- * @author IQ  Key Value
+ * @author IQ Key Value
  */
 @Configuration
 @EnableConfigurationProperties(S3ConfigurationProperties.class)

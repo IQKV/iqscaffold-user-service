@@ -33,7 +33,7 @@ import org.springframework.web.multipart.MultipartFile;
  *   <li><strong>Transactional</strong> - Database and storage operations are atomic</li>
  * </ul>
  *
- * @author IQ  Key Value
+ * @author IQ Key Value
  */
 @Service
 public class AvatarManagementService {

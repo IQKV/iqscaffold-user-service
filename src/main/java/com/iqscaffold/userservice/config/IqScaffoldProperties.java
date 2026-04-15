@@ -19,7 +19,7 @@ import org.springframework.boot.context.properties.bind.Name;
 import org.springframework.validation.annotation.Validated;
 
 /**
- * Configuration properties for IQ  Key Value User Service. All custom configuration properties use the 'iqscaffold.' prefix for clear namespace separation.
+ * Configuration properties for IQ Key Value User Service. All custom configuration properties use the 'iqscaffold.' prefix for clear namespace separation.
  */
 @ConfigurationProperties(prefix = "iqscaffold")
 @Validated

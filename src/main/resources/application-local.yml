@@ -49,16 +49,16 @@ iqscaffold:
       starttls: false
     sender:
       from-email: ${EMAIL_FROM_EMAIL:noreply@iqscaffold.local}
-      from-name: ${EMAIL_FROM_NAME:IQ  Key Value Platform (Local)}
+      from-name: ${EMAIL_FROM_NAME:IQ Key Value Platform (Local)}
       base-url: ${APP_BASE_URL:http://localhost:3000}
       auth-base-url: ${AUTH_BASE_URL:http://localhost:3001}
     verification:
       rate-limit: 10
     templates:
-      verification-subject: "[LOCAL] Verify your IQ  Key Value account"
-      password-reset-subject: "[LOCAL] Reset your IQ  Key Value password"
-      password-reset-confirmed-subject: "[LOCAL] Password Reset Successful - IQ  Key Value"
-      registration-confirmed-subject: "[LOCAL] Welcome to IQ  Key Value - Email Verified!"
+      verification-subject: "[LOCAL] Verify your IQ Key Value account"
+      password-reset-subject: "[LOCAL] Reset your IQ Key Value password"
+      password-reset-confirmed-subject: "[LOCAL] Password Reset Successful - IQ Key Value"
+      registration-confirmed-subject: "[LOCAL] Welcome to IQ Key Value - Email Verified!"
 
   object-storage:
     bucket-name: ${IQSCAFFOLD_OBJECTSTORAGE_BUCKET_NAME:user-avatars-local}

@@ -60,16 +60,16 @@ iqscaffold:
       starttls: false
     sender:
       from-email: ${EMAIL_FROM_EMAIL:noreply@iqscaffold.com}
-      from-name: ${EMAIL_FROM_NAME:IQ  Key Value Platform (Dev)}
+      from-name: ${EMAIL_FROM_NAME:IQ Key Value Platform (Dev)}
       base-url: ${APP_BASE_URL:https://app.iqscaffold.com}
       auth-base-url: ${AUTH_BASE_URL:https://auth.iqscaffold.com}
     verification:
       rate-limit: 5
     templates:
-      verification-subject: "[DEV] Verify your IQ  Key Value account"
-      password-reset-subject: "[DEV] Reset your IQ  Key Value password"
-      password-reset-confirmed-subject: "[DEV] Password Reset Successful - IQ  Key Value"
-      registration-confirmed-subject: "[DEV] Welcome to IQ  Key Value - Email Verified!"
+      verification-subject: "[DEV] Verify your IQ Key Value account"
+      password-reset-subject: "[DEV] Reset your IQ Key Value password"
+      password-reset-confirmed-subject: "[DEV] Password Reset Successful - IQ Key Value"
+      registration-confirmed-subject: "[DEV] Welcome to IQ Key Value - Email Verified!"
 
   object-storage:
     endpoint: ${IQSCAFFOLD_OBJECTSTORAGE_ENDPOINT:http://foundation-infra-minio.iqkv-sit-env.svc.cluster.local:9000}
