@@ -29,10 +29,10 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @OpenAPIDefinition(
     info = @Info(
-        title = "IQ Scaffold User Service API",
+        title = "IQ  Key Value User Service API",
         version = "1.0.0",
         description = """
-            Centralized authentication and user management service for the IQ Scaffold microservices platform.
+            Centralized authentication and user management service for the IQ  Key Value microservices platform.
             
             ## Features
             - JWT-based authentication with refresh tokens
@@ -52,7 +52,7 @@ import org.springframework.context.annotation.Configuration;
             All errors follow a consistent format with correlation IDs for tracing.
             """,
         contact = @Contact(
-            name = "IQ Scaffold Platform Team",
+            name = "IQ  Key Value Platform Team",
             email = "api-support@iqscaffold.com",
             url = "https://docs.iqscaffold.com"
         ),
@@ -190,7 +190,7 @@ public class OpenApiConfig {
   private OpenApiCustomizer publicApiCustomizer() {
     return openApi -> {
       openApi.info(openApi.getInfo()
-          .title("IQ Scaffold User Service - Public APIs")
+          .title("IQ  Key Value User Service - Public APIs")
           .description("All public-facing APIs for authentication and user management"));
 
       addCommonResponses(openApi);

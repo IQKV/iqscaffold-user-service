@@ -130,7 +130,7 @@ iqscaffold:
       password: ${SMTP_PASSWORD}
     sender:
       from-email: ${EMAIL_FROM_EMAIL:noreply@iqscaffold.com}
-      from-name: ${EMAIL_FROM_NAME:IQ Scaffold Platform}
+      from-name: ${EMAIL_FROM_NAME:IQ  Key Value Platform}
       base-url: ${APP_BASE_URL:https://app.iqscaffold.com}
       auth-base-url: ${AUTH_BASE_URL:https://auth.iqscaffold.com}
 

@@ -1,5 +1,5 @@
 databaseChangeLog:
-  # Master Liquibase Changelog for IQ Scaffold User Service
+  # Master Liquibase Changelog for IQ  Key Value User Service
   # 
   # This file serves as the unified entry point for all database migrations.
   # However, note that this application uses a custom multi-tenant Liquibase setup
@@ -14,7 +14,7 @@ databaseChangeLog:
   # - Development and testing scenarios
   # - Documentation and migration overview
   #
-  # Author: IQ Scaffold Team
+  # Author: IQ  Key Value Team
   # Created: 2026-02-01
 
   # =============================================================================

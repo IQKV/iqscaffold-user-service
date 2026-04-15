@@ -3,7 +3,7 @@
     {
       "name": "iqscaffold",
       "type": "com.iqscaffold.userservice.config.IqScaffoldProperties",
-      "description": "Configuration properties for IQ Scaffold User Service with iqscaffold prefix"
+      "description": "Configuration properties for IQ  Key Value User Service with iqscaffold prefix"
     },
     {
       "name": "iqscaffold.database",
@@ -349,7 +349,7 @@
       "type": "java.lang.String",
       "description": "Display name used as sender for all outbound emails",
       "sourceType": "com.iqscaffold.userservice.config.IqScaffoldProperties$Email$Sender",
-      "defaultValue": "IQ Scaffold Platform"
+      "defaultValue": "IQ  Key Value Platform"
     },
     {
       "name": "iqscaffold.email.sender.base-url",
@@ -377,7 +377,7 @@
       "type": "java.lang.String",
       "description": "Subject line for email verification emails",
       "sourceType": "com.iqscaffold.userservice.config.IqScaffoldProperties$Email$Template",
-      "defaultValue": "Verify your IQ Scaffold account"
+      "defaultValue": "Verify your IQ  Key Value account"
     },
     {
       "name": "iqscaffold.email.templates.verification-template",
@@ -391,7 +391,7 @@
       "type": "java.lang.String",
       "description": "Subject line for password reset emails",
       "sourceType": "com.iqscaffold.userservice.config.IqScaffoldProperties$Email$Template",
-      "defaultValue": "Reset your IQ Scaffold password"
+      "defaultValue": "Reset your IQ  Key Value password"
     },
     {
       "name": "iqscaffold.email.templates.password-reset-template",
@@ -405,7 +405,7 @@
       "type": "java.lang.String",
       "description": "Subject line for password reset confirmation emails sent after successful password change",
       "sourceType": "com.iqscaffold.userservice.config.IqScaffoldProperties$Email$Template",
-      "defaultValue": "Password Reset Successful - IQ Scaffold"
+      "defaultValue": "Password Reset Successful - IQ  Key Value"
     },
     {
       "name": "iqscaffold.email.templates.password-reset-confirmed-template",
@@ -419,7 +419,7 @@
       "type": "java.lang.String",
       "description": "Subject line for registration confirmation welcome emails sent after successful email verification",
       "sourceType": "com.iqscaffold.userservice.config.IqScaffoldProperties$Email$Template",
-      "defaultValue": "Welcome to IQ Scaffold - Email Verified!"
+      "defaultValue": "Welcome to IQ  Key Value - Email Verified!"
     },
     {
       "name": "iqscaffold.email.templates.registration-confirmed-template",
@@ -1141,7 +1141,7 @@
         },
         {
           "value": "/iqscaffold",
-          "description": "Custom IQ Scaffold virtual host"
+          "description": "Custom IQ  Key Value virtual host"
         }
       ]
     }

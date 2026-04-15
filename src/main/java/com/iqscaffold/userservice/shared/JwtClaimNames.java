@@ -1,7 +1,7 @@
 package com.iqscaffold.userservice.shared;
 
 /**
- * Standard JWT claim names used across the IQ Scaffold platform.
+ * Standard JWT claim names used across the IQ  Key Value platform.
  * Follows JWT RFC conventions using snake_case for claim names.
  */
 public final class JwtClaimNames {
@@ -13,7 +13,7 @@ public final class JwtClaimNames {
   public static final String EXPIRATION = "exp";
   public static final String JWT_ID = "jti";
 
-  // Custom IQ Scaffold claims
+  // Custom IQ  Key Value claims
   public static final String TYPE = "type";
   public static final String USER_ID = "userId"; // Explicit userId claim for frontend compatibility
   public static final String USERNAME = "username";

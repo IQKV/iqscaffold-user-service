@@ -14,7 +14,7 @@ package com.iqscaffold.userservice.shared.exception;
  *   <li><strong>Configuration Issues</strong> - Invalid credentials, endpoint unreachable</li>
  * </ul>
  *
- * @author IQ Scaffold
+ * @author IQ  Key Value
  */
 public class FileStorageException extends RuntimeException {
 

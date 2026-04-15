@@ -51,7 +51,7 @@ import org.springframework.web.multipart.MultipartFile;
  * │       └── ...
  * </pre>
  *
- * @author IQ Scaffold
+ * @author IQ  Key Value
  */
 @Service
 @ConditionalOnProperty(name = "iqscaffold.storage.minio.enabled", havingValue = "true", matchIfMissing = true)

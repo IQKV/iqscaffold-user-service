@@ -12,7 +12,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * @param avatarUrl   the URL to access the avatar image
  * @param fileSize    the size of the uploaded file in bytes
  * @param contentType the MIME type of the uploaded file
- * @author IQ Scaffold
+ * @author IQ  Key Value
  */
 @Schema(description = "Response containing avatar upload results")
 public record AvatarUploadResponse(

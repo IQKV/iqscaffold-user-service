@@ -518,20 +518,20 @@ iqscaffold:
       timeout: PT30S
     sender:
       from-email: ${EMAIL_FROM_EMAIL:noreply@iqscaffold.com}
-      from-name: ${EMAIL_FROM_NAME:IQ Scaffold Platform}
+      from-name: ${EMAIL_FROM_NAME:IQ  Key Value Platform}
       base-url: ${APP_BASE_URL:https://app.iqscaffold.com}
       auth-base-url: ${AUTH_BASE_URL:https://auth.iqscaffold.com}
     verification:
       token-expiry: PT24H  # 24 hours
       rate-limit: 3  # emails per hour per user
     templates:
-      verification-subject: "Verify your IQ Scaffold account"
+      verification-subject: "Verify your IQ  Key Value account"
       verification-template: "email/user-registration/email-verification.html"
-      password-reset-subject: "Reset your IQ Scaffold password"
+      password-reset-subject: "Reset your IQ  Key Value password"
       password-reset-template: "email/password-reset/initiate.html"
-      password-reset-confirmed-subject: "Password Reset Successful - IQ Scaffold"
+      password-reset-confirmed-subject: "Password Reset Successful - IQ  Key Value"
       password-reset-confirmed-template: "email/password-reset/confirmed.html"
-      registration-confirmed-subject: "Welcome to IQ Scaffold - Email Verified!"
+      registration-confirmed-subject: "Welcome to IQ  Key Value - Email Verified!"
       registration-confirmed-template: "email/user-registration/email-confirmed.html"
 
   # Observability Configuration

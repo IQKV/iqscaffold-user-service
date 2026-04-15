@@ -28,7 +28,7 @@ import org.springframework.web.multipart.MultipartFile;
  *   <li><strong>Presigned URLs</strong> - Time-limited access URLs</li>
  * </ul>
  *
- * @author IQ Scaffold
+ * @author IQ  Key Value
  */
 public interface FileStorageService {
 

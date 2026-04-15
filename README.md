@@ -1,4 +1,4 @@
-# 🔐 IQ Scaffold User Service
+# 🔐 IQ  Key Value User Service
 
 > Centralized authentication and user management microservice providing JWT-based authentication, user lifecycle management, role-based access control, and email verification.
 
@@ -33,7 +33,7 @@ An identity and access management service that handles:
 
 ## Overview
 
-This is the authentication hub for the IQ Scaffold microservices platform. It centralizes identity management, enabling other services to delegate authentication and authorization concerns while maintaining consistent security policies across the ecosystem.
+This is the authentication hub for the IQ  Key Value microservices platform. It centralizes identity management, enabling other services to delegate authentication and authorization concerns while maintaining consistent security policies across the ecosystem.
 
 ## What It Demonstrates
 

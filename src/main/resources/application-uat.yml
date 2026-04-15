@@ -61,14 +61,14 @@ iqscaffold:
       password: ${SMTP_PASSWORD}
     sender:
       from-email: ${EMAIL_FROM_EMAIL:noreply@iqscaffold.website}
-      from-name: ${EMAIL_FROM_NAME:IQ Scaffold Platform (Staging)}
+      from-name: ${EMAIL_FROM_NAME:IQ  Key Value Platform (Staging)}
       base-url: ${APP_BASE_URL:https://iqscaffold.website}
       auth-base-url: ${AUTH_BASE_URL:https://auth.iqscaffold.website}
     templates:
-      verification-subject: "[STAGING] Verify your IQ Scaffold account"
-      password-reset-subject: "[STAGING] Reset your IQ Scaffold password"
-      password-reset-confirmed-subject: "[STAGING] Password Reset Successful - IQ Scaffold"
-      registration-confirmed-subject: "[STAGING] Welcome to IQ Scaffold - Email Verified!"
+      verification-subject: "[STAGING] Verify your IQ  Key Value account"
+      password-reset-subject: "[STAGING] Reset your IQ  Key Value password"
+      password-reset-confirmed-subject: "[STAGING] Password Reset Successful - IQ  Key Value"
+      registration-confirmed-subject: "[STAGING] Welcome to IQ  Key Value - Email Verified!"
 
   object-storage:
     endpoint: ${IQSCAFFOLD_OBJECTSTORAGE_ENDPOINT:https://s3.staging.example.com}

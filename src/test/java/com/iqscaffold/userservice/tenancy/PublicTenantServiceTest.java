@@ -46,7 +46,7 @@ class PublicTenantServiceTest {
 
     when(tenantRepository.findAll()).thenReturn(List.of(tenant1, tenant2, tenant3));
 
-    var org1 = new Organization("IQ Scaffold Platform", "default");
+    var org1 = new Organization("IQ  Key Value Platform", "default");
     org1.setEnabled(true);
 
     var org2 = new Organization("Acme Corporation", "acme");
@@ -61,7 +61,7 @@ class PublicTenantServiceTest {
 
     // Then
     assertThat(result).hasSize(2);
-    assertThat(result).containsEntry("default", "IQ Scaffold Platform");
+    assertThat(result).containsEntry("default", "IQ  Key Value Platform");
     assertThat(result).containsEntry("acme", "Acme Corporation");
     assertThat(result).doesNotContainKey("disabled");
   }
