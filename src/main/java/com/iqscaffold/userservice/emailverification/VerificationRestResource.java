@@ -93,7 +93,7 @@ public class VerificationRestResource {
                   summary = "Token is invalid or expired",
                   value = """
                       {
-                        "type": "https://problems.iqscaffold.com/email-verification",
+                        "type": "https://problems.iqkv.dev/email-verification",
                         "title": "Email verification failed",
                         "status": 400,
                         "detail": "Verification token is invalid or has expired",
@@ -180,7 +180,7 @@ public class VerificationRestResource {
                   summary = "Email is already verified",
                   value = """
                       {
-                        "type": "https://problems.iqscaffold.com/email-verification",
+                        "type": "https://problems.iqkv.dev/email-verification",
                         "title": "Email verification not required",
                         "status": 400,
                         "detail": "Email address is already verified",
@@ -206,7 +206,7 @@ public class VerificationRestResource {
                   summary = "Too many resend requests",
                   value = """
                       {
-                        "type": "https://problems.iqscaffold.com/email-verification",
+                        "type": "https://problems.iqkv.dev/email-verification",
                         "title": "Rate limit exceeded",
                         "status": 429,
                         "detail": "Maximum 3 verification emails per hour. Please try again later.",
@@ -305,7 +305,7 @@ public class VerificationRestResource {
                   summary = "Email address not registered",
                   value = """
                       {
-                        "type": "https://problems.iqscaffold.com/user-management",
+                        "type": "https://problems.iqkv.dev/user-management",
                         "title": "User not found",
                         "status": 404,
                         "detail": "No user found with the specified email address",

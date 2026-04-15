@@ -108,7 +108,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
  * <pre>{@code
  * // Validation Error Response
  * {
- *   "type": "https://problems.iqscaffold.com/validation-error",
+ *   "type": "https://problems.iqkv.dev/validation-error",
  *   "title": "Request validation failed",
  *   "status": 400,
  *   "detail": "One or more fields contain invalid values",
@@ -126,7 +126,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
  *
  * // Authentication Error Response
  * {
- *   "type": "https://problems.iqscaffold.com/authentication-error",
+ *   "type": "https://problems.iqkv.dev/authentication-error",
  *   "title": "Authentication failed",
  *   "status": 401,
  *   "detail": "Invalid credentials provided",
@@ -188,7 +188,7 @@ public class GlobalExceptionHandler {
    *   <li><strong>requestId</strong> - Unique request identifier</li>
    * </ul>
    *
-   * @param type    URI identifying the problem type (e.g., "https://problems.iqscaffold.com/validation-error")
+   * @param type    URI identifying the problem type (e.g., "https://problems.iqkv.dev/validation-error")
    * @param title   Human-readable summary of the problem type
    * @param status  HTTP status code for the response
    * @param detail  Detailed explanation of this specific problem occurrence
@@ -224,7 +224,7 @@ public class GlobalExceptionHandler {
     var fieldErrors = ex.getBindingResult().getFieldErrors().stream()
         .map(this::createErrorDetail)
         .toList();
-    var pd = problem("https://problems.iqscaffold.com/validation-error",
+    var pd = problem("https://problems.iqkv.dev/validation-error",
         "Request validation failed",
         HttpStatus.BAD_REQUEST,
         "One or more fields contain invalid values",
@@ -246,7 +246,7 @@ public class GlobalExceptionHandler {
             violation.getInvalidValue()
         ))
         .toList();
-    var pd = problem("https://problems.iqscaffold.com/validation-error",
+    var pd = problem("https://problems.iqkv.dev/validation-error",
         "Constraint validation failed",
         HttpStatus.BAD_REQUEST,
         ex.getMessage(),
@@ -269,7 +269,7 @@ public class GlobalExceptionHandler {
   public ResponseEntity<ProblemDetail> handleAuthenticationException(
       AuthenticationException ex, HttpServletRequest request) {
     var errorCode = determineAuthErrorCode(ex.getMessage());
-    var pd = problem("https://problems.iqscaffold.com/authentication-error",
+    var pd = problem("https://problems.iqkv.dev/authentication-error",
         "Authentication failed",
         HttpStatus.UNAUTHORIZED,
         ex.getMessage(),
@@ -282,7 +282,7 @@ public class GlobalExceptionHandler {
   @ExceptionHandler(AccountLockedException.class)
   public ResponseEntity<ProblemDetail> handleAccountLockedException(
       AccountLockedException ex, HttpServletRequest request) {
-    var pd = problem("https://problems.iqscaffold.com/account-locked",
+    var pd = problem("https://problems.iqkv.dev/account-locked",
         "Account temporarily locked",
         HttpStatus.LOCKED,
         ex.getMessage(),
@@ -303,7 +303,7 @@ public class GlobalExceptionHandler {
   )
   public ResponseEntity<ProblemDetail> handleEmailVerificationRequiredException(
       EmailVerificationRequiredException ex, HttpServletRequest request) {
-    var pd = problem("https://problems.iqscaffold.com/email-verification-required",
+    var pd = problem("https://problems.iqkv.dev/email-verification-required",
         "Email verification required",
         HttpStatus.UNAUTHORIZED,
         "Please check your email and click the verification link to activate your account",
@@ -322,7 +322,7 @@ public class GlobalExceptionHandler {
       UserRegistrationService.UserRegistrationException ex, HttpServletRequest request) {
     var errorCode = determineRegistrationErrorCode(ex.getMessage());
     var status = errorCode.equals("USER_ALREADY_EXISTS") ? HttpStatus.CONFLICT : HttpStatus.BAD_REQUEST;
-    var pd = problem("https://problems.iqscaffold.com/user-registration",
+    var pd = problem("https://problems.iqkv.dev/user-registration",
         "User registration failed",
         status,
         ex.getMessage(),
@@ -344,7 +344,7 @@ public class GlobalExceptionHandler {
   )
   public ResponseEntity<ProblemDetail> handleAccessDeniedException(
       AccessDeniedException ex, HttpServletRequest request) {
-    var pd = problem("https://problems.iqscaffold.com/access-denied",
+    var pd = problem("https://problems.iqkv.dev/access-denied",
         "Insufficient permissions for this operation",
         HttpStatus.FORBIDDEN,
         ex.getMessage(),
@@ -360,7 +360,7 @@ public class GlobalExceptionHandler {
       HttpServletRequest request) {
     var errorCode = determineUserManagementErrorCode(ex.getMessage());
     var status = errorCode.equals("USER_ALREADY_EXISTS") ? HttpStatus.CONFLICT : HttpStatus.BAD_REQUEST;
-    var pd = problem("https://problems.iqscaffold.com/user-management",
+    var pd = problem("https://problems.iqkv.dev/user-management",
         "User management operation failed",
         status,
         ex.getMessage(),
@@ -384,7 +384,7 @@ public class GlobalExceptionHandler {
       EmailVerificationException ex, HttpServletRequest request) {
     var errorCode = determineEmailVerificationErrorCode(ex.getMessage());
     var status = determineEmailVerificationStatus(errorCode);
-    var pd = problem("https://problems.iqscaffold.com/email-verification",
+    var pd = problem("https://problems.iqkv.dev/email-verification",
         "Email verification failed",
         status,
         ex.getMessage(),
@@ -407,7 +407,7 @@ public class GlobalExceptionHandler {
       TenantManagementException ex, HttpServletRequest request) {
     var errorCode = determineTenantManagementErrorCode(ex);
     var status = determineTenantManagementStatus(ex);
-    var pd = problem("https://problems.iqscaffold.com/tenant-management",
+    var pd = problem("https://problems.iqkv.dev/tenant-management",
         "Tenant management failed",
         status,
         ex.getMessage(),
@@ -428,7 +428,7 @@ public class GlobalExceptionHandler {
   )
   public ResponseEntity<ProblemDetail> handleTenantContextException(
       TenantContextException ex, HttpServletRequest request) {
-    var pd = problem("https://problems.iqscaffold.com/tenant-context",
+    var pd = problem("https://problems.iqkv.dev/tenant-context",
         "Tenant context error",
         HttpStatus.BAD_REQUEST,
         ex.getMessage(),
@@ -449,7 +449,7 @@ public class GlobalExceptionHandler {
   )
   public ResponseEntity<ProblemDetail> handleTenantContextMismatchException(
       TenantContextMismatchException ex, HttpServletRequest request) {
-    var pd = problem("https://problems.iqscaffold.com/tenant-context-mismatch",
+    var pd = problem("https://problems.iqkv.dev/tenant-context-mismatch",
         "Tenant context mismatch",
         HttpStatus.FORBIDDEN,
         ex.getMessage(),
@@ -482,7 +482,7 @@ public class GlobalExceptionHandler {
         request.getRequestURI(), 
         ex);
     
-    var pd = problem("https://problems.iqscaffold.com/internal-error",
+    var pd = problem("https://problems.iqkv.dev/internal-error",
         "Internal system error",
         HttpStatus.INTERNAL_SERVER_ERROR,
         "An unexpected error occurred",

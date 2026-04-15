@@ -342,7 +342,7 @@
       "type": "java.lang.String",
       "description": "Email address used as sender for all outbound emails",
       "sourceType": "com.iqscaffold.userservice.config.IqScaffoldProperties$Email$Sender",
-      "defaultValue": "noreply@iqscaffold.com"
+      "defaultValue": "noreply@iqkv.dev"
     },
     {
       "name": "iqscaffold.email.sender.from-name",
@@ -356,7 +356,7 @@
       "type": "java.lang.String",
       "description": "Base URL for application links in emails (verification, password reset, dashboard)",
       "sourceType": "com.iqscaffold.userservice.config.IqScaffoldProperties$Email$Sender",
-      "defaultValue": "https://app.iqscaffold.com"
+      "defaultValue": "https://app.iqkv.dev"
     },
     {
       "name": "iqscaffold.email.verification.token-expiry",

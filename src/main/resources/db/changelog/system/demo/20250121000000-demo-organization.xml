@@ -14,13 +14,13 @@
             <column name="name" value="Demo Tech Solutions"/>
             <column name="description" value="Demo organization showcasing multi-tenant SaaS capabilities with user management"/>
             <column name="industry" value="Technology"/>
-            <column name="website" value="https://demo.iqscaffold.com"/>
+            <column name="website" value="https://demo.iqkv.dev"/>
             <column name="phone" value="+1-555-0123"/>
             <column name="address" value="123 Demo Street, Suite 100"/>
             <column name="city" value="San Francisco"/>
             <column name="country" value="United States"/>
             <column name="tenant_id" value="default"/>
-            <column name="billing_email" value="billing@demo.iqscaffold.com"/>
+            <column name="billing_email" value="billing@demo.iqkv.dev"/>
             <column name="subscription_status" value="active"/>
             <column name="subscription_plan" value="enterprise"/>
             <column name="max_users" value="100"/>

@@ -12,7 +12,7 @@ This directory contains demo data migrations for development and testing purpose
 ## Demo Users
 
 ### 1. Super Administrator (`superadmin`)
-- **Email**: superadmin@iqscaffold.com
+- **Email**: superadmin@iqkv.dev
 - **Password**: SuperAdmin123!
 - **Authority**: SUPER_ADMIN
 - **Description**: Platform administrator with full system access across all tenants. Responsible for system-wide operations, security, and multi-tenant infrastructure management.
@@ -25,7 +25,7 @@ This directory contains demo data migrations for development and testing purpose
 - **Theme**: Dark mode for extended monitoring sessions
 
 ### 2. Tenant Owner (`owner`)
-- **Email**: owner@demo.iqscaffold.com
+- **Email**: owner@demo.iqkv.dev
 - **Password**: TenantOwner123!
 - **Authority**: TENANT_OWNER
 - **Description**: Organization owner and CEO responsible for strategic decisions, billing oversight, and business growth initiatives. Cannot be removed, only transferred.
@@ -38,7 +38,7 @@ This directory contains demo data migrations for development and testing purpose
 - **Timezone**: America/New_York (EST)
 
 ### 3. Tenant Administrator (`admin`)
-- **Email**: admin@demo.iqscaffold.com
+- **Email**: admin@demo.iqkv.dev
 - **Password**: TenantAdmin123!
 - **Authority**: TENANT_ADMIN
 - **Description**: Technical administrator managing user accounts, system configuration, and day-to-day operations within the tenant.
@@ -51,7 +51,7 @@ This directory contains demo data migrations for development and testing purpose
 - **Theme**: Dark mode for technical work
 
 ### 4. Billing Administrator (`billing`)
-- **Email**: billing@demo.iqscaffold.com
+- **Email**: billing@demo.iqkv.dev
 - **Password**: BillingAdmin123!
 - **Authority**: BILLING_ADMIN
 - **Description**: Billing administrator responsible for subscription management, invoice processing, payment gateway integration, and financial reporting.
@@ -65,7 +65,7 @@ This directory contains demo data migrations for development and testing purpose
 - **Timezone**: America/Chicago (CST)
 
 ### 5. Finance Viewer (`finance`)
-- **Email**: finance@demo.iqscaffold.com
+- **Email**: finance@demo.iqkv.dev
 - **Password**: FinanceViewer123!
 - **Authority**: FINANCE_VIEWER
 - **Description**: Financial analyst with read-only access to billing data, reports, and analytics for business intelligence and compliance purposes.
@@ -78,7 +78,7 @@ This directory contains demo data migrations for development and testing purpose
 - **Access Level**: View-only
 
 ### 6. Manager (`manager`)
-- **Email**: manager@demo.iqscaffold.com
+- **Email**: manager@demo.iqkv.dev
 - **Password**: RegularAdmin123!
 - **Authority**: ADMIN
 - **Description**: Department manager responsible for team coordination, user management, and operational oversight without billing access.
@@ -91,7 +91,7 @@ This directory contains demo data migrations for development and testing purpose
 - **Timezone**: America/Denver (MST)
 
 ### 7. Standard User (`user`)
-- **Email**: user@demo.iqscaffold.com
+- **Email**: user@demo.iqkv.dev
 - **Password**: StandardUser123!
 - **Authority**: USER
 - **Description**: Standard application user with basic access to core features and functionality for daily business operations.

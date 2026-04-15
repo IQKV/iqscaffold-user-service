@@ -71,7 +71,7 @@ public class InvitationValidationPropertyTest {
     var senderConfig = mock(IqScaffoldProperties.Email.Sender.class);
     lenient().when(properties.email()).thenReturn(emailConfig);
     lenient().when(emailConfig.sender()).thenReturn(senderConfig);
-    lenient().when(senderConfig.authBaseUrl()).thenReturn("https://auth.iqscaffold.com");
+    lenient().when(senderConfig.authBaseUrl()).thenReturn("https://auth.iqkv.dev");
 
     service = new InvitationService(
         invitationRepository,
@@ -208,7 +208,7 @@ public class InvitationValidationPropertyTest {
    * Property 8: Invitation Link Format
    * 
    * For any invitation, the generated invitation link SHALL match the format
-   * https://auth.iqscaffold.com/join/{code} where {code} is the invitation's unique code.
+   * https://auth.iqkv.dev/join/{code} where {code} is the invitation's unique code.
    * 
    * Validates: Requirements 1.9
    */
@@ -236,9 +236,9 @@ public class InvitationValidationPropertyTest {
     InvitationLinkResponse result = service.getInvitationLink(1L, adminUser);
 
     // Assert
-    String expectedUrl = "https://auth.iqscaffold.com/join/" + invitationCode;
+    String expectedUrl = "https://auth.iqkv.dev/join/" + invitationCode;
     assertThat(result.fullUrl())
-        .as("Invitation link must follow format https://auth.iqscaffold.com/join/{code}")
+        .as("Invitation link must follow format https://auth.iqkv.dev/join/{code}")
         .isEqualTo(expectedUrl);
     assertThat(result.invitationCode()).isEqualTo(invitationCode);
   }

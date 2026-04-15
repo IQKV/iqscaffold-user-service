@@ -69,7 +69,7 @@ public class InvitationCodeSecurityPropertyTest {
     var senderConfig = mock(IqScaffoldProperties.Email.Sender.class);
     lenient().when(properties.email()).thenReturn(emailConfig);
     lenient().when(emailConfig.sender()).thenReturn(senderConfig);
-    lenient().when(senderConfig.authBaseUrl()).thenReturn("https://auth.iqscaffold.com");
+    lenient().when(senderConfig.authBaseUrl()).thenReturn("https://auth.iqkv.dev");
 
     service = new InvitationService(
         invitationRepository,

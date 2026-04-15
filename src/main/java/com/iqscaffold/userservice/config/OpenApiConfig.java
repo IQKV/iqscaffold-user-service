@@ -53,8 +53,8 @@ import org.springframework.context.annotation.Configuration;
             """,
         contact = @Contact(
             name = "IQ Key Value Platform Team",
-            email = "api-support@iqscaffold.com",
-            url = "https://docs.iqscaffold.com"
+            email = "api-support@iqkv.dev",
+            url = "https://docs.iqkv.dev"
         ),
         license = @License(
             name = "MIT License",
@@ -63,7 +63,7 @@ import org.springframework.context.annotation.Configuration;
     ),
     servers = {
         @Server(
-            url = "https://api.iqscaffold.com",
+            url = "https://api.iqkv.dev",
             description = "Production Server"
         ),
         @Server(
@@ -236,7 +236,7 @@ public class OpenApiConfig {
 
   private ApiResponse createErrorResponse(String code, String description, String exampleMessage) {
     var errorMap = new java.util.HashMap<String, Object>();
-    errorMap.put("type", "https://problems.iqscaffold.com/example");
+    errorMap.put("type", "https://problems.iqkv.dev/example");
     errorMap.put("title", description);
     errorMap.put("status", Integer.valueOf(code));
     errorMap.put("detail", exampleMessage);

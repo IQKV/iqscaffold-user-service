@@ -59,10 +59,10 @@ iqscaffold:
       auth: false
       starttls: false
     sender:
-      from-email: ${EMAIL_FROM_EMAIL:noreply@iqscaffold.com}
+      from-email: ${EMAIL_FROM_EMAIL:noreply@iqkv.dev}
       from-name: ${EMAIL_FROM_NAME:IQ Key Value Platform (Dev)}
-      base-url: ${APP_BASE_URL:https://app.iqscaffold.com}
-      auth-base-url: ${AUTH_BASE_URL:https://auth.iqscaffold.com}
+      base-url: ${APP_BASE_URL:https://app.iqkv.dev}
+      auth-base-url: ${AUTH_BASE_URL:https://auth.iqkv.dev}
     verification:
       rate-limit: 5
     templates:

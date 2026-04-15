@@ -72,10 +72,10 @@ class EmailServiceTest {
     testUser.setPreferredLocale("en");
 
     senderConfig = new IqScaffoldProperties.Email.Sender(
-        "noreply@iqscaffold.com",
+        "noreply@iqkv.dev",
         "IQ Key Value",
-        "https://app.iqscaffold.com",
-        "https://auth.iqscaffold.com"
+        "https://app.iqkv.dev",
+        "https://auth.iqkv.dev"
     );
 
     templatesConfig = new IqScaffoldProperties.Email.Template(
@@ -125,7 +125,7 @@ class EmailServiceTest {
     var url = emailService.buildVerificationUrl(token);
 
     // Assert
-    assertThat(url).isEqualTo("https://auth.iqscaffold.com/verify-email?token=test-token-123");
+    assertThat(url).isEqualTo("https://auth.iqkv.dev/verify-email?token=test-token-123");
   }
 
   @Test
@@ -133,10 +133,10 @@ class EmailServiceTest {
   void shouldHandleBaseUrlWithTrailingSlash() {
     // Arrange
     var senderConfigWithSlash = new IqScaffoldProperties.Email.Sender(
-        "noreply@iqscaffold.com",
+        "noreply@iqkv.dev",
         "IQ Key Value",
-        "https://app.iqscaffold.com/",
-        "https://auth.iqscaffold.com/"
+        "https://app.iqkv.dev/",
+        "https://auth.iqkv.dev/"
     );
     var emailConfigWithSlash = new IqScaffoldProperties.Email(null, senderConfigWithSlash, null, templatesConfig);
     when(properties.email()).thenReturn(emailConfigWithSlash);
@@ -146,7 +146,7 @@ class EmailServiceTest {
     var url = emailService.buildVerificationUrl(token);
 
     // Assert
-    assertThat(url).isEqualTo("https://auth.iqscaffold.com/verify-email?token=test-token-123");
+    assertThat(url).isEqualTo("https://auth.iqkv.dev/verify-email?token=test-token-123");
   }
 
   @Test
@@ -202,7 +202,7 @@ class EmailServiceTest {
     var url = emailService.buildPasswordResetUrl(token);
 
     // Assert
-    assertThat(url).isEqualTo("https://auth.iqscaffold.com/reset-password?token=reset-token-123");
+    assertThat(url).isEqualTo("https://auth.iqkv.dev/reset-password?token=reset-token-123");
   }
 
   @Test
